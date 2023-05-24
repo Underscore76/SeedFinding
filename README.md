@@ -1,5 +1,20 @@
 # Stardew Seed Scanning Tools in C\#
 
+## Why C\# when we have python scripts?
+Speed. For doing max int32 scans, this will be significantly faster than python (and also easier to parallelize).
+
+On my machine scanning the Traveling Cart stock:
+* python (single core): 21,000 seeds per second (28 hours for 2^31-1)
+* C# (single core): 280,000 seeds per second (~13x faster, 2-2.5 hours for 2^31-1)
+* C# (parallel): 1,800,000 seeds per second (~85x faster, 20 minutes for 2^31-1)
+
+Remix bundle scanning:
+* python (single core): 16,000 seeds per second (37 hours for 2^31-1)
+* c# (single core): 315,000 seeds per second (~20x faster, 2 hours for 2^31-1)
+* c# (parallel): 1,300,000 seeds per second (~80x faster, 28 minutes for 2^31-1)
+
+When you need to do more complicated searches, that speed difference will be even more pronounced.
+
 ## Functions
 * Remixed Bundle scanning (for details see [Remixed Bundles](Bundles/README.md))
 * Traveling Cart scanning (for details see [Traveling Cart](TravelingCart/README.md))
