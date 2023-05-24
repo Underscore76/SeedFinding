@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(SolutionDir)data\*&quot; &quot;$(TargetDir)data\&quot; /F /S /Y /E /D" />
+  </Target>-->
+
+  <ItemGroup>
+    <None Remove="data\carts\" />
+    <None Remove="Locations\" />
+    <None Remove="Bundles\" />
+    <None Remove="TravelingCart\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data\carts\" />
+    <Folder Include="Locations\" />
+    <Folder Include="Bundles\" />
+    <Folder Include="TravelingCart\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>
