@@ -18,12 +18,12 @@ namespace SeedFinding
         static void Main(string[] args)
         {
             // do some speed testing before a long search
-            bool runSpeedTest = true;
+            bool runSpeedTest = false;
             // the optimal size for this will vary depending on your system
             int blockSize = 1 << 16;
 
             // run a search for a specific remix bundle set
-            bool runRemixSearch = false;
+            bool runRemixSearch = true;
 
             // search for a TAS vault seed that looks at both forage and cart bundles
             bool runVaultSearch = false;
@@ -75,7 +75,7 @@ namespace SeedFinding
             {
                 Console.WriteLine("RemixSearch");
                 int numSeeds = Int32.MaxValue;
-                double time = RemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
