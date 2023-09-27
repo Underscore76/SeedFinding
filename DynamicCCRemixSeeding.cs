@@ -52,12 +52,14 @@ namespace SeedFinding
             if (Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Gus) != 194)
                 return false;
 
-            int geode = Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Musuem);
+            int geode = Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Museum);
 
             if (geode != 535 && geode != 749)
                 return false;
 
-
+            (int, int) content = Mines.GetGeodeContents(seed, 1, geode == 535 ? Geode.Geode : Geode.OmniGeode);
+            if (content.Item1 != 378 || content.Item2 != 20)
+                return false;
 
             return true;
         }
