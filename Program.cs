@@ -32,8 +32,25 @@ namespace SeedFinding
             // search for a TAS vault seed that is just cart based
             bool runCartSearch = false;
 
-            Console.WriteLine(Trash.Trash.getTrash(405255134, 6, Trash.Trash.Can.Museum));
-            Console.Read();
+            if (true)
+            {
+                Beach beach = new Beach(1535555546);
+                beach.Day = 1;
+                beach.ProcessBubbles(Beach.map);
+                foreach (var bubble in beach.Bubbles)
+                {
+                    Console.WriteLine(bubble);
+                }
+                /*Console.WriteLine("SeedSearch");
+                int numSeeds = Int32.MaxValue;
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                foreach (var item in validSeeds)
+                {
+                    Console.WriteLine(item);
+                }
+                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                Console.Read();*/
+            }
             return;
 
 

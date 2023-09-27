@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using System.Drawing;
 
 namespace SeedFinding
 {
@@ -300,6 +301,28 @@ namespace SeedFinding
             }
 
             return Season.Spring;
+        }
+
+        public static List<Point> getBorderOfThisRectangle(Rectangle r)
+        {
+            List<Point> border = new List<Point>();
+            for (int l = r.X; l < r.Right; l++)
+            {
+                border.Add(new Point(l, r.Y));
+            }
+            for (int k = r.Y + 1; k < r.Bottom; k++)
+            {
+                border.Add(new Point(r.Right - 1, k));
+            }
+            for (int j = r.Right - 2; j >= r.X; j--)
+            {
+                border.Add(new Point(j, r.Bottom - 1));
+            }
+            for (int i = r.Bottom - 2; i >= r.Y + 1; i--)
+            {
+                border.Add(new Point(r.X, i));
+            }
+            return border;
         }
     }
 }
