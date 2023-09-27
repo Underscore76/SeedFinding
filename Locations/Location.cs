@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace SeedFinding.Locations
 {
@@ -115,11 +116,13 @@ namespace SeedFinding.Locations
         public readonly int Height;
 
         public Dictionary<Tile, ObjectInfo.ObjectData> ForageSpawns;
+        public List<Tile> ArtifactSpots;
         public int Seed;
         public int Day;
         public Location(int seed, int width, int height)
         {
             ForageSpawns = new Dictionary<Tile, ObjectInfo.ObjectData>();
+            ArtifactSpots = new List<Tile>();
             Seed = seed;
             Day = 0;
             Width = width;
@@ -138,29 +141,56 @@ namespace SeedFinding.Locations
 
         public void Spawn(HashSet<Tile> SpawnableTiles, HashSet<Tile> BadTiles, Dictionary<int, List<SpawnChance>> SeasonalSpawns)
         {
-            if (ForageSpawns.Count >= 6) return;
             int season = (Day == 0) ? 0 : (((Day - 1) / 28) % 4);
-            Random rand = new Random((Seed / 2) + Day);
-            int numToSpawn = rand.Next(1, Math.Min(5, 7 - ForageSpawns.Count));
-            for (int i = 0; i < numToSpawn; i++)
+            if (ForageSpawns.Count < 6)
             {
-                for (int t = 0; t < 11; t++)
+                Random rand = new Random((Seed / 2) + Day);
+                int numToSpawn = rand.Next(1, Math.Min(5, 7 - ForageSpawns.Count));
+                for (int i = 0; i < numToSpawn; i++)
                 {
-                    Tile check = new Tile(rand.Next(Width), rand.Next(Height));
-                    int index = rand.Next(SeasonalSpawns[season].Count);
-                    if (!ForageSpawns.ContainsKey(check) && SpawnableTiles.Contains(check))
+                    for (int t = 0; t < 11; t++)
                     {
-                        double result = rand.NextDouble();
-                        if (result < SeasonalSpawns[season][index].P)
+                        Tile check = new Tile(rand.Next(Width), rand.Next(Height));
+                        int index = rand.Next(SeasonalSpawns[season].Count);
+                        if (!ForageSpawns.ContainsKey(check) && SpawnableTiles.Contains(check))
                         {
-                            if (BadTiles.Contains(check)) continue;
+                            double result = rand.NextDouble();
+                            if (result < SeasonalSpawns[season][index].P)
+                            {
+                                if (BadTiles.Contains(check)) continue;
 
-                            ForageSpawns[check] = ObjectInfo.Get(SeasonalSpawns[season][index].Id);
-                            break;
+                                ForageSpawns[check] = ObjectInfo.Get(SeasonalSpawns[season][index].Id);
+                                break;
+                            }
                         }
                     }
                 }
             }
+
+            /*if (ArtifactSpots.Count > 1) {
+                return;
+            }
+            double chanceForNewArtifactAttempt = 1.0;
+            while (rand.NextDouble() < chanceForNewArtifactAttempt)
+            {
+                int xCoord = rand.Next(Width);
+                int yCoord = rand.Next(Height);
+                Tile location = new Tile(xCoord, yCoord);
+                if (this.isTileLocationTotallyClearAndPlaceable(location) && this.getTileIndexAt(xCoord, yCoord, "AlwaysFront") == -1 && this.getTileIndexAt(xCoord, yCoord, "Front") == -1 && !this.isBehindBush(location) && (this.doesTileHaveProperty(xCoord, yCoord, "Diggable", "Back") != null || (this.GetSeasonForLocation().Equals("winter") && this.doesTileHaveProperty(xCoord, yCoord, "Type", "Back") != null && this.doesTileHaveProperty(xCoord, yCoord, "Type", "Back").Equals("Grass"))))
+                {
+                    if (this.name.Equals("Forest") && xCoord >= 93 && yCoord <= 22)
+                    {
+                        continue;
+                    }
+                    this.objects.Add(location, new Object(location, 590, 1));
+                }
+                chanceForNewArtifactAttempt *= 0.75;
+                if (season == 3)
+                {
+                    chanceForNewArtifactAttempt += 0.10000000149011612;
+                }
+            }*/
+
         }
         public void ProcessDay()
         {

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using SeedFinding.Bundles;
+using SeedFinding.Trash;
 
 namespace SeedFinding
 {
@@ -47,7 +48,18 @@ namespace SeedFinding
 
         static bool ValidSeed(int seed)
         {
-            return RemixedBundles.Generate(seed).Satisfies(DesiredBundles);
+            //return RemixedBundles.Generate(seed).Satisfies(DesiredBundles);
+            if (Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Gus) != 194)
+                return false;
+
+            int geode = Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Musuem);
+
+            if (geode != 535 && geode != 749)
+                return false;
+
+
+
+            return true;
         }
 
         // parallel search

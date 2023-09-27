@@ -12,6 +12,25 @@ namespace SeedFinding
     }
     public class Utility
     {
+
+        public static Season getSeasonFromDay(int day)
+        {
+            int season = (day - 1) / 28 % 4;
+            switch (season)
+            {
+                case 0:
+                    return Season.Spring;
+                case 1:
+                    return Season.Summer;
+                case 2:
+                    return Season.Fall;
+                case 3:
+                    return Season.Winter;
+
+            }
+            return Season.Spring;
+        }
+
         public static int GetRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int cookingRecipesKnown, int gameId, int days, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             int dayOfMonth = (days - 1) % 28 + 1;
