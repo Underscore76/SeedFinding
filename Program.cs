@@ -10,6 +10,7 @@ using System.IO;
 using SeedFinding.Cart;
 using SeedFinding.Bundles;
 using SeedFinding.Locations;
+using SeedFinding.Trash;
 
 namespace SeedFinding
 {
@@ -23,7 +24,7 @@ namespace SeedFinding
             int blockSize = 1 << 16;
 
             // run a search for a specific remix bundle set
-            bool runRemixSearch = true;
+            bool runRemixSearch = false;
 
             // search for a TAS vault seed that looks at both forage and cart bundles
             bool runVaultSearch = false;
@@ -73,6 +74,11 @@ namespace SeedFinding
 
             if (runRemixSearch)
             {
+                FileStream fs = new FileStream("Remix.txt", FileMode.Create);
+                // First, save the standard output.
+                TextWriter tmp = Console.Out;
+                StreamWriter sw = new StreamWriter(fs);
+                Console.SetOut(sw);
                 Console.WriteLine("RemixSearch");
                 int numSeeds = Int32.MaxValue;
                 double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
@@ -81,6 +87,8 @@ namespace SeedFinding
                     Console.WriteLine(item);
                 }
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                Console.SetOut(tmp);
+                sw.Close();
             }
 
             if (runVaultSearch)
@@ -96,6 +104,7 @@ namespace SeedFinding
                 double time = VaultCartSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
             }
+
         }
     }
 }
