@@ -49,20 +49,42 @@ namespace SeedFinding.Locations
         public Tile Tile;
         public int StartTime;
         public int EndTime;
+        public int Distance;
 
-        public Bubbles(Tile tile, int startTime, int endTime) {
+        public Bubbles(Tile tile, int startTime, int endTime, int distance) {
             Tile = tile;
             StartTime = startTime;
             EndTime = endTime; 
+            Distance = distance;
         }
-        public Bubbles(int x, int y, int startTime, int endTime) {
+        public Bubbles(int x, int y, int startTime, int endTime, int distance) {
             Tile = new Tile(x, y);
             StartTime = startTime;
             EndTime = endTime; 
+            Distance = distance;
         }
         public override string ToString()
         {
             return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4}", Tile.X, Tile.Y, StartTime, EndTime);
+        }
+
+        public int TotalMintues()
+        {
+            // Same hour
+            if (StartTime / 100 == EndTime / 100)
+            {
+                return EndTime - StartTime;
+            }
+
+            // Minutes until next hour
+            int minutes = 60 - (StartTime % 100);
+
+            // Treat StartTime as being at next hour
+            int time = StartTime + minutes + 40;
+
+            int hours = EndTime / 100 - time / 100;
+
+            return hours * 60 + minutes + EndTime % 100;
         }
     }
 
@@ -175,7 +197,8 @@ namespace SeedFinding.Locations
             {
                 foreach (Point v in Utility.getBorderOfThisRectangle(r))
                 {
-                    if (InLayer("Back",tile) && IsWaterTile(tile))
+                    Tile mapTile = new Tile(v.X, v.Y);
+                    if (InLayer("Back", mapTile) && !IsWaterTile(mapTile))
                     {
                         foundLand = true;
                         distance = r.Width / 2;
@@ -206,6 +229,7 @@ namespace SeedFinding.Locations
         {
             ForageSpawns = new Dictionary<Tile, ObjectInfo.ObjectData>();
             ArtifactSpots = new List<Tile>();
+            Bubbles = new List<Bubbles>();
             Seed = seed;
             Day = 0;
             Width = width;
@@ -324,6 +348,7 @@ namespace SeedFinding.Locations
             int x;
             int y;
             int startTime = 0;
+            int toLand = 0;
             Tile tile = new Tile(0,0);
             for(int time = 610; time < 2600; time += 10)
             {
@@ -345,7 +370,7 @@ namespace SeedFinding.Locations
                             {
                                 continue;
                             }
-                            int toLand = map.DistanceToLand(tile);
+                            toLand = map.DistanceToLand(tile);
                             if (toLand > 1 && toLand < 5)
                             {
                                 startTime = time;
@@ -357,13 +382,13 @@ namespace SeedFinding.Locations
                 }else if (random.NextDouble() < 0.1)
                 {
                     bubblesExist = false;
-                    Bubbles.Add(new Locations.Bubbles(tile, startTime, time));
+                    Bubbles.Add(new Locations.Bubbles(tile, startTime, time, toLand));
                 }
             }
 
             if (bubblesExist)
             {
-                Bubbles.Add(new Locations.Bubbles(tile, startTime, 2600));
+                Bubbles.Add(new Locations.Bubbles(tile, startTime, 2600, toLand));
             }
         }
     }
