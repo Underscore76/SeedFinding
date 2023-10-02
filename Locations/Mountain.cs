@@ -8,11 +8,13 @@ namespace SeedFinding.Locations
 {
     public class Mountain : Location
     {
+        public static Map map;
         public static HashSet<Tile> SpawnableTiles;
         public static HashSet<Tile> BadTiles;
         public static Dictionary<int, List<SpawnChance>> SeasonalSpawns;
         static Mountain()
         {
+            map = new Map("Mountain");
             SpawnableTiles = Location.LoadTiles(@"data/mountain_spawn_tiles.json");
             BadTiles = Location.LoadTiles(@"data/mountain_bad_tiles.json");
             SeasonalSpawns = new Dictionary<int, List<SpawnChance>>();
