@@ -17,11 +17,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\carts\" />
-    <Folder Include="Locations\" />
     <Folder Include="Bundles\" />
     <Folder Include="TravelingCart\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="data\Beach_water_tilelist.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -34,22 +34,24 @@ namespace SeedFinding
 
             if (true)
             {
-                Beach beach = new Beach(1535555546);
-                beach.Day = 1;
-                beach.ProcessBubbles(Beach.map);
-                foreach (var bubble in beach.Bubbles)
-                {
-                    Console.WriteLine(bubble);
-                }
-                /*Console.WriteLine("SeedSearch");
+                //DynamicCCRemixSeeding.Curate();
+                //return;
+                FileStream fs = new FileStream("Output.txt", FileMode.Create);
+                // First, save the standard output.
+                TextWriter tmp = Console.Out;
+                StreamWriter sw = new StreamWriter(fs);
+                Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
                 double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                
+                Console.SetOut(tmp);
+                sw.Close();
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-                Console.Read();*/
+                Console.Read();
             }
             return;
 
