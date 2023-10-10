@@ -44,10 +44,6 @@ namespace SeedFinding
                 Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
                 double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-
-                Console.SetOut(tmp);
-                sw.Close();
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
