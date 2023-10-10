@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Data;
+
 namespace SeedFinding
 {
     public class ObjectInfo
@@ -28,8 +30,7 @@ namespace SeedFinding
         {
             Items = new Dictionary<int, ObjectData>();
             ItemsToIndex = new Dictionary<string, int>();
-            Dictionary<string, string> items = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(@"data/object_info.json"));
-            foreach (var kvp in items)
+            foreach (var kvp in ObjectInformation)
             {
                 int id = Int32.Parse(kvp.Key);
                 string[] tokens = kvp.Value.Split("/");
