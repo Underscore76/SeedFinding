@@ -141,6 +141,29 @@ namespace SeedFinding
 
             forest.ProcessBubbles(Forest.map);
 
+            int totalTime = 0;
+            foreach (Bubbles bubbles in forest.Bubbles)
+            {
+                if (bubbles.Distance < 3 || 
+                    bubbles.Tile.X < 52 && bubbles.Tile.Y < 41 ||
+                    bubbles.Tile.X < 21 ||
+                    bubbles.Tile.Y > 93)
+                {
+                    continue;
+                }
+                totalTime += bubbles.TotalMintues();
+            }
+
+            if (totalTime < 960)
+            {
+                return false;
+            }
+            if (curate)
+            {
+                Random random = new Random(gameId + 3);
+                Console.WriteLine($"{gameId}  {totalTime} {random.NextDouble()}");
+            }
+
 
             return true;
         }
@@ -234,7 +257,8 @@ namespace SeedFinding
             {
                 for (int seed = range.Item1; seed < range.Item2; seed++)
                 {
-                    if (ValidSeedDay1(seed))
+                    if (seed % 2 == 0) { continue; }
+                    if (ValidSeedDay3(seed))
                     {
                         bag.Add(seed);
 
