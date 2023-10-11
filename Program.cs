@@ -31,6 +31,30 @@ namespace SeedFinding
             // search for a TAS vault seed that is just cart based
             bool runCartSearch = false;
 
+            // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
+            if (true)
+            {
+                //DynamicCCRemixSeeding.Curate();
+                //return;
+                FileStream fs = new FileStream("Output.txt", FileMode.Create);
+                // First, save the standard output.
+                TextWriter tmp = Console.Out;
+                StreamWriter sw = new StreamWriter(fs);
+                Console.SetOut(sw);
+                int numSeeds = Int32.MaxValue;
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+
+                Console.SetOut(tmp);
+                sw.Close();
+                foreach (var item in validSeeds)
+                {
+                    Console.WriteLine(item);
+                }
+                Console.Read();
+            }
+            return;
+
 
             Console.WriteLine($"Start: {DateTime.Now}");
             if (runSpeedTest)
