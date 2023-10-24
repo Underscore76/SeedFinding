@@ -25,6 +25,7 @@ namespace SeedFinding
         }
         public static Dictionary<int, ObjectData> Items;
         public static Dictionary<string, int> ItemsToIndex;
+        public static Dictionary<string, string> ObjectInformation = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(@"data/object_info.json"));
         static ObjectInfo()
         {
             Items = new Dictionary<int, ObjectData>();
