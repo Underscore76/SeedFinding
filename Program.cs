@@ -35,8 +35,8 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                //DynamicCCRemixSeeding.Curate();
-                //return;
+                BoilerRoomClassic.Curate();
+                return;
                 FileStream fs = new FileStream("Output.txt", FileMode.Create);
                 // First, save the standard output.
                 TextWriter tmp = Console.Out;
