@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -32,11 +32,11 @@ namespace SeedFinding
             // search for a TAS vault seed that is just cart based
             bool runCartSearch = false;
 
-            // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                BoilerRoomClassic.Curate();
-                return;
+                //DynamicCCRemixSeeding.Curate();
+                //return;
+
                 FileStream fs = new FileStream("Output.txt", FileMode.Create);
                 // First, save the standard output.
                 TextWriter tmp = Console.Out;
@@ -69,12 +69,6 @@ namespace SeedFinding
             }
 
             if (runRemixSearch)
-            {
-                FileStream fs = new FileStream("Remix.txt", FileMode.Create);
-                // First, save the standard output.
-                TextWriter tmp = Console.Out;
-                StreamWriter sw = new StreamWriter(fs);
-                Console.SetOut(sw);
                 Console.WriteLine("RemixSearch");
                 int numSeeds = Int32.MaxValue;
                 double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);

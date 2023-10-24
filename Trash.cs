@@ -51,7 +51,6 @@ namespace SeedFinding.Trash
             }
             return new Tile();
         }
-
         public static HashSet<int> getAllTrash(int gameId, int day, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             HashSet<int> results = new HashSet<int>();
