@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using SeedFinding.Locations;
 
@@ -49,6 +50,17 @@ namespace SeedFinding.Trash
 
             }
             return new Tile();
+        }
+
+        public static HashSet<int> getAllTrash(int gameId, int day, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        {
+            HashSet<int> results = new HashSet<int>();
+
+            foreach (Can can in Can.GetValues(typeof(Can))) 
+            {
+                results.Add(getTrash(gameId, day, can, luck, twentyOneChecked, theatre, hasFurnace, hasDesert, mines));
+            }
+            return results;
         }
         public static int getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
