@@ -31,6 +31,8 @@ namespace SeedFinding
             284, //Beet
             432 //Truffle Oil
         };
+
+
         public static int CheckTroves(int seed, int startCount, int count)
         {
 
