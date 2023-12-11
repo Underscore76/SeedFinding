@@ -1154,7 +1154,6 @@
     "Description": "[LocalizedText Strings\\Objects:LostBook_Description]",
     "Type": "asdf",
     "Category": 0,
-    "Price": 0,
     "Texture": null,
     "SpriteIndex": 102,
     "Edibility": -300,
@@ -1732,9 +1731,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Desert": 0.06
-    },
     "ContextTags": [
       "color_gold",
       "dye_strong",
@@ -1756,15 +1752,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Farm": 0.001,
-      "Town": 0.001,
-      "Mountain": 0.001,
-      "Forest": 0.001,
-      "BusStop": 0.001,
-      "Beach": 0.001,
-      "UndergroundMine": 0.001
-    },
     "ContextTags": [
       "color_green",
       "doll_item",
@@ -1787,15 +1774,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Farm": 0.001,
-      "Town": 0.001,
-      "Mountain": 0.001,
-      "Forest": 0.001,
-      "BusStop": 0.001,
-      "Beach": 0.001,
-      "UndergroundMine": 0.001
-    },
     "ContextTags": [
       "color_yellow",
       "doll_item",
@@ -4666,7 +4644,6 @@
     "Description": "[LocalizedText Strings\\Objects:TeaSapling_Description]",
     "Type": "Basic",
     "Category": -74,
-    "Price": 250,
     "Texture": null,
     "SpriteIndex": 251,
     "Edibility": -300,
@@ -5153,10 +5130,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -5716,15 +5690,11 @@
     "Price": 190,
     "Texture": null,
     "SpriteIndex": 306,
-    "Edibility": 20,
-    "IsDrink": true,
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
     "ArtifactSpotChances": null,
     "ContextTags": [
-      "color_white",
-      "mayo_item"
     ],
     "CustomFields": {}
   },
@@ -5737,8 +5707,6 @@
     "Price": 375,
     "Texture": null,
     "SpriteIndex": 307,
-    "Edibility": 30,
-    "IsDrink": true,
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
@@ -5759,7 +5727,6 @@
     "Texture": null,
     "SpriteIndex": 308,
     "Edibility": -30,
-    "IsDrink": true,
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
@@ -9163,10 +9130,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -9222,10 +9186,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -9279,10 +9240,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -10281,9 +10239,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Beach": 0.03
-    },
     "ContextTags": [
       "bone_item",
       "color_white",
@@ -10307,10 +10262,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Forest": 0.01,
-      "Mountain": 0.01
-    },
     "ContextTags": [
       "bone_item",
       "color_white",
@@ -10334,10 +10285,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Desert": 0.1,
-      "Beach": 0.01
-    },
     "ContextTags": [
       "bone_item",
       "color_white",
@@ -10359,10 +10306,6 @@
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
-    "ArtifactSpotChances": {
-      "Mountain": 0.03,
-      "Forest": 0.03
-    },
     "ContextTags": [
       "bone_item",
       "color_white",
@@ -12559,10 +12502,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       },
       {
         "Chance": 1.0,
@@ -12626,10 +12566,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -12893,7 +12830,6 @@
     "Description": "[LocalizedText Strings\\Objects:LifeElixir_Description]",
     "Type": "Cooking",
     "Category": -7,
-    "Price": 250,
     "Texture": null,
     "SpriteIndex": 773,
     "Edibility": 80,
@@ -13355,8 +13291,6 @@
     "Price": 800,
     "Texture": null,
     "SpriteIndex": 807,
-    "Edibility": 50,
-    "IsDrink": true,
     "Buff": null,
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
@@ -13746,7 +13680,6 @@
     "Edibility": -300,
     "IsDrink": false,
     "Buff": null,
-    "GeodeDropsDefaultItems": false,
     "GeodeDrops": [
       {
         "Chance": 0.05,
@@ -13765,10 +13698,7 @@
         "ToolUpgradeLevel": -1,
         "IsRecipe": false,
         "StackModifiers": null,
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       },
       {
         "Chance": 1.0,
@@ -13798,29 +13728,23 @@
           {
             "Id": "PineappleSeeds",
             "Condition": "ITEM_ID Target (O)833",
-            "Modification": "Set",
             "Amount": 5.0,
             "RandomAmount": null
           },
           {
             "Id": "TaroTuber",
             "Condition": "ITEM_ID Target (O)831",
-            "Modification": "Set",
             "Amount": 5.0,
             "RandomAmount": null
           },
           {
             "Id": "IridiumOre",
             "Condition": "ITEM_ID Target (O)386",
-            "Modification": "Set",
             "Amount": 5.0,
             "RandomAmount": null
           }
         ],
-        "StackModifierMode": "Stack",
         "QualityModifiers": null,
-        "QualityModifierMode": "Stack",
-        "PerItemCondition": null
       }
     ],
     "ArtifactSpotChances": null,
@@ -14865,7 +14789,6 @@
     "Description": "[LocalizedText Strings\\Objects:FairyDust_Description]",
     "Type": "Basic",
     "Category": 0,
-    "Price": 300,
     "Texture": null,
     "SpriteIndex": 872,
     "Edibility": -300,
@@ -16072,9 +15995,6 @@
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
     "ArtifactSpotChances": null,
-    "ContextTags": [
-      "not_giftable"
-    ],
     "CustomFields": {}
   },
   "MixedFlowerSeeds": {
@@ -16231,7 +16151,6 @@
     "Description": "[LocalizedText Strings\\Objects:Moss_Description]",
     "Type": "Basic",
     "Category": -16,
-    "Price": 5,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 38,
     "Edibility": -300,
@@ -16507,7 +16426,6 @@
     "Description": "[LocalizedText Strings\\Objects:MysticSyrup_Description]",
     "Type": "Basic",
     "Category": -27,
-    "Price": 1000,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 62,
     "Edibility": 200,
@@ -16613,8 +16531,6 @@
     "GeodeDrops": null,
     "ArtifactSpotChances": null,
     "ContextTags": [
-      "color_red",
-      "not_giftable"
     ],
     "CustomFields": {}
   },
@@ -16651,11 +16567,6 @@
     "GeodeDropsDefaultItems": false,
     "GeodeDrops": null,
     "ArtifactSpotChances": null,
-    "ContextTags": [
-      "color_brown",
-      "not_placeable",
-      "totem_item"
-    ],
     "CustomFields": {}
   },
   "ChallengeBait": {
@@ -16702,7 +16613,6 @@
     "Description": "[LocalizedText Strings\\Objects:Carrot_Description]",
     "Type": "Basic",
     "Category": -75,
-    "Price": 35,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 80,
     "Edibility": 30,
@@ -16744,7 +16654,6 @@
     "Description": "[LocalizedText Strings\\Objects:SummerSquash_Description]",
     "Type": "Basic",
     "Category": -75,
-    "Price": 45,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 81,
     "Edibility": 25,
@@ -16786,7 +16695,6 @@
     "Description": "[LocalizedText Strings\\Objects:Broccoli_Description]",
     "Type": "Basic",
     "Category": -75,
-    "Price": 70,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 82,
     "Edibility": 25,
@@ -16827,7 +16735,6 @@
     "DisplayName": "[LocalizedText Strings\\Objects:Powdermelon_Name]",
     "Description": "[LocalizedText Strings\\Objects:Powdermelon_Description]",
     "Type": "Basic",
-    "Category": -79,
     "Price": 60,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 83,
@@ -16886,7 +16793,6 @@
     "Description": "Read this to gain some experience in every skill.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 2500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 89,
     "Edibility": -300,
@@ -16907,7 +16813,6 @@
     "Description": "Read this to gain some farming experience.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 90,
     "Edibility": -300,
@@ -16928,7 +16833,6 @@
     "Description": "Read this to gain some foraging experience.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 91,
     "Edibility": -300,
@@ -16949,7 +16853,6 @@
     "Description": "Read this to gain some fishing experience.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 92,
     "Edibility": -300,
@@ -16970,7 +16873,6 @@
     "Description": "Read this to gain some mining experience.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 93,
     "Edibility": -300,
@@ -16991,7 +16893,6 @@
     "Description": "Read this to gain some combat experience.",
     "Type": "asdf",
     "Category": -103,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 94,
     "Edibility": -300,
@@ -17023,8 +16924,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_dark_gray",
-      "book_item",
-      "book_xp_foraging"
     ],
     "CustomFields": {}
   },
@@ -17045,8 +16944,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_black",
-      "book_item",
-      "book_xp_fishing"
     ],
     "CustomFields": {}
   },
@@ -17067,8 +16964,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_red",
-      "book_item",
-      "book_xp_mining"
     ],
     "CustomFields": {}
   },
@@ -17078,7 +16973,6 @@
     "Description": "[LocalizedText Strings\\1_6_Strings:Book_Roe_Description]",
     "Type": "asdf",
     "Category": -102,
-    "Price": 800,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 105,
     "Edibility": -300,
@@ -17089,8 +16983,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_orange",
-      "book_item",
-      "book_xp_fishing"
     ],
     "CustomFields": {}
   },
@@ -17111,8 +17003,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_green",
-      "book_item",
-      "book_xp_foraging"
     ],
     "CustomFields": {}
   },
@@ -17122,7 +17012,6 @@
     "Description": "[LocalizedText Strings\\1_6_Strings:Book_Woodcutting_Description]",
     "Type": "asdf",
     "Category": -102,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 107,
     "Edibility": -300,
@@ -17133,8 +17022,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_brown",
-      "book_item",
-      "book_xp_foraging"
     ],
     "CustomFields": {}
   },
@@ -17144,7 +17031,6 @@
     "Description": "[LocalizedText Strings\\1_6_Strings:Book_Defense_Description]",
     "Type": "asdf",
     "Category": -102,
-    "Price": 500,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 108,
     "Edibility": -300,
@@ -17155,8 +17041,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_brown",
-      "book_item",
-      "book_xp_combat"
     ],
     "CustomFields": {}
   },
@@ -17187,7 +17071,6 @@
     "Description": "[LocalizedText Strings\\1_6_Strings:Book_Void_Description]",
     "Type": "asdf",
     "Category": -102,
-    "Price": 2000,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 110,
     "Edibility": -300,
@@ -17198,8 +17081,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_black",
-      "book_item",
-      "book_xp_combat"
     ],
     "CustomFields": {}
   },
@@ -17241,8 +17122,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_dark_gray",
-      "book_item",
-      "book_xp_combat"
     ],
     "CustomFields": {}
   },
@@ -17294,7 +17173,6 @@
     "Description": "[LocalizedText Strings\\1_6_Strings:Book_Diamonds_Description]",
     "Type": "asdf",
     "Category": -102,
-    "Price": 1000,
     "Texture": "TileSheets\\Objects_2",
     "SpriteIndex": 116,
     "Edibility": -300,
@@ -17305,8 +17183,6 @@
     "ArtifactSpotChances": null,
     "ContextTags": [
       "color_cyan",
-      "book_item",
-      "book_xp_mining"
     ],
     "CustomFields": {}
   },
