@@ -57,7 +57,7 @@ namespace SeedFinding
         static bool ValidSeedDay1(int seed)
         {
             // DishOfTheDay
-            if (Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Gus) != 194)
+            if (Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Gus) != "194")
                 return false;
 
             //int geode = Trash.Trash.getTrash(seed, 1, Trash.Trash.Can.Museum);
@@ -97,7 +97,7 @@ namespace SeedFinding
         static bool ValidSeedDay2(int seed, bool curate=false)
         {
             // DishOfTheDay
-            if (Trash.Trash.getTrash(seed, 2, Trash.Trash.Can.Gus) != 194)
+            if (Trash.Trash.getTrash(seed, 2, Trash.Trash.Can.Gus) != "194")
                 return false;
 
             Beach beach = new Beach(seed);

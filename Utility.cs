@@ -5,6 +5,8 @@ using SeedFinding.Locations;
 using static System.Environment;
 using System.Globalization;
 using System.Numerics;
+using System.Text;
+using StardewValley.Hashing;
 
 namespace SeedFinding
 {
@@ -52,18 +54,29 @@ namespace SeedFinding
             return Season.Spring;
         }
 
+        public static int getYearFromDay(int day)
+        {
+            return ((day - 1) / (28 *4))+1;
+        }
+
+        public static int getDayOfMonthFromDay(int day)
+        {
+            return (day - 1) % 28 + 1;
+        }
+
+        public static string getDayDescription(int day)
+        {
+            return $"{getSeasonFromDay(day)} {getDayOfMonthFromDay(day)} {getYearFromDay(day)}";
+        }
+
         public static int GetRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int cookingRecipesKnown, int gameId, int days, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
-            int dayOfMonth = (days - 1) % 28 + 1;
-            int year = (days - 1) / (28 * 4) + 1;
-            Random r;
-            //if (Game1.version.StartsWith("1.6"))
-            //{
-            //    r = Utility.CreateRandom(gameId, changeDaily ? days : 0, randomSeedAddition);
-            //}
-            //else
-            //{
-            r = new Random(gameId + (int)(changeDaily ? days : 0) + randomSeedAddition);
+            Random r = Utility.CreateRandom(gameId, changeDaily ? days : 0, randomSeedAddition);
+
+            return GetRandomItemFromSeason(season, forQuest, r, cookingRecipesKnown, hasFurnace, hasDesert, mines);
+        }
+
+        public static int GetRandomItemFromSeason(Season season, bool forQuest, Random r, int cookingRecipesKnown, bool hasFurnace = false, bool hasDesert = false, int mines = 0) { 
             //}
             List<int> possibleItems = new List<int>
             {
@@ -559,9 +572,9 @@ namespace SeedFinding
             r.Next();
             return r.NextDouble() < 0.1;
         }
-        public static Random CreateDaySaveRandom(double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
+        public static Random CreateDaySaveRandom(int days, int gameId, double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
         {
-            return Utility.CreateRandom(Game1.DaysPlayed, Game1.uniqueIDForThisGame / 2, seedA, seedB, seedC);
+            return Utility.CreateRandom(days, gameId / 2, seedA, seedB, seedC);
         }
 
         public static Random CreateRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
@@ -575,27 +588,7 @@ namespace SeedFinding
             {
                 return (int)((seedA % 2147483647.0 + seedB % 2147483647.0 + seedC % 2147483647.0 + seedD % 2147483647.0 + seedE % 2147483647.0) % 2147483647.0);
             }
-            return Utility.GetDeterministicHashCode((int)(seedA % 2147483647.0), (int)(seedB % 2147483647.0), (int)(seedC % 2147483647.0), (int)(seedD % 2147483647.0), (int)(seedE % 2147483647.0));
-        }
-
-        public static int GetDeterministicHashCode(params int[] values)
-        {
-            int count = values.Length;
-            int hash1 = 352654597;
-            int hash2 = hash1;
-            int i;
-            for (i = 0; i < count; i++)
-            {
-                int c = values[i];
-                hash1 = ((hash1 << 5) + hash1) ^ c;
-                if (++i >= count)
-                {
-                    break;
-                }
-                c = values[i];
-                hash2 = ((hash2 << 5) + hash2) ^ c;
-            }
-            return hash1 + hash2 * 1566083941;
+            return Game1.hash.GetDeterministicHashCode((int)(seedA % 2147483647.0), (int)(seedB % 2147483647.0), (int)(seedC % 2147483647.0), (int)(seedD % 2147483647.0), (int)(seedE % 2147483647.0));
         }
 
         public static T GetRandom<T>(List<T> list, Random random = null)
@@ -604,5 +597,18 @@ namespace SeedFinding
                 return default(T);
             return list[random.Next(list.Count)];
         }
+
+        public static bool isGreenRainDay(int day, int gameId)
+        {
+            Season season = getSeasonFromDay(day);
+            if (season == Season.Summer)
+            {
+                Random r = Utility.CreateRandom(getYearFromDay(day) * 777, gameId);
+                int[] possible_days = new int[8] { 5, 6, 7, 14, 15, 16, 18, 23 };
+                return getDayOfMonthFromDay(day) == r.ChooseFrom(possible_days);
+            }
+            return false;
+        }
+
     }
 }

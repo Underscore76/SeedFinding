@@ -36,6 +36,8 @@ namespace SeedFinding
 
         public static Dictionary<string, Item> Items = SetupItems();
 
+        public static Dictionary<string, Item> Hats = SetupHats();
+
         public static Dictionary<string, Item> SetupItems()
         {
             Dictionary<string, Item> result = JsonConvert.DeserializeObject<Dictionary<string, Item>>(File.ReadAllText(@"data/Objects.json"));
@@ -46,9 +48,39 @@ namespace SeedFinding
             return result;
         }
 
+        public static Dictionary<string, Item> SetupHats()
+        {
+            Dictionary<string, Item> Hats = new();
+            Dictionary<string, string> hats = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(@"data/hats.json"));
+            foreach (var hat in hats)
+            {
+                var item = new Item();
+                item.Name = hat.Value.Split("/")[0];
+                Hats.Add(hat.Key, item);
+            }
+            return Hats;
+        }
+
         public static Item Get(string id)
         {
-            return Items[id];
+            // Assume Object
+            if (Items.ContainsKey(id))
+            {
+
+                return Items[id];
+            }
+
+            if (id.StartsWith("(O)"))
+            {
+                return Get(id[3..]);
+            }
+
+            if (id.StartsWith("(H)"))
+            {
+                return Hats[id[3..]];
+            }
+
+            return new Item() { Name = id};
         }
     }
 }

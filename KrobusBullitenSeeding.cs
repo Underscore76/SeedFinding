@@ -33,8 +33,6 @@ namespace SeedFinding
         };
 
 
-        public static int CheckTroves(int seed, int startCount, int count)
-        {
 
 
         public static int CheckTroves(int seed, int startCount, int count)
@@ -663,7 +661,7 @@ namespace SeedFinding
 
         public static bool ValidMines(int seed)
         {
-            Console.WriteLine(string.Join( ",",Mines.CheckStone(548284736, 25, 28, 6)));
+            Console.WriteLine(string.Join( ",",Mines.CheckStone1_5(548284736, 25, 28, 6)));
             return true;
         }
 

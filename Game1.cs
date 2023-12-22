@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StardewValley.Hashing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace SeedFinding
         public static bool UseLegacyRandom = true;
         public static ulong uniqueIDForThisGame = 0;
         public static uint DaysPlayed = 0;
+        public static IHashUtility hash = new HashUtility();
     }
 }

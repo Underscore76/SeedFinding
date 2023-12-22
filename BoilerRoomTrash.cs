@@ -52,19 +52,19 @@ namespace SeedFinding
             int cartDay = 0;
             int crabItems = 0;
 
-            HashSet<int> remainingItems = new HashSet<int>(RequiredItems);
+            HashSet<string> remainingItems = new HashSet<string>(RequiredItems);
             if (earthCrystal != 0)
             {
-                remainingItems.Remove(86);
+                remainingItems.Remove("86");
             }
 
             //for (int day = 5; day < 28; day++)
             foreach (var day in days)
             {
                 var stock = TravelingCart.GetStock(gameId, day);
-                HashSet<int> stockIds = new HashSet<int>(stock.Select(o => o.Id));
-                HashSet<int> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
-                if (!trashItems.Contains(749))
+                HashSet<string> stockIds = new HashSet<string>(stock.Select(o => o.Id.ToString()));
+                HashSet<string> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
+                if (!trashItems.Contains("749"))
                 {
                     continue;
                 }
@@ -83,7 +83,7 @@ namespace SeedFinding
                 {
                     if (curate)
                     {
-                        var onlyNeeded = stock.Where(i => CartItems.Contains(i.Id)).ToArray();
+                        var onlyNeeded = stock.Where(i => CartItems.Contains(i.Id.ToString())).ToArray();
                         Console.WriteLine($"{gameId}    {day}   {String.Join(",", onlyNeeded)}    {onlyNeeded.Select(i => i.Cost).ToArray().Sum(x => x)}");
                     }
                     break;
@@ -105,8 +105,8 @@ namespace SeedFinding
                     continue;
                 }
 
-                HashSet<int> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
-                if (!trashItems.Contains(749))
+                HashSet<string> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
+                if (!trashItems.Contains("749"))
                 {
                     continue;
                 }
@@ -114,7 +114,7 @@ namespace SeedFinding
                 if (days.Contains(day))
                 {
                     var stock = TravelingCart.GetStock(gameId, day);
-                    HashSet<int> stockIds = new HashSet<int>(stock.Select(o => o.Id));
+                    HashSet<string> stockIds = new HashSet<string>(stock.Select(o => o.Id.ToString()));
                     moreCrabItems = CrabItems.Intersect(stockIds).Count();
 
                     trashItems.UnionWith(stockIds);
@@ -134,42 +134,42 @@ namespace SeedFinding
             return true;
         }
 
-        static HashSet<int> RequiredItems = new HashSet<int>()
+        static HashSet<string> RequiredItems = new HashSet<string>()
         { 
-            86, // Earth Crystal
-            80, // Quartz
-            334, // Copper Bar
-            335,//": "Iron Bar
+            "86", // Earth Crystal
+            "80", // Quartz
+            "334", // Copper Bar
+            "335",//": "Iron Bar
 
-            336,//": "Gold Bar
+            "336",//": "Gold Bar
 
-            768,//": "Solar Essence
+            "768",//": "Solar Essence
 
-            769 //": "Void Essence
+            "769" //": "Void Essence
         };
-        static HashSet<int> CartItems = new HashSet<int>()
+        static HashSet<string> CartItems = new HashSet<string>()
         {
 
             //335,//": "Iron Bar
 
             //336,//": "Gold Bar
 
-            768,//": "Solar Essence
+            "768",//": "Solar Essence
 
-            769//": "Void Essence
+            "769"//": "Void Essence
         };
-        static HashSet<int> CrabItems = new HashSet<int>()
+        static HashSet<string> CrabItems = new HashSet<string>()
         {
-            372, // Clam
-            715, // Lobster
-            716, // Crayfish
-            717, // Crab
-            718, // Cockle
-            719, // Mussel
-            720, // Shrimp
-            721, // Snail
-            722, // Periwinkle
-            723 // Oyster
+            "372", // Clam
+            "715", // Lobster
+            "716", // Crayfish
+            "717", // Crab
+            "718", // Cockle
+            "719", // Mussel
+            "720", // Shrimp
+            "721", // Snail
+            "722", // Periwinkle
+            "723" // Oyster
 
         };
 
