@@ -112,7 +112,7 @@ namespace SeedFinding
                 {
                     continue;
                 }
-                totalTime += bubbles.TotalMintues();
+                totalTime += bubbles.TotalMinutes();
             }
 
             if (totalTime < 900)
@@ -151,7 +151,7 @@ namespace SeedFinding
                 {
                     continue;
                 }
-                totalTime += bubbles.TotalMintues();
+                totalTime += bubbles.TotalMinutes();
             }
 
             if (totalTime < 960)

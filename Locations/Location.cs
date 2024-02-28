@@ -68,23 +68,28 @@ namespace SeedFinding.Locations
             return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4}", Tile.X, Tile.Y, StartTime, EndTime);
         }
 
-        public int TotalMintues()
+        public int TotalMinutes()
+        {
+            return TotalMinutes(StartTime, EndTime);
+        }
+
+        public int TotalMinutes(int startTime, int endTime)
         {
             // Same hour
-            if (StartTime / 100 == EndTime / 100)
+            if (startTime / 100 == endTime / 100)
             {
-                return EndTime - StartTime;
+                return endTime - startTime;
             }
 
             // Minutes until next hour
-            int minutes = 60 - (StartTime % 100);
+            int minutes = 60 - (startTime % 100);
 
             // Treat StartTime as being at next hour
-            int time = StartTime + minutes + 40;
+            int time = startTime + minutes + 40;
 
-            int hours = EndTime / 100 - time / 100;
+            int hours = endTime / 100 - time / 100;
 
-            return hours * 60 + minutes + EndTime % 100;
+            return hours * 60 + minutes + endTime % 100;
         }
     }
 
@@ -171,6 +176,17 @@ namespace SeedFinding.Locations
             return WaterTiles.Contains(mapTile.index);
         }
 
+        public bool IsSpawnableTile(Tile tile, HashSet<int> SpawnableIndexes)
+        {
+            if (!Back.Tiles.ContainsKey((tile.X, tile.Y)))
+            {
+                return false;
+            }
+            Tile mapTile = Back.Tiles[(tile.X, tile.Y)];
+            return SpawnableIndexes.Contains(mapTile.index);
+
+        }
+
         public bool IsOpenWater(Tile tile)
         {
             if (!IsWaterTile(tile))
@@ -246,7 +262,7 @@ namespace SeedFinding.Locations
         }
         public abstract void Spawn();
 
-        public void Spawn(HashSet<Tile> SpawnableTiles, HashSet<Tile> BadTiles, Dictionary<int, List<SpawnChance>> SeasonalSpawns)
+        public void Spawn(HashSet<Tile> SpawnableTiles, HashSet<Tile> BadTiles, Dictionary<int, List<SpawnChance>> SeasonalSpawns, Map map = null, HashSet<int>SpawnableIndexes = null)
         {
             int season = (Day == 0) ? 0 : (((Day - 1) / 28) % 4);
             if (ForageSpawns.Count < 6)
@@ -259,7 +275,7 @@ namespace SeedFinding.Locations
                     {
                         Tile check = new Tile(rand.Next(Width), rand.Next(Height));
                         int index = rand.Next(SeasonalSpawns[season].Count);
-                        if (!ForageSpawns.ContainsKey(check) && SpawnableTiles.Contains(check))
+                        if (!ForageSpawns.ContainsKey(check) && (SpawnableTiles != null && SpawnableTiles.Contains(check)) || map != null && map.IsSpawnableTile(check,SpawnableIndexes))
                         {
                             double result = rand.NextDouble();
                             if (result < SeasonalSpawns[season][index].P)

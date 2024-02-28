@@ -22,6 +22,9 @@ namespace SeedFinding
             int dayOfMonth = (daysPlayed - 1) % 28 + 1;
             int year = (daysPlayed - 1) / (28 * 4) + 1;
 
+            // Choose person
+            random.NextDouble();
+
             Season season = Utility.ConvertDaysToSeason(daysPlayed);
             if (!(season == Season.Winter) && random.NextDouble() < 0.15)
             {

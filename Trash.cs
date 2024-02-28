@@ -59,6 +59,7 @@ namespace SeedFinding.Trash
             {
                 results.Add(getTrash(gameId, day, can, luck, twentyOneChecked, theatre, hasFurnace, hasDesert, mines));
             }
+            results.Remove(0);
             return results;
         }
         public static int getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)

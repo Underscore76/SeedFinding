@@ -15,6 +15,22 @@ namespace SeedFinding
         Fall,
         Winter
     }
+
+    public enum Quality
+    {
+        Basic = 0,
+        Silver = 1,
+        Gold = 2,
+        Iridium = 4
+    }
+
+    public enum Fertilizer
+    {
+        None,
+        Basic,
+        Quality,
+        Deluxe
+    }
     public class Utility
     {
 
@@ -467,6 +483,126 @@ namespace SeedFinding
                 //break;
             }
             return (-1, -1);
+        }
+
+        public static Quality ForageQuality(int gameId, int day, int x, int y, int level)
+        {
+            Random r = new Random(gameId / 2 + day + x + y * 777);
+            if (r.NextDouble() < level / 30.0)
+            {
+                return Quality.Gold;
+            }else if (r.NextDouble() < level / 15.0)
+            {
+                return Quality.Silver;
+            }
+
+            return Quality.Basic;
+        }
+
+        public static bool ForageDoubled(int gameId, int day, int x, int y, int level,bool botanist = false)
+        {
+            Random r = new Random(gameId / 2 + day + x + y * 777);
+            if (!botanist)
+            {
+                if (r.NextDouble() < level / 30.0)
+                {
+                    //return Quality.Gold;
+                }
+                else if (r.NextDouble() < level / 15.0)
+                {
+                    //return Quality.Silver;
+                }
+            }
+
+            //return Quality.Basic;
+
+            return r.NextDouble() < 0.2;
+        }
+        public static Quality CropQuality(int gameId, int day, int x, int y, int level, Fertilizer fert)
+        {
+            int fertilizerQualityLevel = 0;
+            Random r = new Random(x * 7 + y * 11 + day + gameId);
+            switch (fert)
+            {
+                case Fertilizer.Basic:
+                    fertilizerQualityLevel = 1;
+                    break;
+                case Fertilizer.Quality:
+                    fertilizerQualityLevel = 2;
+                    break;
+                case Fertilizer.Deluxe:
+                    fertilizerQualityLevel = 3;
+                    break;
+            }
+            double chanceForGoldQuality = 0.2 * (level / 10.0) + 0.2 * (double)fertilizerQualityLevel * ((level + 2.0) / 12.0) + 0.01;
+            double chanceForSilverQuality = Math.Min(0.75, chanceForGoldQuality * 2.0);
+            if (fertilizerQualityLevel >= 3 && r.NextDouble() < chanceForGoldQuality / 2.0)
+            {
+                return Quality.Iridium;
+            }
+            else if (r.NextDouble() < chanceForGoldQuality)
+            {
+                return Quality.Gold;
+            }
+            else if (r.NextDouble() < chanceForSilverQuality || fertilizerQualityLevel >= 3)
+            {
+                return Quality.Silver;
+            }
+
+            return Quality.Basic;
+        }
+
+        public static bool MusselNutDrop(int gameId, int day, int x, int y)
+        {
+            Random r = new Random(day + gameId / 2 + x * 4000 + y);
+
+            r.Next();
+            return r.NextDouble() < 0.1;
+        }
+        public static Random CreateDaySaveRandom(double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
+        {
+            return Utility.CreateRandom(Game1.DaysPlayed, Game1.uniqueIDForThisGame / 2, seedA, seedB, seedC);
+        }
+
+        public static Random CreateRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
+        {
+            return new Random(Utility.CreateRandomSeed(seedA, seedB, seedC, seedD, seedE));
+        }
+
+        public static int CreateRandomSeed(double seedA, double seedB, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
+        {
+            if (Game1.UseLegacyRandom)
+            {
+                return (int)((seedA % 2147483647.0 + seedB % 2147483647.0 + seedC % 2147483647.0 + seedD % 2147483647.0 + seedE % 2147483647.0) % 2147483647.0);
+            }
+            return Utility.GetDeterministicHashCode((int)(seedA % 2147483647.0), (int)(seedB % 2147483647.0), (int)(seedC % 2147483647.0), (int)(seedD % 2147483647.0), (int)(seedE % 2147483647.0));
+        }
+
+        public static int GetDeterministicHashCode(params int[] values)
+        {
+            int count = values.Length;
+            int hash1 = 352654597;
+            int hash2 = hash1;
+            int i;
+            for (i = 0; i < count; i++)
+            {
+                int c = values[i];
+                hash1 = ((hash1 << 5) + hash1) ^ c;
+                if (++i >= count)
+                {
+                    break;
+                }
+                c = values[i];
+                hash2 = ((hash2 << 5) + hash2) ^ c;
+            }
+            return hash1 + hash2 * 1566083941;
+        }
+
+        public static T GetRandom<T>(List<T> list, Random random = null)
+        {
+            if (list == null || list.Count == 0 || random == null)
+                return default(T);
+            return list[random.Next(list.Count)];
         }
     }
 }

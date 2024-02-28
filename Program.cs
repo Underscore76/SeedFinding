@@ -7,10 +7,13 @@ using System.Linq;
 using System.Diagnostics;
 using System.IO;
 
-using SeedFinding.Cart;
+using SeedFinding.Cart1_6;
 using SeedFinding.Bundles;
 using SeedFinding.Locations;
 using SeedFinding.Trash;
+using Newtonsoft.Json;
+using static SeedFinding.ObjectInfo;
+using System.Resources;
 
 namespace SeedFinding
 {
@@ -32,26 +35,35 @@ namespace SeedFinding
             // search for a TAS vault seed that is just cart based
             bool runCartSearch = false;
 
+            // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                //DynamicCCRemixSeeding.Curate();
+                Game1.UseLegacyRandom = true;
+                foreach(var item in TravelingCart.GetStockNew(168, 5))
+                {
+                    Console.WriteLine(item.ToString());
+                }
+                return;
+               // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
+               // return;
+
+                
+                //SeededPerfectionSeeding.Curate();
                 //return;
-                FileStream fs = new FileStream("Output.txt", FileMode.Create);
+                FileStream fs = new FileStream("BoilerRoomTrash.txt", FileMode.Create);
                 // First, save the standard output.
                 TextWriter tmp = Console.Out;
                 StreamWriter sw = new StreamWriter(fs);
                 Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
-                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-
-                Console.SetOut(tmp);
-                sw.Close();
+                double time = BoilerRoomTrash.Search(300000000,numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
-                Console.Read();
+                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                Console.SetOut(tmp);
+                sw.Close();
             }
             return;
 
