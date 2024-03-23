@@ -35,37 +35,37 @@ namespace SeedFinding
             }
 
             List<int> days = new List<int> {5,7,12,14,19,21,26,28 };
-            HashSet<int> allItems = new HashSet<int>();
+            HashSet<string> allItems = new HashSet<string>();
             List<int> count = new List<int>();
-            Dictionary<int,HashSet<int>> dict = new Dictionary<int,HashSet<int>>();
+            Dictionary<int,HashSet<string>> dict = new Dictionary<int,HashSet<string>>();
             for (int day = 2; day < 32; day++) {
-                HashSet<int> stockIds = new HashSet<int>();
+                HashSet<string> stockIds = new HashSet<string>();
                 if (days.Contains(day))
                 {
                     var stock = TravelingCart.GetStock(gameId, day);
-                    stockIds.UnionWith(new HashSet<int>(stock.Select(o => o.Id)));
+                    stockIds.UnionWith(new HashSet<string>(stock.Select(o => o.Id.ToString())));
                 }
-                HashSet<int> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
-                if (stockIds.Intersect<int>(RequiredItems).Count() > 0 || trashItems.Intersect<int>(RequiredItems).Count() > 0)
+                HashSet<string> trashItems = Trash.Trash.getAllTrash(gameId, day, 0.1, hasFurnace: true);
+                if (stockIds.Intersect<string>(RequiredItems).Count() > 0 || trashItems.Intersect<string>(RequiredItems).Count() > 0)
                 {
                     count.Add(day);
                     allItems.UnionWith(stockIds);
                     allItems.UnionWith(trashItems);
-                    HashSet<int> dayItems = new HashSet<int>();
+                    HashSet<string> dayItems = new HashSet<string>();
                     dayItems.UnionWith(stockIds);
                     dayItems.UnionWith(trashItems);
                     dict.Add(day, dayItems);
                 }
             }
 
-            if (!allItems.Contains(386) && allItems.Contains(749))
+            if (!allItems.Contains("386") && allItems.Contains("749"))
             {
                 for (int geode = 1; geode < 10; geode++)
                 {
                     (int,int) item = Mines.GetGeodeContents(gameId, geode, Geode.OmniGeode);
                     if (item.Item1 == 386)
                     {
-                        allItems.Add(386);
+                        allItems.Add("386");
                         break;
                     }
                 }
@@ -92,23 +92,23 @@ namespace SeedFinding
 
             return true;
         }
-        static HashSet<int> RequiredItems = new HashSet<int>()
+        static HashSet<string> RequiredItems = new HashSet<string>()
         {
-            334,//": "Copper Bar
+            "334",//": "Copper Bar
 
-            335,//": "Iron Bar
+            "335",//": "Iron Bar
 
-            336,//": "Gold Bar
+            "336",//": "Gold Bar
 
-            768,//": "Solar Essence
+            "768",//": "Solar Essence
 
-            769,//": "Void Essence
+            "769",//": "Void Essence
 
-            338,//": "Refined Quartz
+            "338",//": "Refined Quartz
 
-            787,//": "Battery Pack
+            "787",//": "Battery Pack
 
-            386//: "Iridium Ore
+            "386"//: "Iridium Ore
         };
 
        

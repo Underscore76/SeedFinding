@@ -34,7 +34,7 @@ namespace SeedFinding
             bool bars = false;
             foreach (int day in days)
             {
-                omni = Trash.Trash.getTrash(gameId, day, Trash.Trash.Can.Museum, luck: 0.1) == 749;
+                omni = Trash.Trash.getTrash(gameId, day, Trash.Trash.Can.Museum, luck: 0.1) == "749";
                 if (!omni)
                 {
                     continue;
