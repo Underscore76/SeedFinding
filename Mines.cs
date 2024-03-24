@@ -34,6 +34,8 @@ namespace SeedFinding
     }
     public class Mines
     {
+        public static List<Geode> allGeodes = new() { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode, Geode.Trove, Geode.Coconut, Geode.MysteryBox, Geode.GoldenMysteryBox };
+
         public static List<int> CheckStone1_5(int gameId, int floor, int x, int y, bool ladder=false, bool geologist = false, bool excavator=false)
         {
             return CheckStone1_5(x*1000 + y + floor + gameId / 2, ladder,geologist,excavator,floor);
@@ -504,10 +506,10 @@ namespace SeedFinding
         }
         public static void PrintGeodeContents(int gameId, int startingGeode, int count, List<Geode> geodeTypes, string delimiter, bool excludeOres=true, int deepestMineLevel=0, bool qibeans = false, bool printBestGeode=false, int printBestGeodeMinPrice=0, bool before1_5=false)
         {
-            List<int> unsellables = new List<int>() { 100, 101, 103, 104, 105, 106, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 330, 390 };
+            List<string> unsellables = new List<string>() { "100", "101", "103", "104", "105", "106", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "330", "390" };
             if (excludeOres)
             {
-                unsellables = (List<int>)unsellables.Union(new List<int>() { 378, 380, 382, 384, 386 });
+                unsellables = (List<string>)unsellables.Union(new List<string>() { "378", "380", "382", "384", "386" });
             }
             string header = $"Index";
             foreach (Geode geode in geodeTypes)
@@ -524,13 +526,13 @@ namespace SeedFinding
                 int bestPrice = 0;
                 foreach (Geode geode in geodeTypes)
                 {
-                    var contents = GetGeodeContents(gameId, i, geode, deepestMineLevel, qibeans, before1_5);
+                    var contents = GetGeodeContents1_6(gameId, i, geode, deepestMineLevel, qibeans, before1_5);
                     int price = 0;
-                    if (!unsellables.Contains(ObjectInfo.Get(contents.Item1).Id))
+                    if (!unsellables.Contains(Item.Get(contents.Item1).id))
                     {
-                        price = ObjectInfo.Get(contents.Item1).Cost * contents.Item2;
+                        price = Item.Get(contents.Item1).Price * contents.Item2;
                     }
-                    line += $"{delimiter}{ObjectInfo.Get(contents.Item1).Name}{delimiter}{contents.Item2}{delimiter}{price}";
+                    line += $"{delimiter}{Item.Get(contents.Item1).Name}{delimiter}{contents.Item2}{delimiter}{price}";
 
                     if (price >= bestPrice)
                     {

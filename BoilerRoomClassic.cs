@@ -33,12 +33,12 @@ namespace SeedFinding
             int frozenTear = 0;
             for (int geode = 1; geode < 10; geode++)
             {
-                (int, int) item = Mines.GetGeodeContents(gameId, geode, Geode.OmniGeode);
-                if (item.Item1 == 82)
+                (string, int) item = Mines.GetGeodeContents1_6(gameId, geode, Geode.OmniGeode);
+                if (item.Item1 == "82")
                 {
                     fireQuartz = geode;
                 }
-                if (item.Item1 == 84)
+                if (item.Item1 == "84")
                 {
                     frozenTear = geode;
                 }
@@ -130,7 +130,7 @@ namespace SeedFinding
                         {
                             try
                             {
-                                fs = new FileStream($"BoilerRoomNewRNGA{i}.txt", FileMode.Append);
+                                fs = new FileStream($"BoilerRoomLegacy{i}.txt", FileMode.Append);
                             }
                             catch
                             {
@@ -151,7 +151,7 @@ namespace SeedFinding
                         {
                             try
                             {
-                                fs = new FileStream($"BoilerRoomNewRNGA{i}.txt", FileMode.Append);
+                                fs = new FileStream($"BoilerRoomLegacy{i}.txt", FileMode.Append);
                             }
                             catch
                             {
