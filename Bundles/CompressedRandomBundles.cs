@@ -1,6 +1,7 @@
 ﻿// Class used to translate 64 bit mask to bundle item ids
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SeedFinding.Bundles
 {
@@ -12,6 +13,11 @@ namespace SeedFinding.Bundles
         public bool Satisfies(ulong requirement)
         {
             return (requirement & State) == requirement;
+        }
+
+        public bool Contains(ulong requirement)
+        {
+            return (requirement & State) != 0;
         }
 
         public Dictionary<string, List<int>> ToDict()
