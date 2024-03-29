@@ -242,7 +242,7 @@ namespace SeedFinding.Trash1_6
                 item = new List<string> { "153", "216", "403", "309", "310", "311", "RANDOM_BASE_SEASON_ITEM" }[garbageRandom.Next(7)];
                 if (item == "RANDOM_BASE_SEASON_ITEM")
                 {
-                    item = Utility.GetRandomItemFromSeason(Utility.getSeasonFromDay(day), false, Utility.CreateDaySaveRandom(day, gameId, Game1.hash.GetDeterministicHashCode("")), 1, hasFurnace, hasDesert, mines).ToString();
+                    item = Utility.GetRandomItemFromSeason(Utility.getSeasonFromDay(day), false, garbageRandom, 1, hasFurnace, hasDesert, mines).ToString();
                 }
             }
 
@@ -251,7 +251,7 @@ namespace SeedFinding.Trash1_6
                 item = new List<string> { "153", "216", "403", "309", "310", "311", "RANDOM_BASE_SEASON_ITEM", "168", "167", "170", "171", "172" }[garbageRandom.Next(12)];
                 if (item == "RANDOM_BASE_SEASON_ITEM")
                 {
-                    item = Utility.GetRandomItemFromSeason(Utility.getSeasonFromDay(day), false, Utility.CreateDaySaveRandom(day, gameId, Game1.hash.GetDeterministicHashCode("")), 1, hasFurnace, hasDesert, mines).ToString();
+                    item = Utility.GetRandomItemFromSeason(Utility.getSeasonFromDay(day), false, garbageRandom, 1, hasFurnace, hasDesert, mines).ToString();
                 }
             }
             return new TrashItem(item, can);
