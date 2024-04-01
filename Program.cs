@@ -45,6 +45,9 @@ namespace SeedFinding
             if (true)
             {
 
+                Game1.UseLegacyRandom = false;
+                Console.Write(String.Join(",",Trash1_6.Trash.getAllTrash(1, 1, 0.1).Select(x=>x.ToString())));
+                return;
             }
 
             if (runSpeedTest)
