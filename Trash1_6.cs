@@ -36,7 +36,7 @@ namespace SeedFinding.Trash1_6
             }
             public override string ToString()
             {
-                return string.Format("Can: {0}, Name: {1}, Day:{2}, MinLuck:{2}", Item.Get(Id).Name, getCanOwner(Can), Day.ToString(), MinLuck.ToString());
+                return string.Format("Can: {0}, Name: {1}, Day:{2}, MinLuck:{3}", Item.Get(Id).Name, getCanOwner(Can), Day.ToString(), MinLuck.ToString());
             }
         }
 
