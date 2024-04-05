@@ -14,6 +14,7 @@ using SeedFinding.Trash1_6;
 using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
 using System.Resources;
+using StardewValley;
 
 namespace SeedFinding
 {
@@ -44,9 +45,9 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-
+                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("skillBook_Traveler"));
+                //return;
                 Game1.UseLegacyRandom = true;
-
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -60,8 +61,8 @@ namespace SeedFinding
                 // return;
 
                 //Trash1_6.Trash.getAllTrash(34676331, 14, 0.1, hasFurnace: true);
-                //BoilerRoomClassic.Curate();
-                //return;
+                BoilerRoomClassic.Curate();
+                return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
                 // First, save the standard output.
@@ -69,7 +70,7 @@ namespace SeedFinding
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
-                double time = BoilerRoomClassic.Search(938000000 + 1, numSeeds, blockSize, out List<int> validSeeds);
+                double time = BoilerRoomClassic.Search(1891000000 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);

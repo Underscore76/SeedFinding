@@ -9,7 +9,7 @@ using static SeedFinding.ObjectInfo;
 
 namespace SeedFinding
 {
-    internal class Item
+    public class Item
     {
         [JsonProperty("Name")]
         public string Name;

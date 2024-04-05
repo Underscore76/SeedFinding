@@ -13,5 +13,6 @@ namespace SeedFinding
         public static ulong uniqueIDForThisGame = 0;
         public static uint DaysPlayed = 0;
         public static IHashUtility hash = new HashUtility();
+        public static float DailyLuck = 0.0f;
     }
 }
