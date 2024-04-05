@@ -25,14 +25,18 @@ namespace SeedFinding.Trash1_6
         {
             public string Id;
             public Can Can;
-            public TrashItem(string id, Can can)
+            public double MinLuck;
+            public int Day;
+            public TrashItem(string id, Can can, int day = -1, double luck=0.1)
             {
                 Id = id;
                 Can = can;
+                MinLuck = luck;
+                Day = day;
             }
             public override string ToString()
             {
-                return string.Format("{0}: {1}", Item.Get(Id).Name, getCanOwner(Can));
+                return string.Format("Can: {0}, Name: {1}, Day:{2}, MinLuck:{3}", getCanOwner(Can), Item.Get(Id).Name, Day.ToString(), MinLuck.ToString());
             }
         }
 
@@ -146,34 +150,37 @@ namespace SeedFinding.Trash1_6
                 garbageRandom.NextDouble();
             }
 
-
-            bool baseChancePassed = garbageRandom.NextDouble() < (double)baseChance;
+            double roll = garbageRandom.NextDouble();
+            bool baseChancePassed = roll < (double)baseChance;
 
 
             if (twentyOneChecked && garbageRandom.NextDouble() < 0.002)
             {
                 // Garbage Hat
-                return new TrashItem("GarbageHat", can );
+                return new TrashItem("GarbageHat", can, day, -0.1 );
             }
 
             // Beans
 
-
+            double roll2;
+            double minLuck = roll - 0.2 - (hasBook ? 0.2 : 0);
             // Specific cans
             switch (can)
             {
                 case Can.Clint:
-                    if (baseChancePassed && garbageRandom.NextBool(0.2 + luck))
+                    roll2 = garbageRandom.NextDouble();
+                    if (baseChancePassed && roll2 < (0.2 + luck))
                     {
-                        return new TrashItem(new List<string> { "378", "380", "382" }[garbageRandom.Next(3)],can );
+                        return new TrashItem(new List<string> { "378", "380", "382" }[garbageRandom.Next(3)],can,day, Math.Max(minLuck, roll2 - 0.2));
                     } 
                     break;
                 case Can.Emily:
                     break;
                 case Can.George:
-                    if (baseChancePassed && garbageRandom.NextBool(0.2 + luck))
+                    roll2 = garbageRandom.NextDouble();
+                    if (baseChancePassed && roll2 < (0.2 + luck))
                     {
-                        return new TrashItem("223", can);
+                        return new TrashItem("223", can, day, Math.Max(minLuck, roll2 - 0.2));
                     }
                     break;
                 case Can.Jodi:
@@ -186,7 +193,7 @@ namespace SeedFinding.Trash1_6
                             Random syncedRandom = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("garbage_joja"), gameId, day);
                             if (syncedRandom.NextBool(0.2))
                             {
-                                return new TrashItem(new List<string> { "809", "270", "270", "270" }[garbageRandom.Next(4)], can);
+                                return new TrashItem(new List<string> { "809", "270", "270", "270" }[garbageRandom.Next(4)], can, day, minLuck);
 
                             }
                         }
@@ -195,7 +202,7 @@ namespace SeedFinding.Trash1_6
                             Random syncedRandom = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("garbage_joja"), gameId, day);
                             if (syncedRandom.NextBool(0.2))
                             {
-                                return new TrashItem("167", can);
+                                return new TrashItem("167", can, day, minLuck);
 
                             }
                         }
@@ -207,14 +214,15 @@ namespace SeedFinding.Trash1_6
                     if (baseChancePassed)
                     {
                         Random syncedRandom = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("garbage_museum_535"), gameId, day);
-                        if (syncedRandom.NextBool(0.2 + luck))
+                        roll2 = syncedRandom.NextDouble();
+                        if (roll2 < (0.2 + luck))
                         {
                             syncedRandom = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("garbage_museum_749"), gameId, day);
                             if (syncedRandom.NextBool(0.05))
                             {
-                                return new TrashItem("749", can);
+                                return new TrashItem("749", can, day, Math.Max(minLuck, roll2 - 0.2));
                             }
-                            return new TrashItem("535", can);
+                            return new TrashItem("535", can, day, Math.Max(minLuck, roll2 - 0.2));
 
                         }
 
@@ -224,9 +232,10 @@ namespace SeedFinding.Trash1_6
                     if (baseChancePassed)
                     {
                         Random syncedRandom = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("garbage_saloon_dish"), gameId, day);
-                        if (syncedRandom.NextBool(0.2 + luck))
+                        roll2 = syncedRandom.NextDouble();
+                        if (roll2 < (0.2 + luck))
                         {
-                            return new TrashItem("DishOfTheDay", can);
+                            return new TrashItem("DishOfTheDay", can, day, Math.Max(minLuck, roll2 - 0.2));
 
                         }
 
@@ -254,7 +263,7 @@ namespace SeedFinding.Trash1_6
                     item = Utility.GetRandomItemFromSeason(Utility.getSeasonFromDay(day), false, garbageRandom, 1, hasFurnace, hasDesert, mines).ToString();
                 }
             }
-            return new TrashItem(item, can);
+            return new TrashItem(item, can, day, minLuck);
            
         }
     }

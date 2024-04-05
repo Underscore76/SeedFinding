@@ -28,6 +28,12 @@ namespace SeedFinding
                 return WeatherType.Rain;
             }
 
+            // Off by one error forcing day 5 to be sun
+            if (day == 5)
+            {
+                return WeatherType.Sun;
+            }
+
             if (Utility.isGreenRainDay(day, gameId))
             {
                 return WeatherType.GreenRain;

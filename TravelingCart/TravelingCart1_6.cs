@@ -29,8 +29,8 @@ namespace SeedFinding.Cart1_6
     }
     public class TravelingCart
     {
-        public static List<string> possibleItemsMaster;
-        public static List<string> possibleItemsMaster163;
+        public static HashSet<string> possibleItemsMaster;
+        public static HashSet<string> possibleItemsMaster163;
         public static List<float> randomAmounts;
         public static List<float> randomMultiply;
 
