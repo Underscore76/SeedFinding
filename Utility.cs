@@ -591,6 +591,34 @@ namespace SeedFinding
             return Game1.hash.GetDeterministicHashCode((int)(seedA % 2147483647.0), (int)(seedB % 2147483647.0), (int)(seedC % 2147483647.0), (int)(seedD % 2147483647.0), (int)(seedE % 2147483647.0));
         }
 
+        public static bool TryCreateIntervalRandom(string interval, string key, out Random random, out string error)
+        {
+            int seed = ((key != null) ? Game1.hash.GetDeterministicHashCode(key) : 0);
+            error = null;
+            double intervalSeed;
+            switch (interval.ToLower())
+            {
+                //case "tick":
+                //    intervalSeed = Game1.ticks;
+                //    break;
+                case "day":
+                    intervalSeed = Game1.DaysPlayed;
+                    break;
+                //case "season":
+                //    intervalSeed = Game1.hash.GetDeterministicHashCode(Game1.currentSeason + Game1.year);
+                //    break;
+                //case "year":
+                //    intervalSeed = Game1.hash.GetDeterministicHashCode("year" + Game1.year);
+                //    break;
+                default:
+                    error = "invalid interval '" + interval + "'; expected one of 'tick', 'day', 'season', or 'year'";
+                    random = null;
+                    return false;
+            }
+            random = Utility.CreateRandom(seed, Game1.uniqueIDForThisGame, intervalSeed);
+            return true;
+        }
+
         public static T GetRandom<T>(List<T> list, Random random = null)
         {
             if (list == null || list.Count == 0 || random == null)
