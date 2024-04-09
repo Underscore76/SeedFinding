@@ -50,6 +50,14 @@ namespace SeedFinding
                     {
                         return WeatherType.Sun;
                     }
+                    if (dayOfMonth == 2 || dayOfMonth == 3 || dayOfMonth == 5 )
+                    {
+                        return WeatherType.Sun;
+                    }
+                    if (dayOfMonth == 4)
+                    {
+                        return WeatherType.Rain;
+                    }
                     random = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("location_weather"), gameId, day - 1);
                     if (random.NextDouble() < 0.183)
                     {

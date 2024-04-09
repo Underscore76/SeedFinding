@@ -46,10 +46,7 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-                double hash = Game1.hash.GetDeterministicHashCode("travelerSkillBook");
-                Console.WriteLine(hash);
-                Console.WriteLine(hash % 2147483647.0);
-                return;
+                //return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -62,8 +59,10 @@ namespace SeedFinding
                 // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
                 // return;
                 //Console.WriteLine(StepPredictions.Predict(371897450, 12, 24, new List<string>(){"Lewis","Robin"}));
-                MarriageSpeedrun.Curate();
-                //MarriageSpeedrun.ValidSeed(5299780, true);
+                Console.WriteLine(Weather.getWeather(20, 189726570));
+                Console.WriteLine(Weather.getWeather(21, 189726570));
+                //MarriageSpeedrun.Curate();
+                //MarriageSpeedrun.ValidSeedv2(211391466, false);
                 //Console.WriteLine(Trash1_6.Trash.getTrash(833453617, 2, Trash1_6.Trash.Can.Gus, 0.1));
                 return;
 
