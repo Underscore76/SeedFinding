@@ -151,6 +151,7 @@ namespace SeedFinding.Trash1_6
             }
 
             double roll = garbageRandom.NextDouble();
+            double minLuck = roll - 0.2 - (hasBook ? 0.2 : 0);
             bool baseChancePassed = roll < (double)baseChance;
 
 
@@ -163,7 +164,6 @@ namespace SeedFinding.Trash1_6
             // Beans
 
             double roll2;
-            double minLuck = roll - 0.2 - (hasBook ? 0.2 : 0);
             // Specific cans
             switch (can)
             {

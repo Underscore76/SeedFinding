@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Numerics;
 using System.Text;
 using StardewValley.Hashing;
+using System.Linq;
 
 namespace SeedFinding
 {
@@ -637,6 +638,163 @@ namespace SeedFinding
             }
             return false;
         }
-
+        public static int getRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int all_unlocked_cooking_recipes, int gameId, int daysPlayed, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        {
+            int dayOfMonth = (daysPlayed - 1) % 28 + 1;
+            int year = (daysPlayed - 1) / (28 * 4) + 1;
+            Random r = Utility.CreateRandom(gameId, changeDaily ? daysPlayed : 0, randomSeedAddition);
+            List<int> possibleItems = new List<int>
+            {
+                68,
+                66,
+                78,
+                80,
+                86,
+                152,
+                167,
+                153,
+                420
+            };
+            if ((forQuest && (mines > 40)) || (!forQuest && (mines > 40)))
+            {
+                possibleItems.AddRange(new int[5]
+                {
+                    62,
+                    70,
+                    72,
+                    84,
+                    422
+                });
+            }
+            if ((forQuest && (mines > 80)) || (!forQuest && (mines > 80)))
+            {
+                possibleItems.AddRange(new int[3]
+                {
+                    64,
+                    60,
+                    82
+                });
+            }
+            if (hasDesert)
+            {
+                possibleItems.AddRange(new int[4]
+                {
+                    88,
+                    90,
+                    164,
+                    165
+                });
+            }
+            if (hasFurnace)
+            {
+                possibleItems.AddRange(new int[4]
+                {
+                    334,
+                    335,
+                    336,
+                    338
+                });
+            }
+            if (season == Season.Spring)
+            {
+                possibleItems.AddRange(new int[17]
+                {
+                    16,
+                    18,
+                    20,
+                    22,
+                    129,
+                    131,
+                    132,
+                    136,
+                    137,
+                    142,
+                    143,
+                    145,
+                    147,
+                    148,
+                    152,
+                    167,
+                    267
+                });
+            }
+            else if (season == Season.Summer)
+            {
+                possibleItems.AddRange(new int[16]
+                {
+                    128,
+                    130,
+                    132,
+                    136,
+                    138,
+                    142,
+                    144,
+                    145,
+                    146,
+                    149,
+                    150,
+                    155,
+                    396,
+                    398,
+                    402,
+                    267
+                });
+            }
+            else if (season == Season.Fall)
+            {
+                possibleItems.AddRange(new int[18]
+                {
+                    404,
+                    406,
+                    408,
+                    410,
+                    129,
+                    131,
+                    132,
+                    136,
+                    137,
+                    139,
+                    140,
+                    142,
+                    143,
+                    148,
+                    150,
+                    154,
+                    155,
+                    269
+                });
+            }
+            else if (season == Season.Winter)
+            {
+                possibleItems.AddRange(new int[17]
+                {
+                    412,
+                    414,
+                    416,
+                    418,
+                    130,
+                    131,
+                    132,
+                    136,
+                    140,
+                    141,
+                    144,
+                    146,
+                    147,
+                    150,
+                    151,
+                    154,
+                    269
+                });
+            }
+            if (forQuest)
+            {
+                for (int i = 0; i < all_unlocked_cooking_recipes; i++)
+                {
+                    r.NextDouble();
+                }
+            }
+            return possibleItems.ElementAt(r.Next(possibleItems.Count));
+        }
     }
 }

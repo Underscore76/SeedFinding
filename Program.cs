@@ -28,7 +28,7 @@ namespace SeedFinding
             int blockSize = 1 << 16;
 
             // run a search for specific remux bundle set in 1.6
-            bool runRemixSearch1_6 = true;
+            bool runRemixSearch1_6 = false;
 
             // run a search for a specific remix bundle set
             bool runRemixSearch = false;
@@ -45,9 +45,8 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("skillBook_Traveler"));
+                Game1.UseLegacyRandom = false;
                 //return;
-                Game1.UseLegacyRandom = true;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -59,9 +58,12 @@ namespace SeedFinding
                 return;*/
                 // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
                 // return;
-
-                //Trash1_6.Trash.getAllTrash(34676331, 14, 0.1, hasFurnace: true);
-                BoilerRoomClassic.Curate();
+                //Console.WriteLine(StepPredictions.Predict(371897450, 12, 24, new List<string>(){"Lewis","Robin"}));
+                Console.WriteLine(Weather.getWeather(20, 189726570));
+                Console.WriteLine(Weather.getWeather(21, 189726570));
+                //MarriageSpeedrun.Curate();
+                //MarriageSpeedrun.ValidSeedv2(211391466, false);
+                //Console.WriteLine(Trash1_6.Trash.getTrash(833453617, 2, Trash1_6.Trash.Can.Gus, 0.1));
                 return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
@@ -70,14 +72,16 @@ namespace SeedFinding
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
-                double time = BoilerRoomClassic.Search(1891000000 + 1, numSeeds, blockSize, out List<int> validSeeds);
+                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-               // Console.SetOut(tmp);
-               // sw.Close();
+                // Console.SetOut(tmp);
+                // sw.Close();
+
+
             }
             return;
 
@@ -143,43 +147,8 @@ namespace SeedFinding
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
             }
 
-            if (runBoilerSearch)
-            {
 
-                Game1.UseLegacyRandom = true;
-
-                //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
-                //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
-                //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
-                //return;
-                /*foreach(var item in TravelingCart.GetStockNew(168, 5))
-                {
-                    Console.WriteLine(item.ToString());
-                }
-                return;*/
-                // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
-                // return;
-
-                //BoilerRoomClassic.ValidSeed(9110854);
-                //return;
-
-                //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
-                // First, save the standard output.
-                //TextWriter tmp = Console.Out;
-                //StreamWriter sw = new StreamWriter(fs);
-                //Console.SetOut(sw);
-                int numSeeds = Int32.MaxValue;
-                double time = BoilerRoomClassic.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
-                foreach (var item in validSeeds)
-                {
-                    Console.WriteLine(item);
-                }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-                // Console.SetOut(tmp);
-                // sw.Close();
-            }
-
-            return;
+               
 
         }
     }

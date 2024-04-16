@@ -39,12 +39,36 @@ namespace SeedFinding
                 return WeatherType.GreenRain;
             }
 
+            int dayOfMonth = Utility.getDayOfMonthFromDay(day);
+
             Season season = Utility.getSeasonFromDay(day);
             Random random;
             switch (season)
             {
                 case Season.Spring:
+                    if (dayOfMonth == 13 || dayOfMonth == 24)
+                    {
+                        return WeatherType.Sun;
+                    }
+                    if (dayOfMonth == 2 || dayOfMonth == 3 || dayOfMonth == 5 )
+                    {
+                        return WeatherType.Sun;
+                    }
+                    if (dayOfMonth == 4)
+                    {
+                        return WeatherType.Rain;
+                    }
+                    random = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("location_weather"), gameId, day - 1);
+                    if (random.NextDouble() < 0.183)
+                    {
+                        return WeatherType.Rain;
+                    }
+                    break;
                 case Season.Fall:
+                    if (dayOfMonth == 16 || dayOfMonth == 27)
+                    {
+                        return WeatherType.Sun;
+                    }
                     random = Utility.CreateRandom(Game1.hash.GetDeterministicHashCode("location_weather"), gameId, day-1);
                     if (random.NextDouble() < 0.183)
                     {
@@ -52,9 +76,12 @@ namespace SeedFinding
                     }
                     break;
                 case Season.Summer:
-                    if (Utility.getDayOfMonthFromDay(day) % 13 == 0)
+                    if (dayOfMonth % 13 == 0)
                     {
                         return WeatherType.Storm;
+                    }
+                    if (dayOfMonth == 11 || dayOfMonth == 28){
+                        return WeatherType.Sun;
                     }
                      
                     random = Utility.CreateDaySaveRandom(day-1, gameId, Game1.hash.GetDeterministicHashCode("summer_rain_chance"));
