@@ -1,4 +1,5 @@
 ﻿using SeedFinding.Cart1_6;
+using SeedFinding.NightEvents1_6;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace SeedFinding
             bool fairy = false;
             int fairyDay = 0;
             for (int day = 58; day < 65; day++) {
-                fairy = NightEvents.GetEvent(id, day) == NightEvents.Event.Fairy;
+                fairy = NightEvent.GetEvent(id, day) == NightEvent.Event.Fairy;
                 if (fairy)
                 {
                     fairyDay = day;

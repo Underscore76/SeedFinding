@@ -1,8 +1,8 @@
 using System;
 
-namespace SeedFinding
+namespace SeedFinding.NightEvents
 {
-    public class NightEvents
+    public class NightEvent
     {
         public enum Event
         {
