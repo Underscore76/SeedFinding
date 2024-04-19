@@ -113,7 +113,12 @@ namespace SeedFinding
 
         public static (string,int) GetGeodeContents1_6(int gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans = false, bool farmingMastery=false, int fishingLevel=0, bool hasCoconutHat = false, bool hasMysteryBook = false)
         {
-            Random r = Utility.CreateRandom(geodesCracked, gameId / 2); 
+            return GetGeodeContents1_6_4(gameId, 0, geodesCracked, whichGeode, deepestMineLevel, qibeans, farmingMastery, fishingLevel, hasCoconutHat, hasMysteryBook);
+        }
+
+        public static (string,int) GetGeodeContents1_6_4(int gameId, long multiplayerId, int geodesCracked, Geode whichGeode, int deepestMineLevel = 0, bool qibeans = false, bool farmingMastery = false, int fishingLevel = 0, bool hasCoconutHat = false, bool hasMysteryBook = false)
+        {
+            Random r = Utility.CreateRandom(geodesCracked, gameId / 2, (int)multiplayerId / 2);
             int prewarm_amount = r.Next(1, 10);
             for (int i = 0; i < prewarm_amount; i++)
             {
