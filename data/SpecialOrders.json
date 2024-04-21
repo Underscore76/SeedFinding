@@ -1,0 +1,1688 @@
+{
+  "Willy": {
+    "Name": "Juicy Bugs Wanted!",
+    "Requester": "Willy",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Willy_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Willy_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "item_bug_meat"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Willy_Objective_1_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "WillyBarrel",
+          "DropBoxGameLocation": "Beach",
+          "DropBoxIndicatorLocation": "37 32",
+          "AcceptedContextTags": "item_bug_meat"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "3000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "willyBugWadCutscene"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Pam": {
+    "Name": "The Strong Stuff",
+    "Requester": "Pam",
+    "Duration": "TwoWeeks",
+    "Repeatable": false,
+    "RequiredTags": "season_spring",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Pam_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Pam_Objective_0_Text]",
+        "RequiredCount": "12",
+        "Data": {
+          "AcceptedContextTags": "juice_item, preserve_sheet_index_192"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Pam_Objective_1_Text]",
+        "RequiredCount": "12",
+        "Data": {
+          "DropBox": "PamKitchen",
+          "DropBoxGameLocation": "Trailer",
+          "DropBoxIndicatorLocation": "10 5",
+          "AcceptedContextTags": "juice_item, preserve_sheet_index_192"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "3000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "pamPotatoJuice"
+        }
+      },
+      {
+        "Type": "Friendship",
+        "Data": {}
+      }
+    ],
+    "CustomFields": null
+  },
+  "Pierre": {
+    "Name": "Pierre's Prime Produce",
+    "Requester": "Pierre",
+    "Duration": "Month",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Pierre_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Pierre_Objective_0_Text]",
+        "RequiredCount": "25",
+        "Data": {
+          "AcceptedContextTags": "!forage_item, category_vegetable, quality_gold"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Pierre_Objective_1_Text]",
+        "RequiredCount": "25",
+        "Data": {
+          "DropBox": "PierreBox",
+          "DropBoxGameLocation": "SeedShop",
+          "DropBoxIndicatorLocation": "18.5 27",
+          "AcceptedContextTags": "!forage_item, category_vegetable, quality_gold"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "pierreQualityCrops"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Robin": {
+    "Name": "Robin's Project",
+    "Requester": "Robin",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Robin_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Robin_Objective_0_Text]",
+        "RequiredCount": "80",
+        "Data": {
+          "AcceptedContextTags": "item_hardwood"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Robin_Objective_1_Text]",
+        "RequiredCount": "80",
+        "Data": {
+          "DropBox": "RobinWood",
+          "DropBoxGameLocation": "ScienceHouse",
+          "DropBoxIndicatorLocation": "10.5 18",
+          "AcceptedContextTags": "item_hardwood"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "robinDeluxeBed"
+        }
+      },
+      {
+        "Type": "Friendship",
+        "Data": {}
+      }
+    ],
+    "CustomFields": null
+  },
+  "Emily": {
+    "Name": "Rock Rejuvenation",
+    "Requester": "Emily",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "event_992559",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Emily_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Deliver",
+        "Text": "[Emily_Objective_0_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_ruby",
+          "TargetName": "Emily"
+        }
+      },
+      {
+        "Type": "Deliver",
+        "Text": "[Emily_Objective_1_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_topaz",
+          "TargetName": "Emily"
+        }
+      },
+      {
+        "Type": "Deliver",
+        "Text": "[Emily_Objective_2_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_emerald",
+          "TargetName": "Emily"
+        }
+      },
+      {
+        "Type": "Deliver",
+        "Text": "[Emily_Objective_3_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_jade",
+          "TargetName": "Emily"
+        }
+      },
+      {
+        "Type": "Deliver",
+        "Text": "[Emily_Objective_4_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_amethyst",
+          "TargetName": "Emily"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "1000"
+        }
+      },
+      {
+        "Type": "Friendship",
+        "Data": {}
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "emilyStones",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Demetrius": {
+    "Name": "Aquatic Overpopulation",
+    "Requester": "Demetrius",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Demetrius_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "FishType",
+        "Values": [
+          {
+            "RequiredTags": "season_spring",
+            "Value": "PICK_ITEM Sunfish, Sardine, Flounder, Largemouth Bass, Halibut"
+          },
+          {
+            "RequiredTags": "season_summer",
+            "Value": "PICK_ITEM Rainbow Trout, Dorado, Tilapia, Tuna, Red Mullet"
+          },
+          {
+            "RequiredTags": "season_fall",
+            "Value": "PICK_ITEM Tiger Trout, Albacore, Midnight Carp, Salmon"
+          },
+          {
+            "RequiredTags": "season_winter",
+            "Value": "PICK_ITEM Squid, Perch, Lingcod"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Fish",
+        "Text": "[Demetrius_Objective_0_Text]",
+        "RequiredCount": "10",
+        "Data": {
+          "AcceptedContextTags": "{FishType:Tags}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "{FishType:Price}",
+          "Multiplier": "10"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "DemetriusReward",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Demetrius2": {
+    "Name": "Biome Balance",
+    "Requester": "Demetrius",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Demetrius2_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "FishType",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "Text|[Demetrius2_RE_FishType_0_Text]|Tags|fish_river"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Text|[Demetrius2_RE_FishType_1_Text]|Tags|fish_ocean"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Text|[Demetrius2_RE_FishType_2_Text]|Tags|fish_lake"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Fish",
+        "Text": "[Demetrius2_Objective_0_Text]",
+        "RequiredCount": "20",
+        "Data": {
+          "AcceptedContextTags": "{FishType:Tags}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "1500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "DemetriusReward",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Gus": {
+    "Name": "Gus' Famous Omelet",
+    "Requester": "Gus",
+    "Duration": "TwoWeeks",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Gus_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Greeting",
+        "Values": [
+          {
+            "RequiredTags": "!mail_gusGiantOmelet",
+            "Value": "[Gus_RE_Greeting_0]"
+          },
+          {
+            "RequiredTags": "mail_gusGiantOmelet",
+            "Value": "[Gus_RE_Greeting_1]"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Gus_Objective_0_Text]",
+        "RequiredCount": "24",
+        "Data": {
+          "AcceptedContextTags": "egg_item"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Gus_Objective_1_Text]",
+        "RequiredCount": "24",
+        "Data": {
+          "DropBox": "GusFridge",
+          "DropBoxGameLocation": "Saloon",
+          "DropBoxIndicatorLocation": "18 15",
+          "MinimumCapacity": "30",
+          "AcceptedContextTags": "egg_item"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "3000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "gusGiantOmelet",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Lewis": {
+    "Name": "Crop Order",
+    "Requester": "Lewis",
+    "Duration": "Month",
+    "Repeatable": true,
+    "RequiredTags": "!season_winter",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Lewis_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Crop",
+        "Values": [
+          {
+            "RequiredTags": "season_spring",
+            "Value": "PICK_ITEM Potato, Green Bean, Garlic, Cauliflower"
+          },
+          {
+            "RequiredTags": "season_summer",
+            "Value": "PICK_ITEM Tomato, Blueberry, Radish, Melon, Hot Pepper, Wheat"
+          },
+          {
+            "RequiredTags": "season_fall",
+            "Value": "PICK_ITEM Pumpkin, Eggplant, Cranberries, Bok Choy, Amaranth, Grape, Yam, Artichoke"
+          }
+        ]
+      },
+      {
+        "Name": "Text",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "[Lewis_RE_Text_0]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "[Lewis_RE_Text_1]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "[Lewis_RE_Text_2]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "[Lewis_RE_Text_3]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "[Lewis_RE_Text_4]"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Lewis_Objective_1_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "{Crop:Tags}"
+        }
+      },
+      {
+        "Type": "Ship",
+        "Text": "[Lewis_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "{Crop:Tags}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "{Crop:Price}",
+          "Multiplier": "50"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "MSB_Lewis",
+          "Host": "true",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Wizard": {
+    "Name": "A Curious Substance",
+    "Requester": "Wizard",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Wizard_Text]",
+    "ItemToRemoveOnEnd": "875",
+    "MailToRemoveOnEnd": "ectoplasmDrop",
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Deliver",
+        "Text": "[Wizard_Objective_0_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_ectoplasm",
+          "Message": "[Wizard_Objective_0_Message]",
+          "TargetName": "Wizard"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "WizardReward2",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Clint": {
+    "Name": "Cave Patrol",
+    "Requester": "Clint",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Clint_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Monster",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "Target|Bat|LocalizedName|[Clint_RE_Monster_0_LocalizedName]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|Dust Spirit|LocalizedName|[Clint_RE_Monster_1_LocalizedName]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|Skeleton|LocalizedName|[Clint_RE_Monster_2_LocalizedName]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|Grub|LocalizedName|[Clint_RE_Monster_3_LocalizedName]"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Slay",
+        "Text": "[Clint_Objective_0_Text]",
+        "RequiredCount": "50",
+        "Data": {
+          "TargetName": "{Monster:Target}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "6000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "ClintReward",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Linus": {
+    "Name": "Community Cleanup",
+    "Requester": "Linus",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Linus_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Linus_Objective_0_Text]",
+        "RequiredCount": "20",
+        "Data": {
+          "AcceptedContextTags": "trash_item"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Linus_Objective_1_Text]",
+        "RequiredCount": "20",
+        "Data": {
+          "DropBox": "Dumpster",
+          "DropBoxGameLocation": "Railroad",
+          "DropBoxIndicatorLocation": "28.5 36",
+          "AcceptedContextTags": "trash_item"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "linusTrashCleanup",
+          "NoLetter": "false"
+        }
+      },
+      {
+        "Type": "Friendship",
+        "Data": {}
+      }
+    ],
+    "CustomFields": null
+  },
+  "Evelyn": {
+    "Name": "Gifts for George",
+    "Requester": "Evelyn",
+    "Duration": "Month",
+    "Repeatable": false,
+    "RequiredTags": "season_spring",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Evelyn_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Evelyn_Objective_0_Text]",
+        "RequiredCount": "12",
+        "Data": {
+          "AcceptedContextTags": "item_leek"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Evelyn_Objective_1_Text]",
+        "RequiredCount": "12",
+        "Data": {
+          "DropBox": "EvelynKitchen",
+          "DropBoxGameLocation": "JoshHouse",
+          "DropBoxIndicatorLocation": "3 15",
+          "AcceptedContextTags": "item_leek"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "georgeGifts",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Wizard2": {
+    "Name": "Prismatic Jelly",
+    "Requester": "Wizard",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Wizard2_Text]",
+    "ItemToRemoveOnEnd": "876",
+    "MailToRemoveOnEnd": "prismaticJellyDrop",
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Slay",
+        "Text": "[Wizard2_Objective_0_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "TargetName": "Prismatic Slime"
+        }
+      },
+      {
+        "Type": "Deliver",
+        "Text": "[Wizard2_Objective_1_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_prismatic_jelly",
+          "TargetName": "Wizard",
+          "Message": "[Wizard2_Objective_1_Message]"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "5000"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "WizardReward",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Robin2": {
+    "Name": "Robin's Resource Rush",
+    "Requester": "Robin",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Robin2_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Resource",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "PICK_ITEM Wood, Stone"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Robin2_Objective_0_Text]",
+        "RequiredCount": "1000",
+        "Data": {
+          "AcceptedContextTags": "{Resource:Tags}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "robinResource",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Gunther": {
+    "Name": "Fragments of the past",
+    "Requester": "Gunther",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Gunther_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Gunther_Objective_1_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "bone_item"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[Gunther_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "GuntherBox",
+          "DropBoxGameLocation": "ArchaeologyHouse",
+          "DropBoxIndicatorLocation": "6 8",
+          "AcceptedContextTags": "bone_item"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "3500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "guntherBones",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Caroline": {
+    "Name": "Island Ingredients",
+    "Requester": "Caroline",
+    "Duration": "Month",
+    "Repeatable": true,
+    "RequiredTags": "island",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Caroline_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Crop",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "PICK_ITEM Pineapple, Taro Root, Ginger"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Lewis_Objective_1_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "{Crop:Tags}"
+        }
+      },
+      {
+        "Type": "Ship",
+        "Text": "[Caroline_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "AcceptedContextTags": "{Crop:Tags}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "{Crop:Price}",
+          "Multiplier": "50"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "carolineSO",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "Willy2": {
+    "Name": "Tropical Fish",
+    "Requester": "Willy",
+    "Duration": "Week",
+    "Repeatable": false,
+    "RequiredTags": "island, mail_Island_Resort",
+    "Condition": "",
+    "OrderType": "",
+    "SpecialRule": "",
+    "Text": "[Willy2_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Fish",
+        "Text": "[Willy2_Objective_0_Text]",
+        "RequiredCount": "5",
+        "Data": {
+          "AcceptedContextTags": "item_lionfish"
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[Willy2_Objective_1_Text]",
+        "RequiredCount": "5",
+        "Data": {
+          "AcceptedContextTags": "item_blue_discus"
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[Willy2_Objective_2_Text]",
+        "RequiredCount": "5",
+        "Data": {
+          "AcceptedContextTags": "item_stingray"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Money",
+        "Data": {
+          "Amount": "2500"
+        }
+      },
+      {
+        "Type": "Mail",
+        "Data": {
+          "MailReceived": "WillyTropicalFish",
+          "NoLetter": "false"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge": {
+    "Name": "FivePlagues",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "NOT_IMPLEMENTED, !rule_QI_BEANS",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "FIVE_PLAGUES, QI_BEANS",
+    "Text": "[QiChallenge_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Ship",
+        "Text": "[QiChallenge_Objective_0_Text]",
+        "RequiredCount": "500",
+        "Data": {
+          "AcceptedContextTags": "item_qi_fruit"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "50"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge2": {
+    "Name": "Qi's Crop",
+    "Requester": "Qi",
+    "Duration": "Month",
+    "Repeatable": true,
+    "RequiredTags": "!rule_QI_BEANS",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "QI_BEANS, DROP_QI_BEANS",
+    "Text": "[QiChallenge2_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Ship",
+        "Text": "[QiChallenge2_Objective_0_Text]",
+        "RequiredCount": "500",
+        "Data": {
+          "AcceptedContextTags": "item_qi_fruit"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "100"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge3": {
+    "Name": "Let's Play A Game",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "",
+    "Text": "[QiChallenge3_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "JKScore",
+        "Text": "[QiChallenge3_Objective_0_Text]",
+        "RequiredCount": "50000",
+        "Data": {
+          "AcceptedContextTags": "placeholder"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "20"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge4": {
+    "Name": "Four Precious Stones",
+    "Requester": "Qi",
+    "Duration": "Month",
+    "Repeatable": true,
+    "RequiredTags": "!dropbox_QiChallengeBox",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "",
+    "Text": "[QiChallenge4_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Treasure",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "Target|item_prismatic_shard|LocalizedName|[Marlon_DF_Item_2_LocalizedName]|Count|4"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Marlon_DF_2_Objective]",
+        "RequiredCount": "{Treasure:Count}",
+        "Data": {
+          "AcceptedContextTags": "{Treasure:Target}"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge4_Objective_0_Text]",
+        "RequiredCount": "4",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "item_prismatic_shard"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "40"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge5": {
+    "Name": "Qi's Hungry Challenge",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "SC_NO_FOOD",
+    "Text": "[QiChallenge5_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "ReachMineFloor",
+        "Text": "[QiChallenge5_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "SkullCave": "true"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "25"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge6": {
+    "Name": "Qi's Cuisine",
+    "Requester": "Qi",
+    "Duration": "TwoWeeks",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "QI_COOKING",
+    "Text": "[QiChallenge6_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Ship",
+        "Text": "[QiChallenge6_Objective_0_Text]",
+        "RequiredCount": "100000",
+        "Data": {
+          "AcceptedContextTags": "quality_qi",
+          "UseShipmentValue": "True"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "25"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge7": {
+    "Name": "Qi's Kindness",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "",
+    "Text": "[QiChallenge7_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Gift",
+        "Text": "[QiChallenge7_Objective_0_Text]",
+        "RequiredCount": "50",
+        "Data": {
+          "MinimumLikeLevel": "Loved"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "40"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge8": {
+    "Name": "Extended Family",
+    "Requester": "Qi",
+    "Duration": "ThreeDays",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "LEGENDARY_FAMILY",
+    "Text": "[QiChallenge8_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Fish",
+        "Text": "[QiChallenge8_Objective_0_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_ms._angler"
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[QiChallenge8_Objective_1_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_glacierfish_jr."
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[QiChallenge8_Objective_2_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_son_of_crimsonfish"
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[QiChallenge8_Objective_3_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_radioactive_carp"
+        }
+      },
+      {
+        "Type": "Fish",
+        "Text": "[QiChallenge8_Objective_4_Text]",
+        "RequiredCount": "1",
+        "Data": {
+          "AcceptedContextTags": "item_legend_ii"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "20"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge9": {
+    "Name": "Danger In The Deep",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "MINE_HARD",
+    "Text": "[QiChallenge9_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "ReachMineFloor",
+        "Text": "[QiChallenge9_Objective_0_Text]",
+        "RequiredCount": "120",
+        "Data": {}
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "50"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge10": {
+    "Name": "Skull Cavern Invasion",
+    "Requester": "Qi",
+    "Duration": "Week",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "SC_HARD",
+    "Text": "[QiChallenge10_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "ReachMineFloor",
+        "Text": "[QiChallenge10_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "SkullCave": "true"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "40"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge11": {
+    "Name": "Find Qi's Double",
+    "Requester": "Qi",
+    "Duration": "OneDay",
+    "Repeatable": true,
+    "RequiredTags": "NOT_IMPLEMENTED",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "QI_DOUBLE",
+    "Text": "[QiChallenge11_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Custom",
+        "Text": "[QiChallenge11_Objective_0_Text]",
+        "RequiredCount": "120",
+        "Data": {
+          "AcceptedContextTags": "placeholder"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "10"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "QiChallenge12": {
+    "Name": "Qi's Prismatic Grange",
+    "Requester": "Qi",
+    "Duration": "TwoWeeks",
+    "Repeatable": true,
+    "RequiredTags": "!dropbox_QiChallengeBox",
+    "Condition": "",
+    "OrderType": "Qi",
+    "SpecialRule": "",
+    "Text": "[QiChallenge12_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_0_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "MinimumCapacity": "36",
+          "AcceptedContextTags": "color_red/color_dark_red"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_1_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "color_orange/color_copper/color_dark_orange"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_2_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "color_yellow/color_dark_yellow/color_gold"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_3_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "color_green/color_dark_green/color_lime/color_yellow_green/color_jade"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_4_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "color_blue/color_dark_blue/color_dark_cyan/color_light_cyan/color_cyan/color_aquamarine"
+        }
+      },
+      {
+        "Type": "Donate",
+        "Text": "[QiChallenge12_Objective_5_Text]",
+        "RequiredCount": "100",
+        "Data": {
+          "DropBox": "QiChallengeBox",
+          "DropBoxGameLocation": "QiNutRoom",
+          "DropBoxIndicatorLocation": "1 3",
+          "AcceptedContextTags": "color_purple/color_dark_purple/color_dark_pink/color_pale_violet_red/color_poppyseed/color_iridium"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Gems",
+        "Data": {
+          "Amount": "35"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "DesertFestivalMarlon1": {
+    "Name": "Monster Hunt",
+    "Requester": "Marlon",
+    "Duration": "OneDay",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "DesertFestivalMarlon",
+    "SpecialRule": "",
+    "Text": "[Marlon_DF_0_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Monster",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "Target|Serpent|LocalizedName|[Marlon_DF_Monster_0_LocalizedName]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|Sludge|LocalizedName|[Marlon_DF_Monster_1_LocalizedName]"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|Mummy|LocalizedName|[Marlon_DF_Monster_2_LocalizedName]"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Slay",
+        "Text": "[Marlon_DF_0_Objective]",
+        "RequiredCount": "10",
+        "Data": {
+          "TargetName": "{Monster:Target}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Object",
+        "Data": {
+          "Item": "CalicoEgg",
+          "Amount": "35"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "DesertFestivalMarlon2": {
+    "Name": "Deep Dive",
+    "Requester": "Marlon",
+    "Duration": "OneDay",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "DesertFestivalMarlon",
+    "SpecialRule": "",
+    "Text": "[Marlon_DF_1_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": null,
+    "Objectives": [
+      {
+        "Type": "ReachMineFloor",
+        "Text": "[Marlon_DF_1_Objective]",
+        "RequiredCount": "30",
+        "Data": {
+          "SkullCave": "true"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Object",
+        "Data": {
+          "Item": "CalicoEgg",
+          "Amount": "50"
+        }
+      }
+    ],
+    "CustomFields": null
+  },
+  "DesertFestivalMarlon3": {
+    "Name": "Treasure Hunt",
+    "Requester": "Marlon",
+    "Duration": "OneDay",
+    "Repeatable": true,
+    "RequiredTags": "",
+    "Condition": "",
+    "OrderType": "DesertFestivalMarlon",
+    "SpecialRule": "",
+    "Text": "[Marlon_DF_2_Text]",
+    "ItemToRemoveOnEnd": null,
+    "MailToRemoveOnEnd": null,
+    "RandomizedElements": [
+      {
+        "Name": "Treasure",
+        "Values": [
+          {
+            "RequiredTags": "",
+            "Value": "Target|item_omni_geode|LocalizedName|[Marlon_DF_Item_0_LocalizedName]|Count|12"
+          },
+          {
+            "RequiredTags": "",
+            "Value": "Target|item_iridium_ore|LocalizedName|[Marlon_DF_Item_1_LocalizedName]|Count|15"
+          }
+        ]
+      }
+    ],
+    "Objectives": [
+      {
+        "Type": "Collect",
+        "Text": "[Marlon_DF_2_Objective]",
+        "RequiredCount": "{Treasure:Count}",
+        "Data": {
+          "AcceptedContextTags": "{Treasure:Target}"
+        }
+      }
+    ],
+    "Rewards": [
+      {
+        "Type": "Object",
+        "Data": {
+          "Item": "CalicoEgg",
+          "Amount": "40"
+        }
+      }
+    ],
+    "CustomFields": null
+  }
+}
