@@ -65,8 +65,10 @@ namespace SeedFinding
                 //MarriageSpeedrun.ValidSeedv2(211391466, false);
                 //Console.WriteLine(Trash1_6.Trash.getTrash(833453617, 2, Trash1_6.Trash.Can.Gus, 0.1));
 
-                SpecialOrders.islandAccess = true;
-                Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
+                //SpecialOrders.islandAccess = true;
+                //Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
+                Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
+                Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
                 return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);

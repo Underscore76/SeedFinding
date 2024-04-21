@@ -796,5 +796,47 @@ namespace SeedFinding
             }
             return possibleItems.ElementAt(r.Next(possibleItems.Count));
         }
+
+        public static Point[] getSurroundingTileLocationsArray(Point tileLocation)
+        {
+            return new Point[8]
+            {
+            new Point(-1+tileLocation.X, 0+tileLocation.Y),
+            new Point(1+tileLocation.X, 0+tileLocation.Y),
+            new Point(0+tileLocation.X, 1+tileLocation.Y),
+            new Point(0+tileLocation.X, -1+tileLocation.Y),
+            new Point(-1+tileLocation.X, -1+tileLocation.Y),
+            new Point(1+tileLocation.X, -1+tileLocation.Y),
+            new Point(1+tileLocation.X, 1+tileLocation.Y),
+            new Point(-1+tileLocation.X, 1+tileLocation.Y)
+            };
+        }
+        public static bool isFestivalDay(int day)
+        {
+            Season season = ConvertDaysToSeason(day);
+            int dayOfMonth = day % 28;
+            if (dayOfMonth == 0)
+            {
+                dayOfMonth = 28;
+            }
+
+            switch (season)
+            {
+                case Season.Spring:
+                    return dayOfMonth == 13 || dayOfMonth == 24;
+                    break;
+                case Season.Summer:
+                    return dayOfMonth == 11 || dayOfMonth == 28;
+                    break;
+                case Season.Fall:
+                    return dayOfMonth == 16 || dayOfMonth == 27;
+                    break;
+                case Season.Winter:
+                    return dayOfMonth == 11 || dayOfMonth == 25;
+                    break;
+
+            }
+            return false;
+        }
     }
 }

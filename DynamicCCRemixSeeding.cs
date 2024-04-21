@@ -106,7 +106,7 @@ namespace SeedFinding
             beach.ProcessBubbles(Beach.map);
 
             int totalTime = 0;
-            foreach (Bubbles bubbles in beach.Bubbles)
+            foreach (var bubbles in beach.Bubbles)
             {
                 if (bubbles.Distance < 3 || bubbles.Tile.X > 57)
                 {
@@ -142,7 +142,7 @@ namespace SeedFinding
             forest.ProcessBubbles(Forest.map);
 
             int totalTime = 0;
-            foreach (Bubbles bubbles in forest.Bubbles)
+            foreach (var bubbles in forest.Bubbles)
             {
                 if (bubbles.Distance < 3 || 
                     bubbles.Tile.X < 52 && bubbles.Tile.Y < 41 ||
