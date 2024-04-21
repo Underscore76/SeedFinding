@@ -59,11 +59,14 @@ namespace SeedFinding
                 // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
                 // return;
                 //Console.WriteLine(StepPredictions.Predict(371897450, 12, 24, new List<string>(){"Lewis","Robin"}));
-                Console.WriteLine(Weather.getWeather(20, 189726570));
-                Console.WriteLine(Weather.getWeather(21, 189726570));
+                //Console.WriteLine(Weather.getWeather(20, 189726570));
+                //Console.WriteLine(Weather.getWeather(21, 189726570));
                 //MarriageSpeedrun.Curate();
                 //MarriageSpeedrun.ValidSeedv2(211391466, false);
                 //Console.WriteLine(Trash1_6.Trash.getTrash(833453617, 2, Trash1_6.Trash.Can.Gus, 0.1));
+
+                SpecialOrders.islandAccess = true;
+                Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
                 return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
