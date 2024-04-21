@@ -134,7 +134,7 @@ namespace SeedFinding
             mountain.ProcessBubbles(Mountain.map);
 
             int totalTime = 0;
-            foreach (Bubbles bubbles in mountain.Bubbles)
+            foreach (var bubbles in mountain.Bubbles)
             {
                 if (bubbles.StartTime > 1200)
                 {
@@ -173,7 +173,7 @@ namespace SeedFinding
             forest.ProcessBubbles(Forest.map);
 
             int totalTime = 0;
-            foreach (Bubbles bubbles in forest.Bubbles)
+            foreach (var bubbles in forest.Bubbles)
             {
                 if (bubbles.StartTime > 1200)
                 {
