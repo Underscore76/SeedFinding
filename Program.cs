@@ -46,37 +46,8 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                Game1.UseLegacyRandom = false;
-				uint seed = 2910939589;
-				//int seed = (int)useed;
-				Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(seed, 5).Select(o=>Item.Get(o.Id).Name))));
-				return;
-
-				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
-				//return;
-				List<Locations1_6.Location> locations = new()
-				{
-					new Locations1_6.Location("Town", seed),
-					new Locations1_6.Location("Beach", seed),
-					new Locations1_6.Location("Mountain", seed),
-					new Locations1_6.Location("Forest", seed),
-					new Locations1_6.Location("BusStop", seed),
-					new Locations1_6.Location("Desert", seed),
-					new Locations1_6.Location("Railroad", seed),
-					new Locations1_6.Location("Backwoods", seed)
-				};
-				foreach (var location in locations)
-				{
-					location.RunToDay(7);
-					location.printResults();
-				}
-				//Locations1_6.Location town = new Locations1_6.Location("Town", 379647118);
-
-				//town.RunToDay(5);
-				//town.printResults();
-				//Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
-				//Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
-				return;
+                Game1.UseLegacyRandom = true;
+                //return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -99,9 +70,10 @@ namespace SeedFinding
 
                 //SpecialOrders.islandAccess = true;
                 //Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
-                Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
-                Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
-                return;
+                //Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
+                //Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
+                //MinPerfection.ValidSeed(1234);
+                //return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
                 // First, save the standard output.
