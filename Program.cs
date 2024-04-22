@@ -45,7 +45,7 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                Game1.UseLegacyRandom = false;
+                Game1.UseLegacyRandom = true;
                 //return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
@@ -67,9 +67,10 @@ namespace SeedFinding
 
                 //SpecialOrders.islandAccess = true;
                 //Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
-                Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
-                Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
-                return;
+                //Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
+                //Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
+                //MinPerfection.ValidSeed(1234);
+                //return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
                 // First, save the standard output.
@@ -77,7 +78,7 @@ namespace SeedFinding
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
                 int numSeeds = Int32.MaxValue;
-                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
+                double time = MinPerfection.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
