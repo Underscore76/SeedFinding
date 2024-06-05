@@ -45,7 +45,7 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                Game1.UseLegacyRandom = true;
+                Game1.UseLegacyRandom = false;
                 //return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
@@ -59,18 +59,19 @@ namespace SeedFinding
                 // Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(184400, 5).Select(o=>Item.Get(o.Id).Name))));
                 // return;
                 //Console.WriteLine(StepPredictions.Predict(371897450, 12, 24, new List<string>(){"Lewis","Robin"}));
-                //Console.WriteLine(Weather.getWeather(20, 189726570));
-                //Console.WriteLine(Weather.getWeather(21, 189726570));
-                //MarriageSpeedrun.Curate();
-                //MarriageSpeedrun.ValidSeedv2(211391466, false);
+                //Console.WriteLine(Weather.getWeather(48, 483662850));
+                //Console.WriteLine(Weather.getWeather(49, 483662850));
+                //Console.WriteLine(StepPredictions.Predict(483662850, 3, 13, new List<string>() { "One"}));
+                //Console.WriteLine(NightEvents1_6.NightEvent.GetEvent(189726570, 17));
+                MarriageSpeedrun.Curate();
+                //MarriageSpeedrun.ValidSeedv2(1598879837, true);
                 //Console.WriteLine(Trash1_6.Trash.getTrash(833453617, 2, Trash1_6.Trash.Can.Gus, 0.1));
 
                 //SpecialOrders.islandAccess = true;
                 //Console.WriteLine(String.Join(",", SpecialOrders.GetOrders(1, 1, "1.6", null, new List<string>() { "Pierre" }).Select(o=>o.name)));
-                //Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
-                //Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
-                //MinPerfection.ValidSeed(1234);
-                //return;
+                Locations1_6.Map map = JsonConvert.DeserializeObject<Locations1_6.Map>(File.ReadAllText(@"Locations1_6/Beach.json"));
+                Console.WriteLine(String.Join(", ", Bubbles.Predict(map, 1, 1)));
+                return;
 
                 //FileStream fs = new FileStream("BoilerRoom.txt", FileMode.Create);
                 // First, save the standard output.
