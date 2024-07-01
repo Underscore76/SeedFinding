@@ -45,29 +45,16 @@ namespace SeedFinding
 
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
-            {
-
+			{
+				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
+				//return;a
 				Game1.UseLegacyRandom = true;
-				uint numSeeds = UInt32.MaxValue;
-				uint start = 0;
-				//KrobusSeeding.CheckSeed(666262426, true);
-				//return;
-				//for (int seed2 = 0; seed2 < 100000; seed2++)
-				//{
-				//KrobusSeeding.CheckSeed(2093299582, true);
-				//}
-				//return;
-				//KrobusSeeding.Curate();
-				//return;		
-				//KrobusSeeding.ExploreSeed(3848814016, 39, 58);
-				//KrobusSeeding.CheckSeed(3848814004, true);
-				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
-				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
-				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
+				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
+				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
+				//MAXPERFECTION.checkFile();
+				MAXPERFECTION.checkWinterStar();
+				//MAXPERFECTION.findGoodStepCount(1, 0);
 				return;
-				KrobusSeeding.Search(start, numSeeds, blockSize, out List<long> validSeeds);
-				return;
-				uint seed = 379647118;
 
 				Game1.UseLegacyRandom = true;
 				int startingValue = 655568;
