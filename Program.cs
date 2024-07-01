@@ -44,34 +44,29 @@ namespace SeedFinding
 
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
-            {
-                Game1.UseLegacyRandom = false;
-				int seed = 379647118;
+			{
+				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
+				//return;a
+				Game1.UseLegacyRandom = true;
+				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
+				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
+				//MAXPERFECTION.checkFile();
+				MAXPERFECTION.checkWinterStar();
+				//MAXPERFECTION.findGoodStepCount(1, 0);
+				return;
 
-				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
-				//return;
-				List<Locations1_6.Location> locations = new()
+				Game1.UseLegacyRandom = true;
+				int startingValue = 655568;
+				for (int i = startingValue; i <= int.MaxValue; i++)
 				{
-					new Locations1_6.Location("Town", seed),
-					new Locations1_6.Location("Beach", seed),
-					new Locations1_6.Location("Mountain", seed),
-					new Locations1_6.Location("Forest", seed),
-					new Locations1_6.Location("BusStop", seed),
-					new Locations1_6.Location("Desert", seed),
-					new Locations1_6.Location("Railroad", seed),
-					new Locations1_6.Location("Backwoods", seed)
-				};
-				foreach (var location in locations)
-				{
-					location.RunToDay(7);
-					location.printResults();
+					if (MAXPERFECTION.ValidSeed(i))
+					{
+						Console.WriteLine(i);
+						return;
+					}
 				}
-				//Locations1_6.Location town = new Locations1_6.Location("Town", 379647118);
-
-				//town.RunToDay(5);
-				//town.printResults();
 				//Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
-				//Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
+				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
 				return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));

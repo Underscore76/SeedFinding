@@ -23,12 +23,14 @@ namespace SeedFinding
             public string Person;
             public string Id;
             public QuestType Type;
-            public QuestResults(string person, string id, QuestType type = QuestType.None)
+			public int Amount;
+            public QuestResults(string person, string id, QuestType type = QuestType.None, int amount = 1)
             {
                 
                 Person = person;
                 Id = id;
                 Type = type;
+				Amount = amount;
             }
             public override string ToString()
             {
@@ -147,6 +149,103 @@ namespace SeedFinding
             return resource;
         }
 
-        
-    }
+		public QuestResults GetSlayMonsterQuest(int seed, int daysPlayed, int mineLevel)
+		{
+			Random random = Utility.CreateRandom(seed, daysPlayed);
+			string target;
+			string item;
+			for (int i = 0; i < random.Next(1, 100); i++)
+			{
+				random.Next();
+			}
+
+			List<string> possibleMonsters = new List<string>();
+			if (mineLevel < 39)
+			{
+				possibleMonsters.Add("Green Slime");
+				if (mineLevel > 10)
+				{
+					possibleMonsters.Add("Rock Crab");
+				}
+				if (mineLevel > 30)
+				{
+					possibleMonsters.Add("Duggy");
+				}
+			}
+			else if (mineLevel < 79)
+			{
+				possibleMonsters.Add("Frost Jelly");
+				if (mineLevel > 70)
+				{
+					possibleMonsters.Add("Skeleton");
+				}
+				possibleMonsters.Add("Dust Spirit");
+			}
+			else
+			{
+				possibleMonsters.Add("Sludge");
+				possibleMonsters.Add("Ghost");
+				possibleMonsters.Add("Lava Crab");
+				possibleMonsters.Add("Squid Kid");
+			}
+
+			item = possibleMonsters.ElementAt(random.Next(possibleMonsters.Count));
+			int numberToKill = 0;
+			switch (item)
+			{
+				case "Green Slime":
+					numberToKill = random.Next(4, 11);
+					numberToKill = (int)numberToKill - (int)numberToKill % 2;
+					break;
+				case "Rock Crab":
+					numberToKill = random.Next(2, 6);
+					break;
+				case "Duggy":
+					target = "Clint";
+					numberToKill = random.Next(2, 4);
+					break;
+				case "Frost Jelly":
+					numberToKill = random.Next(4, 11);
+					numberToKill = (int)numberToKill - (int)numberToKill % 2;
+					break;
+				case "Ghost":
+					numberToKill = random.Next(2, 4);
+					break;
+				case "Sludge":
+					numberToKill = random.Next(4, 11);
+					numberToKill = (int)numberToKill - (int)numberToKill % 2;
+					break;
+				case "Lava Crab":
+					numberToKill = random.Next(2, 6);
+					break;
+				case "Squid Kid":
+					numberToKill = random.Next(1, 3);
+					break;
+				case "Skeleton":
+					numberToKill = random.Next(6, 12);
+					break;
+				case "Dust Spirit":
+					numberToKill = random.Next(10, 21);
+					break;
+				default:
+					numberToKill = random.Next(3, 7);
+					break;
+			}
+
+			if (item.Equals("Green Slime") || item.Equals("Frost Jelly") || item.Equals("Sludge"))
+			{
+				target = "Lewis";
+			}
+			else if (item.Equals("Rock Crab") || item.Equals("Lava Crab"))
+			{
+				target = "Demetrius";
+			}
+			else
+			{
+				target = "Wizard";
+			}
+
+			return new QuestResults(target, item, QuestType.ItemDeliveryQuest, numberToKill);
+		}
+	}
 }

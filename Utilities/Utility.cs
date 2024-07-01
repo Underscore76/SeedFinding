@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System;
-using System.Drawing;
 using SeedFinding.Locations;
 using static System.Environment;
 using System.Globalization;
-using System.Numerics;
 using System.Text;
 using StardewValley.Hashing;
 using System.Linq;
 using SeedFinding.StardewClasses;
 using StardewValley;
+using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 
 namespace SeedFinding
 {
@@ -339,24 +339,24 @@ namespace SeedFinding
             return Season.Spring;
         }
 
-        public static List<Point> getBorderOfThisRectangle(Rectangle r)
+        public static List<Vector2> getBorderOfThisRectangle(Rectangle r)
         {
-            List<Point> border = new List<Point>();
+            List<Vector2> border = new List<Vector2>();
             for (int l = r.X; l < r.Right; l++)
             {
-                border.Add(new Point(l, r.Y));
+                border.Add(new Vector2(l, r.Y));
             }
             for (int k = r.Y + 1; k < r.Bottom; k++)
             {
-                border.Add(new Point(r.Right - 1, k));
+                border.Add(new Vector2(r.Right - 1, k));
             }
             for (int j = r.Right - 2; j >= r.X; j--)
             {
-                border.Add(new Point(j, r.Bottom - 1));
+                border.Add(new Vector2(j, r.Bottom - 1));
             }
             for (int i = r.Bottom - 2; i >= r.Y + 1; i--)
             {
-                border.Add(new Point(r.X, i));
+                border.Add(new Vector2(r.X, i));
             }
             return border;
         }
@@ -799,18 +799,18 @@ namespace SeedFinding
             return possibleItems.ElementAt(r.Next(possibleItems.Count));
         }
 
-        public static Point[] getSurroundingTileLocationsArray(Point tileLocation)
+        public static Vector2[] getSurroundingTileLocationsArray(Vector2 tileLocation)
         {
-            return new Point[8]
+            return new Vector2[8]
             {
-            new Point(-1+tileLocation.X, 0+tileLocation.Y),
-            new Point(1+tileLocation.X, 0+tileLocation.Y),
-            new Point(0+tileLocation.X, 1+tileLocation.Y),
-            new Point(0+tileLocation.X, -1+tileLocation.Y),
-            new Point(-1+tileLocation.X, -1+tileLocation.Y),
-            new Point(1+tileLocation.X, -1+tileLocation.Y),
-            new Point(1+tileLocation.X, 1+tileLocation.Y),
-            new Point(-1+tileLocation.X, 1+tileLocation.Y)
+            new Vector2(-1+tileLocation.X, 0+tileLocation.Y),
+            new Vector2(1+tileLocation.X, 0+tileLocation.Y),
+            new Vector2(0+tileLocation.X, 1+tileLocation.Y),
+            new Vector2(0+tileLocation.X, -1+tileLocation.Y),
+            new Vector2(-1+tileLocation.X, -1+tileLocation.Y),
+            new Vector2(1+tileLocation.X, -1+tileLocation.Y),
+            new Vector2(1+tileLocation.X, 1+tileLocation.Y),
+            new Vector2(-1+tileLocation.X, 1+tileLocation.Y)
             };
         }
         public static bool isFestivalDay(int day)
@@ -916,6 +916,24 @@ namespace SeedFinding
 				}
 			}
 			return newValue ?? value;
+		}
+		public static int Clamp(int value, int min, int max)
+		{
+			if (max < min)
+			{
+				int num = min;
+				min = max;
+				max = num;
+			}
+			if (value < min)
+			{
+				value = min;
+			}
+			if (value > max)
+			{
+				value = max;
+			}
+			return value;
 		}
 	}
 }

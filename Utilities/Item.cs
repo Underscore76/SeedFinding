@@ -84,5 +84,38 @@ namespace SeedFinding
 
             return new Item() { Name = id};
         }
-    }
+
+		public bool IsBreakableStone()
+		{
+			if (Category == -999)
+			{
+				return this.Name == "Stone";
+			}
+			return false;
+		}
+
+		public bool IsTwig()
+		{
+			if (Category == -999)
+			{
+				return this.Name == "Twig";
+			}
+			return false;
+		}
+
+		public bool IsWeeds()
+		{
+			if (Category == -999)
+			{
+				return this.Name.ToLower().Contains("weeds");
+			}
+			return false;
+		}
+
+		public bool IsTapper()
+		{
+			// TODO
+			return false;
+		}
+	}
 }

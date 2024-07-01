@@ -14,7 +14,8 @@ namespace SeedFinding
             Rain,
             Storm,
             Snow,
-            GreenRain
+            GreenRain,
+			Debris
 
         }
         public static WeatherType getWeather(int day, int gameId)
@@ -97,5 +98,29 @@ namespace SeedFinding
 
             return WeatherType.Sun;
         }
+
+		public static bool isRainType(WeatherType type)
+		{
+			return new HashSet<Weather.WeatherType> { Weather.WeatherType.Rain, Weather.WeatherType.Storm, Weather.WeatherType.GreenRain }.Contains(type);
+		}
+
+		public static WeatherType getWeatherTypeFromName(string name)
+		{
+			switch(name)
+			{
+				case "Rain":
+					return WeatherType.Rain;
+				case "GreenRain":
+					return WeatherType.GreenRain;
+				case "Storm":
+					return WeatherType.Storm;
+				case "Wind":
+					return WeatherType.Debris;
+				case "Snow":
+					return WeatherType.Snow;
+				default:
+					return WeatherType.Sun;
+			}
+		}
     }
 }

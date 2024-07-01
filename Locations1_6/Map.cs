@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace SeedFinding.Locations1_6
 {
@@ -68,21 +67,21 @@ namespace SeedFinding.Locations1_6
             while (!foundLand && width <= 11)
             {
 
-                List<Point> vector2List = new List<Point>();
+                List<Vector2> vector2List = new List<Vector2>();
                 for (int index = startx; index < endx; ++index)
-                    vector2List.Add(new Point(index, starty));
+                    vector2List.Add(new Vector2(index, starty));
                 for (int index = starty + 1; index < endy; ++index)
-                    vector2List.Add(new Point((endx - 1), index));
+                    vector2List.Add(new Vector2((endx - 1), index));
                 for (int index = endx - 2; index >= startx; --index)
-                    vector2List.Add(new Point(index, (endy - 1)));
+                    vector2List.Add(new Vector2(index, (endy - 1)));
                 for (int index = endy - 2; index >= starty + 1; --index)
-                    vector2List.Add(new Point(startx, index));
+                    vector2List.Add(new Vector2(startx, index));
 
-                foreach (Point position in vector2List)
+                foreach (Vector2 position in vector2List)
                 {
                     if (position.X > 0 && position.Y > 0 && position.X <= Width - 1 && position.Y <= Height - 1)
                     {
-                        int tileIndex = layer.GetTileIndex(position.X, position.Y);
+                        int tileIndex = layer.GetTileIndex((int)position.X, (int)position.Y);
                         Tile tile = FindTile(tileIndex);
                         if (tile == null || (tile.HasProperty("Water") != null))
                         {
@@ -95,10 +94,10 @@ namespace SeedFinding.Locations1_6
                             foundLand = false;
 
 
-                            Point[] surroundingTileLocationsArray = Utility.getSurroundingTileLocationsArray(position);
-                            foreach (Point surroundings in surroundingTileLocationsArray)
+                            Vector2[] surroundingTileLocationsArray = Utility.getSurroundingTileLocationsArray(position);
+                            foreach (Vector2 surroundings in surroundingTileLocationsArray)
                             {
-                                if (isTilePassable(surroundings.X, surroundings.Y) && !isWaterTile(position.X, position.Y))
+                                if (isTilePassable((int)surroundings.X, (int)surroundings.Y) && !isWaterTile((int)position.X, (int)position.Y))
                                 {
                                     foundLand = true;
                                     break;
@@ -261,6 +260,24 @@ namespace SeedFinding.Locations1_6
 					}
 				case null:
 					break;
+			}
+			return false;
+		}
+
+		public bool isTileLocationOpen(Vector2 location)
+		{
+			if (this.getTileIndexAt((int)location.X, (int)location.Y, "Buildings") == 0 && !this.isWaterTile((int)location.X, (int)location.Y) && this.getTileIndexAt((int)location.X, (int)location.Y, "Front") == 0)
+			{
+				return this.getTileIndexAt((int)location.X, (int)location.Y, "AlwaysFront") == 0;
+			}
+			return false;
+		}
+
+		public bool isTileOnMap(Vector2 position)
+		{
+			if (position.X >= 0f && position.X < (float)Layers[0].Width && position.Y >= 0f)
+			{
+				return position.Y < (float)Layers[0].Height;
 			}
 			return false;
 		}
