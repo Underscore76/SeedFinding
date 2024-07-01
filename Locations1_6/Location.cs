@@ -869,6 +869,114 @@ namespace SeedFinding.Locations1_6
 
 	}
 
+	public class Tree : TerrainFeature
+	{
+		public int growthStage;
+		public bool stump;
+		public bool hasMoss;
+		public bool fertilized;
+		public bool tapped;
+		public bool isTemporaryGreenRainTree;
+		public string treeType;
+		public Location location;
+
+		public Tree(Vector2 tile, Location location)
+		{
+			this.tile = tile;
+			this.location = location;
+		}
+
+		public override void dayUpdate(Random random, Season season)
+		{
+			base.dayUpdate(random, season);
+
+			if (5 > growthStage)
+			{
+				float chance = 0.2f; //TODO lookup based on tree type
+				float fertilisedGrowthChance = 1f;
+				if (random.NextBool(chance) || (fertilized && random.NextBool(fertilisedGrowthChance))){
+					growthStage++;
+				}
+			}
+
+			if (growthStage >= 5 && !stump && true && random.NextBool(15f))
+			{
+				int xCoord = random.Next(-3, 4) + (int)this.tile.X;
+				int yCoord = random.Next(-3, 4) + (int)this.tile.Y;
+				Vector2 newTile = new Vector2(xCoord, yCoord);
+
+				if (!location.map.IsNoSpawnTile(xCoord,yCoord, "Tree") && location.map.isTileLocationOpen(newTile) && location.CanItemBePlacedHere(newTile) && !location.map.isWaterTile(xCoord, yCoord) && location.map.isTileOnMap(newTile))
+				{
+					location.TerrainFeatures.Add(newTile, new Tree(newTile, location));
+				}
+			}
+
+			if (growthStage >= 5)
+			{
+				random.NextBool(0.05);
+			}
+
+			// TODO Mossy Green Rain Trees
+			/*bool accelerateMoss = (int)this.growthStage >= 5 && !Game1.IsWinter && (this.treeType.Value == "10" || this.treeType.Value == "11") && !this.isTemporaryGreenRainTree.Value;
+			if ((int)this.growthStage >= 5 && !Game1.IsWinter && !accelerateMoss)
+			{
+				for (int x = (int)tile.X - 2; (float)x <= tile.X + 2f; x++)
+				{
+					for (int y = (int)tile.Y - 2; (float)y <= tile.Y + 2f; y++)
+					{
+						Vector2 v = new Vector2(x, y);
+						if (this.Location.terrainFeatures.ContainsKey(v) && this.Location.terrainFeatures[v] is Tree tree && tree.growthStage.Value >= 5 && (tree.treeType.Value == "10" || tree.treeType.Value == "11") && !tree.isTemporaryGreenRainTree.Value && (bool)tree.hasMoss)
+						{
+							accelerateMoss = true;
+							break;
+						}
+					}
+					if (accelerateMoss)
+					{
+						break;
+					}
+				}
+			}
+			float mossChance = (Game1.isRaining ? 0.2f : 0.1f);
+			if (accelerateMoss && Game1.random.NextDouble() < 0.5)
+			{
+				this.growthStage.Value++;
+			}*/
+
+			if (growthStage >= 14 && !stump && random.NextBool(0.1))
+			{
+
+			}
+		}
+	}
+
+	public class Grass : TerrainFeature
+	{
+		public int grassType;
+		public int numberOfWeeds;
+		public int grassSourceOffset;
+
+		public override void dayUpdate(Random random, Season season)
+		{
+			base.dayUpdate(random, season);
+
+			if (grassType == 1 && season != Season.Winter && numberOfWeeds < 4)
+			{
+				this.numberOfWeeds = Utility.Clamp(this.numberOfWeeds + random.Next(1, 4), 0, 4);
+			}
+		}
+	}
+
+	public class HoeDirt : TerrainFeature
+	{
+		public bool hasCrop;
+	}
+
+	public class Flooring : TerrainFeature
+	{
+
+	}
+
 	public struct Bubbles
 	{
 		public int X;
