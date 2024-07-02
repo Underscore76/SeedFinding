@@ -128,7 +128,7 @@ namespace SeedFinding
                         for (int index = 0; index < 2; ++index)
                         {
                             p = new Point(random.Next(0, mapWidth), random.Next(0, mapHeight));
-                            if (!map.isOpenWater(p.X, p.Y) || map.doesTileHaveProperty(p.X, p.Y, "NoFishing", "Back") != false)
+                            if (!map.isOpenWater(p.X, p.Y) || map.doesTileHaveProperty(p.X, p.Y, "NoFishing", "Back") != null)
                             {
                                 continue;
                             }

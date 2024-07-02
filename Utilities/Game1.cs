@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Locations1_6;
+using Newtonsoft.Json;
+using System.Resources;
+using System.Xml.Linq;
+using System.IO;
 
 namespace SeedFinding
 {
@@ -13,6 +18,8 @@ namespace SeedFinding
         public static ulong uniqueIDForThisGame = 0;
         public static uint DaysPlayed = 0;
         public static IHashUtility hash = new HashUtility();
-        public static float DailyLuck = 0.0f;
-    }
+		public static float DailyLuck = 0.0f;
+
+		public static Dictionary<string, LocationData> locations1_6 = JsonConvert.DeserializeObject<Dictionary<string, LocationData>>(File.ReadAllText($@"Locations1_6/Locations.json"));
+	}
 }

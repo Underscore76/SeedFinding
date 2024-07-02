@@ -46,9 +46,30 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
-                Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
-                return;
+				int seed = 379731892;
+				List<Locations1_6.Location> locations = new()
+				{
+					new Locations1_6.Location("Town", seed),
+					new Locations1_6.Location("Beach", seed),
+					new Locations1_6.Location("Mountain", seed),
+					new Locations1_6.Location("Forest", seed),
+					new Locations1_6.Location("BusStop", seed),
+					new Locations1_6.Location("Desert", seed),
+					new Locations1_6.Location("Railroad", seed),
+					new Locations1_6.Location("Backwoods", seed)
+				};
+				foreach (var location in locations)
+				{
+					location.RunToDay(1);
+					location.printResults();
+				}
+				//Locations1_6.Location town = new Locations1_6.Location("Town", 379647118);
+
+				//town.RunToDay(5);
+				//town.printResults();
+				//Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
+				//Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
+				return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());

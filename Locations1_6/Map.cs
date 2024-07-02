@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,13 +40,13 @@ namespace SeedFinding.Locations1_6
 
         public bool isTilePassable(int x, int y)
         {
-            if (doesTileHaveProperty(x, y, "Passable", "Back"))
+            if (doesTileHaveProperty(x, y, "Passable", "Back") != null)
             {
                 return false;
             }
 
             int index = getTileIndexAt(x, y, "Buildings");
-            if (index != 0 && !doesTileHaveProperty(x, y, "Shadow", "Buildings") && !doesTileHaveProperty(x, y, "Passable", "Buildings"))
+            if (index != 0 && doesTileHaveProperty(x, y, "Shadow", "Buildings") == null && doesTileHaveProperty(x, y, "Passable", "Buildings") == null)
             {
                 return false;
             }
@@ -83,7 +84,7 @@ namespace SeedFinding.Locations1_6
                     {
                         int tileIndex = layer.GetTileIndex(position.X, position.Y);
                         Tile tile = FindTile(tileIndex);
-                        if (tile == null || !tile.HasProperty("Water"))
+                        if (tile == null || (tile.HasProperty("Water") != null))
                         {
                             foundLand = true;
                             distance = width / 2;
@@ -120,17 +121,21 @@ namespace SeedFinding.Locations1_6
             return distance;
         }
 
-        public bool doesTileHaveProperty(int x, int y, string property, string layerName)
+        public string doesTileHaveProperty(int x, int y, string property, string layerName, bool ignoreTileSheetProperties = false)
         {
             // Hardcoded due to laziness
             if (Name == "Mountains" && property == "NoFishing" && layerName == "Back")
             {
-                return ((x == 47 || x == 48) && (y == 3 || y == 4 || y == 5));
+				if ((x == 47 || x == 48) && (y == 3 || y == 4 || y == 5))
+				{
+					return "Y";
+				}
+				return null;
             }
             Tile tile = FindTile(getTileIndexAt(x, y, layerName));
             if (tile == null)
             {
-                return false;
+                return null;
             }
             return tile.HasProperty(property);
         }
@@ -140,7 +145,7 @@ namespace SeedFinding.Locations1_6
             Layer layer = FindLayer(layerName);
             if (layer == null)
             {
-                return -1;
+                return 0;
             }
             return layer.GetTileIndex(x, y);
         }
@@ -189,7 +194,7 @@ namespace SeedFinding.Locations1_6
         {
             int tileIndex = getTileIndexAt(xTile, yTile, "Back");
             Tile tile = FindTile(tileIndex);
-            return (tile != null && tile.HasProperty("Water"));
+            return (tile != null && tile.HasProperty("Water") != null);
         }
 
         public TileSet FindTileSet(int id)
@@ -233,7 +238,51 @@ namespace SeedFinding.Locations1_6
             }
             return null;
         }
-    }
+
+		public virtual bool IsNoSpawnTile(int x, int y, string type = "All", bool ignoreTileSheetProperties = false)
+		{
+			string noSpawn = this.doesTileHaveProperty(x, y, "NoSpawn", "Back", ignoreTileSheetProperties);
+			switch (noSpawn)
+			{
+				case "Grass":
+				case "Tree":
+					if (type == noSpawn)
+					{
+						return true;
+					}
+					break;
+				default:
+					{
+						if (!bool.TryParse(noSpawn, out var isBanned) || isBanned)
+						{
+							return true;
+						}
+						break;
+					}
+				case null:
+					break;
+			}
+			return false;
+		}
+
+		public virtual bool doesEitherTileOrTileIndexPropertyEqual(int xTile, int yTile, string propertyName, string layerName, string propertyValue)
+		{
+			Layer layer = FindLayer(layerName);
+			if (layer != null)
+			{
+				Tile tmp = FindTile(getTileIndexAt(xTile, yTile, layerName));
+				//if (tmp != null && tmp.TileIndexProperties.TryGetValue(propertyName, out var property2) && property2 == propertyValue)
+				//{
+				//	return true;
+				//}
+				if (tmp != null && tmp.HasProperty(propertyName) == propertyValue)
+				{
+					return true;
+				}
+			}
+			return propertyValue == null;
+		}
+	}
     public class Layer
     {
         [JsonProperty("data")]
@@ -279,21 +328,21 @@ namespace SeedFinding.Locations1_6
         [JsonProperty("properties")]
         public List<Dictionary<string, string>> Properties;
 
-        public bool HasProperty(string name)
+        public string HasProperty(string name)
         {
             if (Properties == null)
             {
-                return false;
+                return null;
             }
             foreach (var prop in Properties)
             {
 
                 if (prop["name"] == name)
                 {
-                    return true;
+                    return prop["value"];
                 }
             }
-            return false;
+            return null;
         }
     }
 }
