@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SeedFinding.Locations;
+using SeedFinding.StardewClasses;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -341,6 +342,95 @@ namespace SeedFinding.Locations1_6
 			{
 				Console.WriteLine($"{aftifact.Item1}	{aftifact.Item2}");
 			}
+		}
+
+		public static List<(string,int)> digUpArtifactSpot(int day, int gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
+		{
+			List<(string, int)> list = new List<(string, int)>();
+			Game1.location = location;
+			//Object.performToolAction
+			Random r2 = Utility.CreateDaySaveRandom(day, gameId, (0f - xLocation) * 7f, yLocation * 777f, totemsUsed * 777);
+			//t.getLastFarmerToUse().stats.Increment("ArtifactSpotsDug", 1);
+			if (artifactSpotsDug + 1 > 2 && r2.NextDouble() < 0.008 + (hasDefenseBook ? (artifactSpotsDug + 1) * 0.002 : 0.005))
+			{
+				//t.getLastFarmerToUse().mailReceived.Add("DefenseBookDropped");
+				//Vector2 position2 = this.TileLocation * 64f;
+				list.Add( ("(O)Book_Defense",1) );
+				//Game1.createMultipleItemDebris(ItemRegistry.Create("(O)Book_Defense"), position2, Utility.GetOppositeFacingDirection(t.getLastFarmerToUse().FacingDirection), location);
+				return list;
+			}
+
+
+
+
+
+
+			//GameLocation.digUpArtifactSpot
+			Random r = Utility.CreateDaySaveRandom(day, gameId, xLocation * 2000, yLocation, totemsUsed * 777);
+			//Vector2 tilePixelPos = new Vector2(xLocation * 64, yLocation * 64);
+			Dictionary<string, LocationData> dictionary = Game1.locations1_6;
+			string locationName = location;
+			if (locationName == "Farm")
+			{
+				locationName = "Farm_Standard";
+			}
+			LocationData locationData = dictionary[locationName];
+			Farmer farmer = new Farmer();
+
+			GameLocation gameLocation = new GameLocation() { Name = locationName };
+			ItemQueryContext itemQueryContext = new ItemQueryContext(gameLocation, farmer, r);
+			IEnumerable<ArtifactSpotDropData> possibleDrops = dictionary["Default"].ArtifactSpots;
+			if (locationData != null && locationData.ArtifactSpots?.Count > 0)
+			{
+				possibleDrops = possibleDrops.Concat(locationData.ArtifactSpots);
+			}
+			possibleDrops = possibleDrops.OrderBy((ArtifactSpotDropData p) => p.Precedence);
+			if (sawQiPlane && r.NextDouble() < 0.05 + dailyLuck / 2.0)
+			{
+				list.Add(("(O)MysteryBox",r.Next(1,3)));
+			}
+			//Utility.trySpawnRareObject(who, tilePixelPos, this, 10.0); Game1.random
+			foreach (ArtifactSpotDropData drop in possibleDrops)
+			{
+				if (!r.NextBool(drop.Chance) || (drop.Condition != null && !GameStateQuery.CheckConditions(drop.Condition, gameLocation, farmer, null, null, r)))
+				{
+					continue;
+				}
+				Item item = ItemQueryResolver.TryResolveRandomItem(drop, itemQueryContext, avoidRepeat: false, null, null, null, delegate (string query, string error)
+				{
+					Console.Write($"Location '{locationName}' failed parsing item query '{query}' for artifact spot '{drop.Id}': {error}");
+				});
+				if (item == null)
+				{
+					continue;
+				}
+				if (drop.OneDebrisPerDrop && item.Stack > 1)
+				{
+					list.Add((item.id, item.Stack));
+				}
+				else
+				{
+					list.Add((item.id, 1));
+				}
+				if (hasGenerousEnchantment && drop.ApplyGenerousEnchantment && r.NextBool())
+				{
+					ItemQueryResolver.ApplyItemFields(item, drop, itemQueryContext);
+					if (drop.OneDebrisPerDrop && item.Stack > 1)
+					{
+						list.Add((item.id, item.Stack));
+					}
+					else
+					{
+						list.Add((item.id, 1));
+					}
+				}
+				if (!drop.ContinueOnDrop)
+				{
+					break;
+				}
+			}
+
+			return list;
 		}
 	}
 

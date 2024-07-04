@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeedFinding.StardewClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace SeedFinding.Locations1_6
 
 	}
 
-	public class ArtifactSpotDropData
+	public class ArtifactSpotDropData : GenericSpawnItemData
 	{
 		[JsonProperty("Chance")]
 		public double Chance;
