@@ -193,7 +193,7 @@ namespace SeedFinding.Locations1_6
 
 			foreach (var bush in Bushes)
 			{
-				if (bush.location == location)
+				if (bush.isOnTile(location))
 				{
 					return false;
 				}
@@ -252,7 +252,8 @@ namespace SeedFinding.Locations1_6
 		{
 			ForageSpawns.Clear();
 			Day = 0;
-			//Spawn(Seed, Day);
+			Spawn(Seed, Day);
+			ForageSpawns.Clear();
 			while (Day < day)
 			{
 				Day++;
@@ -272,7 +273,9 @@ namespace SeedFinding.Locations1_6
 				{
 					for (int t = 0; t < 11; t++)
 					{
-						Point check = new Point(rand.Next(map.Width), rand.Next(map.Height));
+						int xCoord2 = rand.Next(map.Width);
+						int yCoord2 = rand.Next(map.Height);
+						Point check = new Point(xCoord2, yCoord2);
 
 						if (map.IsNoSpawnTile(check.X, check.Y) || map.doesTileHaveProperty(check.X, check.Y, "Spawnable", "Back") == null || map.doesEitherTileOrTileIndexPropertyEqual(check.X, check.Y, "Spawnable", "Back", "F") || !this.CanItemBePlacedHere(check) || map.getTileIndexAt(check.X, check.Y, "AlwaysFront") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront2") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront3") != 0 || map.getTileIndexAt(check.X, check.Y, "Front") != 0 || this.isBehindBush(check) || (!rand.NextBool(0.1) && this.isBehindTree(check)))
 						{
@@ -455,6 +458,22 @@ namespace SeedFinding.Locations1_6
 				default:
 					return Rectangle.Empty;
 			}
+		}
+
+		public bool isOnTile(Point location)
+		{
+			switch (this.size)
+			{
+				case 0:
+				case 3:
+					return this.location == location;
+				case 1:
+				case 4:
+					return this.location == location || (this.location.X + 1 == location.X && this.location.Y == location.Y);
+				case 2:
+					return this.location == location || (this.location.X + 1 == location.X && this.location.Y == location.Y) || (this.location.X + 2 == location.X && this.location.Y == location.Y);
+			}
+			return false;
 		}
 	}
 

@@ -46,10 +46,10 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-				int seed = 379731892;
+				int seed = 379648710;
 
-				Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
-				return;
+				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
+				//return;
 				List<Locations1_6.Location> locations = new()
 				{
 					new Locations1_6.Location("Town", seed),
