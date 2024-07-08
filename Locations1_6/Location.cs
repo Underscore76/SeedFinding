@@ -30,6 +30,7 @@ namespace SeedFinding.Locations1_6
 
 		public int Seed;
 		public int Day;
+		public bool DangerArtifactSpot = false;
 
 		public Location(string name, int seed)
 		{
@@ -39,6 +40,8 @@ namespace SeedFinding.Locations1_6
 			map = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Locations1_6/{name}.json"));
 			setupDefaultCollections();
 			LocationData = Game1.locations1_6[name];
+
+
 
 			List<ForageData> spring = new List<ForageData>();
 			List<ForageData> summer = new List<ForageData>();
@@ -250,6 +253,7 @@ namespace SeedFinding.Locations1_6
 		}
 		public void RunToDay(int day)
 		{
+			DangerArtifactSpot = false;
 			ForageSpawns.Clear();
 			Day = 0;
 			Spawn(Seed, Day);
@@ -323,6 +327,11 @@ namespace SeedFinding.Locations1_6
                         continue;
 					}
 					ArtifactSpots.Add( (location, rand.NextBool(0.166) ? "(O)SeedSpot" : "(O)590") );
+
+					if (xCoord > 100)
+					{
+						DangerArtifactSpot = true;
+					}
                 }
                 chanceForNewArtifactAttempt *= 0.75;
                 if (season == Season.Winter)
