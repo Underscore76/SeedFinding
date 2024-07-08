@@ -32,6 +32,8 @@ namespace SeedFinding
         [JsonProperty("Price")]
         public int Price;
 
+		public int Stack;
+
         public string id;
 
         public static Dictionary<string, Item> Items = SetupItems();

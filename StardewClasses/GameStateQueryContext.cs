@@ -1,4 +1,5 @@
 ﻿using SeedFinding;
+using SeedFinding.StardewClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,10 @@ namespace StardewValley.Delegates
     public readonly struct GameStateQueryContext
     {
         /// <summary>The location for which to check the query.</summary>
-        //public readonly Location Location;
+        public readonly GameLocation Location;
 
         /// <summary>The player for which to check the query.</summary>
-        //public readonly Farmer Player;
+        public readonly Farmer Player;
 
         /// <summary>The target item (e.g. machine output or tree fruit) for which to check the query, or <c>null</c> if not applicable.</summary>
         public readonly Item TargetItem;
@@ -39,10 +40,10 @@ namespace StardewValley.Delegates
         /// <param name="random">The RNG to use for randomization.</param>
         /// <param name="ignoreQueryKeys">The query keys to ignore when checking conditions (like <c>LOCATION_SEASON</c>), or <c>null</c> to check all of them.</param>
         /// <param name="customFields">The custom fields which can be set by mods for custom game state query behavior.</param>
-        public GameStateQueryContext(/*GameLocation location, Farmer player, */Item targetItem, Item inputItem, Random random, HashSet<string> ignoreQueryKeys = null, Dictionary<string, object> customFields = null)
+        public GameStateQueryContext(GameLocation location, Farmer player, Item targetItem, Item inputItem, Random random, HashSet<string> ignoreQueryKeys = null, Dictionary<string, object> customFields = null)
         {
-            //this.Location = location ?? Game1.currentLocation;
-            //this.Player = player ?? Game1.player;
+            this.Location = location;
+            this.Player = player;
             this.TargetItem = targetItem;
             this.InputItem = inputItem;
             this.Random = random;// ?? Game1.random;

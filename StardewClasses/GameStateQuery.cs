@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using SeedFinding;
+using SeedFinding.StardewClasses;
 using StardewValley.Delegates;
 using StardewValley.StardewClasses;
 
@@ -714,7 +715,7 @@ namespace StardewValley
             }*/
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
-            /*public static bool LOCATION_SEASON(string[] query, GameStateQueryContext context)
+            public static bool LOCATION_SEASON(string[] query, GameStateQueryContext context)
             {
                 for (int i = 2; i < query.Length; i++)
                 {
@@ -724,7 +725,7 @@ namespace StardewValley
                     }
                 }
                 return false;
-            }*/
+            }
 
             /// <summary>Get whether a given number of items have been donated to the museum, optionally filtered by type. Format: <c>MUSEUM_DONATIONS &lt;min count&gt; [max count] [object type]+</c> or <c>MUSEUM_DONATIONS &lt;min count&gt; &lt;max count&gt; [object type]+</c>.</summary>
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
@@ -1182,14 +1183,14 @@ namespace StardewValley
             }*/
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
-            /*public static bool PLAYER_LOCATION_NAME(string[] query, GameStateQueryContext context)
+            public static bool PLAYER_LOCATION_NAME(string[] query, GameStateQueryContext context)
             {
-                if (!ArgUtility.TryGet(query, 1, out var playerKey, out var error) || !ArgUtility.TryGet(query, 2, out var _, out error))
+                if (!ArgUtility.TryGet(query, 1, out var playerKey, out var error) || !ArgUtility.TryGet(query, 2, out var rawName, out error))
                 {
                     return Helpers.ErrorResult(query, error);
                 }
-                return Helpers.WithPlayer(context.Player, playerKey, (Farmer target) => Helpers.AnyArgMatches(query, 2, (string rawName) => string.Equals(rawName, target.currentLocation?.Name, StringComparison.OrdinalIgnoreCase)));
-            }
+				return rawName == Game1.location;
+            }/*
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
             public static bool PLAYER_LOCATION_UNIQUE_NAME(string[] query, GameStateQueryContext context)
@@ -1263,7 +1264,7 @@ namespace StardewValley
             }*/
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
-            /*public static bool PLAYER_SPECIAL_ORDER_RULE_ACTIVE(string[] query, GameStateQueryContext context)
+            public static bool PLAYER_SPECIAL_ORDER_RULE_ACTIVE(string[] query, GameStateQueryContext context)
             {
                 if (!ArgUtility.TryGet(query, 1, out var playerKey, out var error) || !ArgUtility.TryGet(query, 2, out var ruleId, out error))
                 {
@@ -1275,7 +1276,7 @@ namespace StardewValley
                 }
                 throw new NotImplementedException();
                 return false;
-            }*/
+            }
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
             /*public static bool PLAYER_SPECIAL_ORDER_COMPLETE(string[] query, GameStateQueryContext context)
@@ -1984,7 +1985,7 @@ namespace StardewValley
         /// <param name="random">The RNG to use for randomization, or <c>null</c> to use <see cref="F:StardewValley.Game1.random" />.</param>
         /// <param name="ignoreQueryKeys">The query keys to ignore when checking conditions (like <c>LOCATION_SEASON</c>), or <c>null</c> to check all of them.</param>
         /// <returns>Returns whether the query matches.</returns>
-        public static bool CheckConditions(string queryString, /*GameLocation location = null, Farmer player = null,*/ Item targetItem = null, Item inputItem = null, Random random = null, HashSet<string> ignoreQueryKeys = null)
+        public static bool CheckConditions(string queryString, GameLocation location = null, Farmer player = null, Item targetItem = null, Item inputItem = null, Random random = null, HashSet<string> ignoreQueryKeys = null)
         {
             if (queryString != null && (queryString == null || queryString.Length != 0) && !(queryString == "TRUE"))
             {
@@ -1992,7 +1993,7 @@ namespace StardewValley
                 {
                     return false;
                 }
-                GameStateQueryContext context = new GameStateQueryContext(/*location, player,*/ targetItem, inputItem, random, ignoreQueryKeys);
+                GameStateQueryContext context = new GameStateQueryContext(location, player, targetItem, inputItem, random, ignoreQueryKeys);
                 return GameStateQuery.CheckConditionsImpl(queryString, context);
             }
             return true;
