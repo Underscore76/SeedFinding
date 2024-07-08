@@ -8,6 +8,8 @@ using System.Numerics;
 using System.Text;
 using StardewValley.Hashing;
 using System.Linq;
+using SeedFinding.StardewClasses;
+using StardewValley;
 
 namespace SeedFinding
 {
@@ -838,5 +840,82 @@ namespace SeedFinding
             }
             return false;
         }
-    }
+
+		public static bool TryGetRandomExcept<T>(IList<T> list, ISet<T> except, Random random, out T selected)
+		{
+			if (list == null || list.Count == 0)
+			{
+				selected = default(T);
+				return false;
+			}
+			if (except == null || except.Count == 0)
+			{
+				selected = random.ChooseFrom(list);
+				return true;
+			}
+			T[] filtered = list.Except(except).ToArray();
+			selected = random.ChooseFrom(filtered);
+			return true;
+		}
+
+		/// <summary>Apply a set of modifiers to a value.</summary>
+		/// <param name="value">The base value to which to apply modifiers.</param>
+		/// <param name="modifiers">The modifiers to apply.</param>
+		/// <param name="mode">How multiple quantity modifiers should be combined.</param>
+		/// <param name="location">The location for which to check queries, or <c>null</c> for the current location.</param>
+		/// <param name="player">The player for which to check queries, or <c>null</c> for the current player.</param>
+		/// <param name="targetItem">The target item (e.g. machine output or tree fruit) for which to check queries, or <c>null</c> if not applicable.</param>
+		/// <param name="inputItem">The input item (e.g. machine input) for which to check queries, or <c>null</c> if not applicable.</param>
+		/// <param name="random">The random number generator to use, or <c>null</c> for <see cref="F:StardewValley.Game1.random" />.</param>
+		public static float ApplyQuantityModifiers(float value, IList<QuantityModifier> modifiers, QuantityModifier.QuantityModifierMode mode = QuantityModifier.QuantityModifierMode.Stack, GameLocation location = null, Farmer player = null, Item targetItem = null, Item inputItem = null, Random random = null)
+		{
+			if (modifiers == null || !modifiers.Any())
+			{
+				return value;
+			}
+			if (random == null)
+			{
+				//random = Game1.random;
+			}
+			float? newValue = null;
+			foreach (QuantityModifier modifier in modifiers)
+			{
+				float amount = modifier.Amount;
+				List<float> randomAmount = modifier.RandomAmount;
+				if (randomAmount != null && randomAmount.Any())
+				{
+					amount = random.ChooseFrom(modifier.RandomAmount);
+				}
+				if (!GameStateQuery.CheckConditions(modifier.Condition, location, player, targetItem, inputItem, random))
+				{
+					continue;
+				}
+				switch (mode)
+				{
+					case QuantityModifier.QuantityModifierMode.Minimum:
+						{
+							float applied2 = QuantityModifier.Apply(value, modifier.Modification, amount);
+							if (!newValue.HasValue || applied2 < newValue)
+							{
+								newValue = applied2;
+							}
+							break;
+						}
+					case QuantityModifier.QuantityModifierMode.Maximum:
+						{
+							float applied = QuantityModifier.Apply(value, modifier.Modification, amount);
+							if (!newValue.HasValue || applied > newValue)
+							{
+								newValue = applied;
+							}
+							break;
+						}
+					default:
+						newValue = QuantityModifier.Apply(newValue ?? value, modifier.Modification, amount);
+						break;
+				}
+			}
+			return newValue ?? value;
+		}
+	}
 }

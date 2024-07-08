@@ -46,7 +46,9 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-                //return;
+                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
+                Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
+                return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
