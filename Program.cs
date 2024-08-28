@@ -45,11 +45,27 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                Game1.UseLegacyRandom = false;
-				uint seed = 2910939589;
-				//int seed = (int)useed;
-				Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(seed, 5).Select(o=>Item.Get(o.Id).Name))));
+				uint unum = 2910939589;
+				int num = -1384027707;
+				Console.WriteLine((uint)num);
+				Console.WriteLine((int)unum);
 				return;
+
+				Game1.UseLegacyRandom = true;
+				int numSeeds = 0;// Int32.MaxValue;
+				int start = Int32.MinValue;
+				//KrobusSeeding.CheckSeed(666262426, true);
+				//return;
+				//for (int seed2 = 0; seed2 < 100000; seed2++)
+				//{
+				//	KrobusSeeding.CheckSeed(seed2);
+				//}
+				//return;
+				KrobusSeeding.Curate();
+				return;
+				KrobusSeeding.Search(start, numSeeds, blockSize, out List<int> validSeeds);
+				return;
+				int seed = 379647118;
 
 				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
 				//return;
@@ -107,13 +123,13 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                uint numSeeds = Int32.MaxValue;
-                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<uint> validSeeds);
+                //int numSeeds = Int32.MaxValue;
+                //double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
 
