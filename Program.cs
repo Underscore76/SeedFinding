@@ -131,8 +131,8 @@ namespace SeedFinding
                 StreamWriter sw = new StreamWriter(fs);
                 Console.SetOut(sw);
                 Console.WriteLine("RemixSearch");
-                int numSeeds = Int32.MaxValue;
-                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                uint numSeeds = Int32.MaxValue;
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<uint> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);

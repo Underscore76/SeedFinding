@@ -368,9 +368,9 @@ namespace SeedFinding.Cart
             };
         }
 
-        public static HashSet<CartItem> GetStock(int gameSeed, int day)
+        public static HashSet<CartItem> GetStock(uint gameSeed, int day)
         {
-            return GetStock(gameSeed + day);
+            return GetStock((int)gameSeed + day);
         }
         public static HashSet<CartItem> GetStock(int seed)
         {

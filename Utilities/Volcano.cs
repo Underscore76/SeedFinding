@@ -10,7 +10,7 @@ namespace SeedFinding
     public class Volcano
     {
 
-        public static List<int> GetLevels(int gameId, int day, double dailyLuck = 0.0, int luckLevel = 0)
+        public static List<int> GetLevels(uint gameId, int day, double dailyLuck = 0.0, int luckLevel = 0)
         {
             List<int> levels = new();
             bool foundSpecialLevel = false;
@@ -36,7 +36,7 @@ namespace SeedFinding
                 }
 
 
-                Random layout_random = new Random(day * level + level * 5152 + gameId / 2);
+                Random layout_random = new Random(day * level + level * 5152 + (int)gameId / 2);
                 if (level > 1 && layout_random.NextDouble() < 0.5 * luckMultiplier) {
                     if (!foundSpecialLevel)
                     {

@@ -15,7 +15,7 @@ namespace SeedFinding.NightEvents1_6
             WindStorm
         }
 
-        public static Event GetEvent(int gameID, int day, bool pantryComplete = false, bool raccoonsValid = false, bool hasFairyRose = false, bool capsuleValid = false)
+        public static Event GetEvent(uint gameID, int day, bool pantryComplete = false, bool raccoonsValid = false, bool hasFairyRose = false, bool capsuleValid = false)
         {
             if (day == 31)
             {
