@@ -48,20 +48,20 @@ namespace SeedFinding
                 | CompressedFlags.BULLETIN_DYE_IRIDIUM_BAR
             );
 
-        static bool ValidSeed(int seed)
+        static bool ValidSeed(uint seed)
         {
             return RemixedBundles.Generate(seed).Satisfies(DesiredBundles);
         }
 
         // parallel search
-        public static double Search(int numSeeds, int blockSize, out List<int> validSeeds)
+        public static double Search(int numSeeds, int blockSize, out List<uint> validSeeds)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            var bag = new ConcurrentBag<int>();
+            var bag = new ConcurrentBag<uint>();
             var partioner = Partitioner.Create(0, numSeeds, blockSize);
             Parallel.ForEach(partioner, (range, loopState) =>
             {
-                for (int seed = range.Item1; seed < range.Item2; seed++)
+                for (uint seed = (uint)range.Item1; seed < range.Item2; seed++)
                 {
                     if (ValidSeed(seed))
                     {

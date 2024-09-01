@@ -17,7 +17,7 @@ namespace SeedFinding
             GreenRain
 
         }
-        public static WeatherType getWeather(int day, int gameId)
+        public static WeatherType getWeather(int day, uint gameId)
         {
             if (day == 1 || day == 2 || day == 4 || day % 28 == 1) { 
                 return WeatherType.Sun;

@@ -28,11 +28,11 @@ namespace SeedFinding.Locations1_6
 		public List<Bush> Bushes = new();
 		public List<ResourceClump> ResourceClumps = new();
 
-		public int Seed;
+		public uint Seed;
 		public int Day;
 		public bool DangerArtifactSpot = false;
 
-		public Location(string name, int seed)
+		public Location(string name, uint seed)
 		{
 			Name = name;
 			Seed = seed;
@@ -264,7 +264,7 @@ namespace SeedFinding.Locations1_6
 				ProcessDay();
 			}
 		}
-		public void Spawn(int gameid, int day)
+		public void Spawn(uint gameid, int day)
 		{
 			Season season = Utility.getSeasonFromDay(day);
 			var seasonData = SeasonalForage[season];
@@ -356,7 +356,7 @@ namespace SeedFinding.Locations1_6
 			}
 		}
 
-		public static List<(string,int)> digUpArtifactSpot(int day, int gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
+		public static List<(string,int)> digUpArtifactSpot(int day, uint gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
 		{
 			List<(string, int)> list = new List<(string, int)>();
 			Game1.location = location;

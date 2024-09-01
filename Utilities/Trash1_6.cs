@@ -108,7 +108,7 @@ namespace SeedFinding.Trash1_6
             }
             return "";
         }
-        public static HashSet<TrashItem> getAllTrash(int gameId, int day, double luck = 0, bool twentyOneChecked = false, bool desertFestival = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false, bool completeCC = false)
+        public static HashSet<TrashItem> getAllTrash(uint gameId, int day, double luck = 0, bool twentyOneChecked = false, bool desertFestival = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false, bool completeCC = false)
         {
             HashSet<TrashItem> results = new HashSet<TrashItem>();
 
@@ -126,7 +126,7 @@ namespace SeedFinding.Trash1_6
             }
             return results;
         }
-        public static TrashItem getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
+        public static TrashItem getTrash(uint gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
         {
 
             float baseChance = 0.2f;

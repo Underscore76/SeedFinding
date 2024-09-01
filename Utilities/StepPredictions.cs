@@ -52,7 +52,7 @@ namespace SeedFinding
             }
         }
 
-        public static StepResult Predict(int gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+        public static StepResult Predict(uint gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
         {
             int calcDay = day + 1;
             Season season = Utility.getSeasonFromDay(calcDay);

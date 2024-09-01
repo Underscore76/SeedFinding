@@ -239,9 +239,9 @@ namespace SeedFinding.Locations
         public Dictionary<Tile, ObjectInfo.ObjectData> ForageSpawns;
         public List<Tile> ArtifactSpots;
         public List<Bubbles> Bubbles;
-        public int Seed;
+        public uint Seed;
         public int Day;
-        public Location(int seed, int width, int height)
+        public Location(uint seed, int width, int height)
         {
             ForageSpawns = new Dictionary<Tile, ObjectInfo.ObjectData>();
             ArtifactSpots = new List<Tile>();
@@ -267,7 +267,7 @@ namespace SeedFinding.Locations
             int season = (Day == 0) ? 0 : (((Day - 1) / 28) % 4);
             if (ForageSpawns.Count < 6)
             {
-                Random rand = new Random((Seed / 2) + Day);
+                Random rand = new Random((int)(Seed / 2) + Day);
                 int numToSpawn = rand.Next(1, Math.Min(5, 7 - ForageSpawns.Count));
                 for (int i = 0; i < numToSpawn; i++)
                 {
@@ -373,7 +373,7 @@ namespace SeedFinding.Locations
                     continue;
                 }
 
-                Random random = new Random(time + Seed / 2 + Day);
+                Random random = new Random(time + (int)Seed / 2 + Day);
 
                 if (!bubblesExist)
                 {
