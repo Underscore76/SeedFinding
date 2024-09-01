@@ -69,7 +69,7 @@ namespace SeedFinding
     {
         public static Version version164 = new Version("1.6.4");
 
-        public static List<Result> Predict(Map map, int gameId, int day, string version = "1.6.4", int timesFished = 0, int panningLevel = 0, string panningEnchant = "")
+        public static List<Result> Predict(Map map, uint gameId, int day, string version = "1.6.4", int timesFished = 0, int panningLevel = 0, string panningEnchant = "")
         {
             List<Result> results = new List<Result>();
             Point p;

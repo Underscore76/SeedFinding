@@ -17,7 +17,7 @@ namespace SeedFinding
             Random r = new Random();
             for (int i = 0; i < numTrials; i++)
             {
-                var seed = r.Next(1 << 30);
+                uint seed = (uint)r.Next(1 << 30);
                 var b = new BundleGenerator().Generate(seed);
                 var c = RemixedBundles.Generate(seed).ToDict();
                 foreach (var p in b)

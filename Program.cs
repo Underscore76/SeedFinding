@@ -46,7 +46,10 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-				int seed = 379647118;
+				uint seed = 2910939589;
+				//int seed = (int)useed;
+				Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(seed, 5).Select(o=>Item.Get(o.Id).Name))));
+				return;
 
 				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
 				//return;
@@ -104,8 +107,8 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                int numSeeds = Int32.MaxValue;
-                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
+                uint numSeeds = Int32.MaxValue;
+                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<uint> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
@@ -155,8 +158,8 @@ namespace SeedFinding
                 StreamWriter sw = new StreamWriter(fs);
                 Console.SetOut(sw);
                 Console.WriteLine("RemixSearch");
-                int numSeeds = Int32.MaxValue;
-                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                uint numSeeds = Int32.MaxValue;
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<uint> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);

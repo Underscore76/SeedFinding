@@ -18,9 +18,9 @@ namespace SeedFinding.Bundles
             RandomBundles = JsonConvert.DeserializeObject<List<RandomBundleData>>(File.ReadAllText(@"data/RandomBundles.json"));
             CompRandomBundles = new List<CompRandomBundleData>(RandomBundles.Select(o => new CompRandomBundleData(o)));
         }
-        public static CompressedRemixBundles Generate(int seed)
+        public static CompressedRemixBundles Generate(uint seed)
         {
-            Random random = new Random(seed * 9);
+            Random random = new Random((int)seed * 9);
             var result = new CompressedRemixBundles(0);
             foreach (var area_data in CompRandomBundles)
             {

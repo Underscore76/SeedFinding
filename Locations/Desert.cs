@@ -30,7 +30,7 @@ namespace SeedFinding.Locations
 
         }
 
-        public Desert(int seed) : base(seed, 120, 120)
+        public Desert(uint seed) : base(seed, 120, 120)
         {
         }
         public override void Spawn()

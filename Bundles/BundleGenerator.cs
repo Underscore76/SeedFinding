@@ -25,9 +25,9 @@ namespace SeedFinding.Bundles
             randomBundleData = JsonConvert.DeserializeObject<List<RandomBundleData>>(File.ReadAllText(@"data/RandomBundles.json"));
         }
 
-        public Dictionary<string, List<int>> Generate(int seed)
+        public Dictionary<string, List<int>> Generate(uint seed)
         {
-            random = new Random(seed*9);
+            random = new Random((int)((double)seed*9));
             bundleData = new Dictionary<string, List<int>>();
             foreach (RandomBundleData area_data in randomBundleData)
             {

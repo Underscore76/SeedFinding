@@ -29,7 +29,7 @@ namespace SeedFinding.Locations
             SeasonalSpawns[3] = new List<SpawnChance>() { new SpawnChance(372, 0.4), new SpawnChance(392, 0.8), new SpawnChance(718, 0.05), new SpawnChance(719, 0.2), new SpawnChance(723, 0.2) };
         }
 
-        public Beach(int seed) : base(seed, 104, 50)
+        public Beach(uint seed) : base(seed, 104, 50)
         {
         }
         public override void Spawn()

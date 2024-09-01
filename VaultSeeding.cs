@@ -25,7 +25,7 @@ namespace SeedFinding
         };
 
         // cart needs to contain items to satisfy two sets of bundles
-        static HashSet<CartItem> ValidCart(int seed, int day, int minMatch, out bool valid)
+        static HashSet<CartItem> ValidCart(uint seed, int day, int minMatch, out bool valid)
         {
             var stock = TravelingCart.GetStock(seed, day);
             HashSet<int> stockIds = new HashSet<int>(stock.Select(o => o.Id));
@@ -42,7 +42,7 @@ namespace SeedFinding
             return stock;
         }
 
-        static HashSet<ObjectInfo.ObjectData> ValidBeach(int seed, int day, out bool valid)
+        static HashSet<ObjectInfo.ObjectData> ValidBeach(uint seed, int day, out bool valid)
         {
             Beach beach = new Beach(seed);
             beach.RunToDay(day);
@@ -53,7 +53,7 @@ namespace SeedFinding
             return items;
         }
 
-        static HashSet<ObjectInfo.ObjectData> ValidBus(int seed, int day, out bool valid)
+        static HashSet<ObjectInfo.ObjectData> ValidBus(uint seed, int day, out bool valid)
         {
             BusStop bus = new BusStop(seed);
             bus.RunToDay(day);
@@ -62,7 +62,7 @@ namespace SeedFinding
             valid = items.Count == 3;
             return items;
         }
-        static HashSet<ObjectInfo.ObjectData> ValidMountain(int seed, int day, out bool valid)
+        static HashSet<ObjectInfo.ObjectData> ValidMountain(uint seed, int day, out bool valid)
         {
             Mountain mtn = new Mountain(seed);
             mtn.RunToDay(day);
@@ -85,7 +85,7 @@ namespace SeedFinding
 
                 //int nSeeds = 0x7FFFFFFF;
                 int nSeeds = 1 << 24;
-                for (int seed = 0; seed < nSeeds; seed++)
+                for (uint seed = 0; seed < nSeeds; seed++)
                 {
                     if (seed > 0 && seed % 1000000 == 0)
                     {

@@ -51,7 +51,7 @@ namespace SeedFinding.Trash
             }
             return new Tile();
         }
-        public static HashSet<string> getAllTrash(int gameId, int day, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static HashSet<string> getAllTrash(uint gameId, int day, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             HashSet<string> results = new HashSet<string>();
 
@@ -62,7 +62,7 @@ namespace SeedFinding.Trash
             results.Remove("0");
             return results;
         }
-        public static string getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static string getTrash(uint gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             Random garbageRandom = new Random((int)gameId / 2 + (int)day + 777 + (int)can * 77);
             int prewarm = garbageRandom.Next(0, 100);
