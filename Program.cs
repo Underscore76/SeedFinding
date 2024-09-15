@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
 using System.Resources;
 using StardewValley;
+using SeedFinding.Locations1_6;
 
 namespace SeedFinding
 {
@@ -45,27 +46,28 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-				uint unum = 2910939589;
-				int num = -1384027707;
-				Console.WriteLine((uint)num);
-				Console.WriteLine((int)unum);
-				return;
 
 				Game1.UseLegacyRandom = true;
-				int numSeeds = 0;// Int32.MaxValue;
-				int start = Int32.MinValue;
+				uint numSeeds = UInt32.MaxValue;
+				uint start = 0;
 				//KrobusSeeding.CheckSeed(666262426, true);
 				//return;
 				//for (int seed2 = 0; seed2 < 100000; seed2++)
 				//{
-				//	KrobusSeeding.CheckSeed(seed2);
+				//KrobusSeeding.CheckSeed(2093299582, true);
 				//}
 				//return;
-				KrobusSeeding.Curate();
+				//KrobusSeeding.Curate();
+				//return;		
+				KrobusSeeding.ExploreSeed(3848814016, 39, 58);
+				//KrobusSeeding.CheckSeed(3848814004, true);
+				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
+				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
+				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
 				return;
-				KrobusSeeding.Search(start, numSeeds, blockSize, out List<int> validSeeds);
+				KrobusSeeding.Search(start, numSeeds, blockSize, out List<uint> validSeeds);
 				return;
-				int seed = 379647118;
+				uint seed = 379647118;
 
 				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
 				//return;

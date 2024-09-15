@@ -24,6 +24,9 @@ namespace SeedFinding
 		public static bool magnifyingGlass = false;
 		public static bool QiBeansActive = false;
 		public static string location = "";
+		public static bool guntherBones = false;
+		public static bool guntherBonesActive = false;
+		
 
 		public static Dictionary<string, LocationData> locations1_6 = JsonConvert.DeserializeObject<Dictionary<string, LocationData>>(File.ReadAllText($@"Locations1_6/Locations.json"));
 	}

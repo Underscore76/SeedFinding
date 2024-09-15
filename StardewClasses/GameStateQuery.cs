@@ -1089,7 +1089,7 @@ namespace StardewValley
             }*/
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
-            /*public static bool PLAYER_HAS_MAIL(string[] query, GameStateQueryContext context)
+            public static bool PLAYER_HAS_MAIL(string[] query, GameStateQueryContext context)
             {
                 if (!ArgUtility.TryGet(query, 1, out var playerKey, out var error) || !ArgUtility.TryGet(query, 2, out var mailId, out error) || !ArgUtility.TryGetOptional(query, 3, out var rawType, out error, "any"))
                 {
@@ -1102,7 +1102,7 @@ namespace StardewValley
                 }
                 throw new NotImplementedException();
                 return false;
-            }*/
+            }
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
             /*public static bool PLAYER_HAS_PROFESSION(string[] query, GameStateQueryContext context)
@@ -1248,7 +1248,7 @@ namespace StardewValley
             }*/
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
-            /*public static bool PLAYER_SPECIAL_ORDER_ACTIVE(string[] query, GameStateQueryContext context)
+            public static bool PLAYER_SPECIAL_ORDER_ACTIVE(string[] query, GameStateQueryContext context)
             {
                 if (!ArgUtility.TryGet(query, 1, out var playerKey, out var error) || !ArgUtility.TryGet(query, 2, out var orderId, out error))
                 {
@@ -1259,9 +1259,8 @@ namespace StardewValley
                 {
                     return Game1.guntherBonesActive;
                 }
-                throw new NotImplementedException();
                 return false;
-            }*/
+            }
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />
             public static bool PLAYER_SPECIAL_ORDER_RULE_ACTIVE(string[] query, GameStateQueryContext context)
@@ -1274,7 +1273,6 @@ namespace StardewValley
                 {
                     return Game1.QiBeansActive;
                 }
-                throw new NotImplementedException();
                 return false;
             }
 
