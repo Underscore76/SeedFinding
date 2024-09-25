@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
 using System.Resources;
 using StardewValley;
+using SeedFinding.Locations1_6;
 
 namespace SeedFinding
 {
@@ -45,11 +46,28 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
             {
-                Game1.UseLegacyRandom = false;
-				uint seed = 2910939589;
-				//int seed = (int)useed;
-				Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(seed, 5).Select(o=>Item.Get(o.Id).Name))));
+
+				Game1.UseLegacyRandom = true;
+				uint numSeeds = UInt32.MaxValue;
+				uint start = 0;
+				//KrobusSeeding.CheckSeed(666262426, true);
+				//return;
+				//for (int seed2 = 0; seed2 < 100000; seed2++)
+				//{
+				//KrobusSeeding.CheckSeed(2093299582, true);
+				//}
+				//return;
+				//KrobusSeeding.Curate();
+				//return;		
+				KrobusSeeding.ExploreSeed(3848814016, 39, 58);
+				//KrobusSeeding.CheckSeed(3848814004, true);
+				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
+				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
+				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
 				return;
+				KrobusSeeding.Search(start, numSeeds, blockSize, out List<uint> validSeeds);
+				return;
+				uint seed = 379647118;
 
 				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
 				//return;
@@ -107,13 +125,13 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                uint numSeeds = Int32.MaxValue;
-                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<uint> validSeeds);
+                //int numSeeds = Int32.MaxValue;
+                //double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
 
