@@ -669,8 +669,74 @@ namespace SeedFinding
             }
             return (390, 1);
         }
-        
-        public static FloorType GetFloorType(int gameID, int day, int floor, bool visitedQuarry=false)
+
+		public static FloorType GetFloorType16(uint gameID, int day, int floor, bool visitedQuarry = false)
+		{
+			Random r = Utility.CreateDaySaveRandom(day, gameID, floor * 100);
+			if (r.NextDouble() < 0.044 && (floor >= 121 || floor % 5 != 0 && floor % 40 > 5 && floor % 40 < 30 && floor % 40 != 19))
+			{
+				FloorType type;
+				if (r.NextDouble() < 0.5)
+				{
+					type = FloorType.Monster;
+				}
+				else
+				{
+					type = FloorType.Slime;
+				}
+				if (floor > 126 && r.NextDouble() < 0.5)
+				{
+					type = FloorType.Dino;
+				}
+
+				return type;
+			}
+			else if (floor < 121 && r.NextDouble() < 0.044 && visitedQuarry && floor % 40 > 1 && floor % 5 != 0)
+			{
+				return FloorType.Quarry;
+			}
+
+			r = Utility.CreateDaySaveRandom(day, gameID, day, floor, 4 * floor);
+
+			if (r.NextDouble() < 0.3 && floor > 2)
+			{
+				//this.isLightingDark.Value = true;
+				//this.lighting = new Color(120, 120, 40);
+				if (r.NextDouble() < 0.3)
+				{
+					//this.lighting = new Color(150, 150, 60);
+				}
+			}
+			if (r.NextDouble() < 0.15 && floor > 5 && floor != 120)
+			{
+				//this.isLightingDark.Value = true;
+				/*switch (this.getMineArea())
+                {
+                    case 0:
+                    case 10:
+                        this.lighting = new Color(110, 110, 70);
+                        break;
+                    case 40:
+                        this.lighting = Color.Black;
+                        if (this.GetAdditionalDifficulty() > 0)
+                        {
+                            this.lighting = new Color(237, 212, 185);
+                        }
+                        break;
+                    case 80:
+                        this.lighting = new Color(90, 130, 70);
+                        break;
+                }*/
+			}
+			if (r.NextDouble() < 0.035 && floor >= 80 && floor < 120 && floor % 5 != 0)
+			{
+				return FloorType.Mushroom;
+			}
+
+			return FloorType.None;
+		}
+
+		public static FloorType GetFloorType15(int gameID, int day, int floor, bool visitedQuarry=false)
         {
             Random r = new Random(day + floor * 100 + gameID / 2);
             if ( r.NextDouble() < 0.044 && (floor >= 121 || floor % 5 != 0 && floor % 40 > 5 && floor % 40 < 30 && floor % 40 != 19))

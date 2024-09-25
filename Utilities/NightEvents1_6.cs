@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 
 namespace SeedFinding.NightEvents1_6
 {
@@ -55,5 +56,14 @@ namespace SeedFinding.NightEvents1_6
 
             return Event.None;
         }
+
+		public static Point getMeteorTarget(uint gameId, int day, int width, int height)
+		{
+			Random r = Utility.CreateRandom(gameId, day);
+
+			Point location = new Point(r.Next(5, width - 20), r.Next(5, height - 4));
+
+			return location;
+		}
     }
 }

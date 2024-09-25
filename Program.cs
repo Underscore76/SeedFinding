@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
 using System.Resources;
 using StardewValley;
+using SeedFinding.Locations1_6;
 
 namespace SeedFinding
 {
@@ -46,9 +47,36 @@ namespace SeedFinding
             if (true)
             {
                 Game1.UseLegacyRandom = false;
-                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
-                Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
-                return;
+				uint seed = 2910939589;
+				//int seed = (int)useed;
+				Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(seed, 5).Select(o=>Item.Get(o.Id).Name))));
+				return;
+
+				//Console.WriteLine(Item.Get(Locations1_6.Location.digUpArtifactSpot(4, seed, "Beach", 23, 8,2)[0].Item1).Name);
+				//return;
+				List<Locations1_6.Location> locations = new()
+				{
+					new Locations1_6.Location("Town", seed),
+					new Locations1_6.Location("Beach", seed),
+					new Locations1_6.Location("Mountain", seed),
+					new Locations1_6.Location("Forest", seed),
+					new Locations1_6.Location("BusStop", seed),
+					new Locations1_6.Location("Desert", seed),
+					new Locations1_6.Location("Railroad", seed),
+					new Locations1_6.Location("Backwoods", seed)
+				};
+				foreach (var location in locations)
+				{
+					location.RunToDay(7);
+					location.printResults();
+				}
+				//Locations1_6.Location town = new Locations1_6.Location("Town", 379647118);
+
+				//town.RunToDay(5);
+				//town.printResults();
+				//Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
+				//Console.WriteLine(Utility.CreateRandom(85944621, 6).NextDouble());
+				return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -86,7 +114,7 @@ namespace SeedFinding
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
 

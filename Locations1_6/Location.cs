@@ -21,6 +21,7 @@ namespace SeedFinding.Locations1_6
 		public string Name;
 		public Dictionary<Point, Item> ForageSpawns = new();
 		public List<(Point,string)> ArtifactSpots = new();
+		public Dictionary<Point, string> ArtifactSpotsDict = new();
 		public LocationData LocationData;
 		public Dictionary<Season,List<ForageData>> SeasonalForage = new();
 		public Dictionary<Point,Item> Objects = new();
@@ -31,6 +32,8 @@ namespace SeedFinding.Locations1_6
 		public uint Seed;
 		public int Day;
 		public bool DangerArtifactSpot = false;
+		public Version version = new Version("1.6.8");
+		public List<string> log = new List<string>();
 
 		public Location(string name, uint seed)
 		{
@@ -72,6 +75,12 @@ namespace SeedFinding.Locations1_6
 					winter.Add(spawn);
 				}
 			}
+		}
+
+		public void printLog()
+		{
+			Console.WriteLine($"{Name} log");
+			foreach (string entry in log) { Console.WriteLine(entry); }
 		}
 
 		public void setupDefaultCollections()
@@ -185,7 +194,7 @@ namespace SeedFinding.Locations1_6
 
 		public bool CanItemBePlacedHere(Point location)
 		{
-			if (Objects.ContainsKey(location) || Trees.ContainsKey(location) || ForageSpawns.ContainsKey(location))
+			if (Objects.ContainsKey(location) || Trees.ContainsKey(location) || ForageSpawns.ContainsKey(location) || ArtifactSpotsDict.ContainsKey(location))
 			{
 				return false;
 			}
@@ -238,6 +247,7 @@ namespace SeedFinding.Locations1_6
 			if (dayOfWeek == 0)
 			{
 				ForageSpawns.Clear();
+				log.Add("Sunday clearing of forage");
 				Spawn(Seed, Day);
 				Spawn(Seed, Day);
 			}
@@ -250,12 +260,24 @@ namespace SeedFinding.Locations1_6
 			{
 				Spawn(Seed, Day);
 			}
+
+			if (Name == "Backwoods" && dayOfMonth == 9)
+			{
+				Point point = new Point(18, 18);
+				if (!ArtifactSpotsDict.ContainsKey(point))
+				{
+					ArtifactSpots.Add((point, "(O)SeedSpot"));
+					ArtifactSpotsDict[point] = "(O)SeedSpot";
+				}
+			}
 		}
 		public void RunToDay(int day)
 		{
 			DangerArtifactSpot = false;
 			ForageSpawns.Clear();
 			Day = 0;
+			ArtifactSpots.Clear();
+			ArtifactSpotsDict.Clear();
 			Spawn(Seed, Day);
 			ForageSpawns.Clear();
 			while (Day < day)
@@ -280,6 +302,7 @@ namespace SeedFinding.Locations1_6
 						int xCoord2 = rand.Next(map.Width);
 						int yCoord2 = rand.Next(map.Height);
 						Point check = new Point(xCoord2, yCoord2);
+						log.Add($"Day:	{Day}	Attempted forage placement at {check}");
 
 						if (map.IsNoSpawnTile(check.X, check.Y) || map.doesTileHaveProperty(check.X, check.Y, "Spawnable", "Back") == null || map.doesEitherTileOrTileIndexPropertyEqual(check.X, check.Y, "Spawnable", "Back", "F") || !this.CanItemBePlacedHere(check) || map.getTileIndexAt(check.X, check.Y, "AlwaysFront") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront2") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront3") != 0 || map.getTileIndexAt(check.X, check.Y, "Front") != 0 || this.isBehindBush(check) || (!rand.NextBool(0.1) && this.isBehindTree(check)))
 						{
@@ -292,8 +315,9 @@ namespace SeedFinding.Locations1_6
 						{
 							continue;
 						}
-
-						ForageSpawns[check] = Item.Get(index.Id);
+						Item item = Item.Get(index.Id);
+						ForageSpawns[check] = item;
+						log.Add($"Day:	{Day}	Placed {item.Name} at {check}");
 						break;
 					}
 				}
@@ -301,9 +325,13 @@ namespace SeedFinding.Locations1_6
 
 			for( int i = ArtifactSpots.Count - 1; i >= 0; i--)
 			{
+				Point point = ArtifactSpots[i].Item1;
+				log.Add($"Day:	{Day}	Attempted Removal {point}");
 				if (rand.NextBool(0.15))
 				{
 					ArtifactSpots.RemoveAt(i);
+					ArtifactSpotsDict.Remove(point);
+					log.Add($"Day: {Day}	Removed Spot {point}");
 				}
 			}
 
@@ -320,15 +348,24 @@ namespace SeedFinding.Locations1_6
                 int xCoord = rand.Next(map.Width);
                 int yCoord = rand.Next(map.Height);
                 Point location = new Point(xCoord, yCoord);
+				log.Add($"Day:	{Day}	Attempted spot placement at {location}");
 				if (this.CanItemBePlacedHere(location) && /*!this.IsTileOccupiedBy(location) &&*/ map.getTileIndexAt(xCoord, yCoord, "AlwaysFront") == 0 && map.getTileIndexAt(xCoord, yCoord, "Front") == 0 && !this.isBehindBush(location) && (map.doesTileHaveProperty(xCoord, yCoord, "Diggable", "Back") != null || (season == Season.Winter && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back") != null && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back").Equals("Grass"))))
 				{
                     if (Name.Equals("Forest") && xCoord >= 93 && yCoord <= 22)
                     {
                         continue;
 					}
-					ArtifactSpots.Add( (location, rand.NextBool(0.166) ? "(O)SeedSpot" : "(O)590") );
+					double chance = 0.166;
+					if (version <= new Version("1.6.3"))
+					{
+						chance = 0.25;
+					}
+					string what = rand.NextBool(chance) ? "(O)SeedSpot" : "(O)590";
+					ArtifactSpots.Insert(0, (location,  what));
+					ArtifactSpotsDict.Add(location, what);
+					log.Add($"Day:	{Day}	Placed {what} at {location}");
 
-					if (xCoord > 100)
+					if (Name.Equals("Mountain") && xCoord > 100)
 					{
 						DangerArtifactSpot = true;
 					}
@@ -340,11 +377,16 @@ namespace SeedFinding.Locations1_6
                 }
             }
 
+			if (ArtifactSpots.Count == 0)
+			{
+				DangerArtifactSpot = false;
+			}
+
 			
 		}
 		public void printResults()
 		{
-			Console.WriteLine($"{Name}	{Day-1}");
+			Console.WriteLine($"{Name}	{Day}");
 			foreach (var forage in ForageSpawns)
 			{
 				Console.WriteLine($"{forage.Key}	{forage.Value.Name}");
