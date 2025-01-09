@@ -16,7 +16,7 @@ namespace SeedFinding.NightEvents1_6
             WindStorm
         }
 
-        public static Event GetEvent(uint gameID, int day, bool pantryComplete = false, bool raccoonsValid = false, bool hasFairyRose = false, bool capsuleValid = false)
+        public static Event GetEvent(long gameID, int day, bool pantryComplete = false, bool raccoonsValid = false, bool hasFairyRose = false, bool capsuleValid = false)
         {
             if (day == 31)
             {
@@ -57,7 +57,7 @@ namespace SeedFinding.NightEvents1_6
             return Event.None;
         }
 
-		public static Point getMeteorTarget(uint gameId, int day, int width, int height)
+		public static Point getMeteorTarget(long gameId, int day, int width, int height)
 		{
 			Random r = Utility.CreateRandom(gameId, day);
 

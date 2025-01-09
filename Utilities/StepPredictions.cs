@@ -52,13 +52,13 @@ namespace SeedFinding
             }
         }
 		 
-		public static StepResult Predict(int gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+		public static StepResult Predict(long gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
 		{
 			Random random;
 			return Predict(gameid, day, steps, friends, out random, numberMachinesProcessing);
 		}
 
-		public static StepResult Predict(int gameid, int day, int steps, List<string> friends, out Random random, int numberMachinesProcessing = 0)
+		public static StepResult Predict(long gameid, int day, int steps, List<string> friends, out Random random, int numberMachinesProcessing = 0)
         {
             int calcDay = day + 1;
             Season season = Utility.getSeasonFromDay(calcDay);

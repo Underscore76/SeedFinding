@@ -59,7 +59,7 @@ namespace SeedFinding
 			}
 		}
 
-        public static QuestType GetQuestType(int gameId, int daysPlayed, bool hasSocialiseQuest = true, int mineLevel = 0)
+        public static QuestType GetQuestType(long gameId, int daysPlayed, bool hasSocialiseQuest = true, int mineLevel = 0)
         {
             if (daysPlayed <= 1)
             {
@@ -92,7 +92,7 @@ namespace SeedFinding
             }
             return QuestType.ItemDeliveryQuest;
         }
-        public static QuestResults GetItemDeliveryQuest(uint gameId, int daysPlayed, int cookingRecipesKnown, List<string> persons, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static QuestResults GetItemDeliveryQuest(long gameId, int daysPlayed, int cookingRecipesKnown, List<string> persons, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             QuestType questType = GetQuestType(gameId, daysPlayed);
             if (questType != QuestType.ItemDeliveryQuest)
