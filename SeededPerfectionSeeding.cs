@@ -23,7 +23,7 @@ namespace SeedFinding
                 ValidSeed(seed, true);
             }
         }
-        public static bool ValidSeed(uint id,bool curate = false)
+        public static bool ValidSeed(long id,bool curate = false)
         {
             // Fairy
             bool fairy = false;
