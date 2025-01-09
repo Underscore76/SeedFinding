@@ -917,4 +917,52 @@ namespace SeedFinding.Locations1_6
 		}
 	}
 
+	public struct Bubbles
+	{
+		public int X;
+		public int Y;
+		public int StartTime;
+		public int EndTime;
+		public int Distance;
+		public bool Frenzy;
+
+		public Bubbles(int x, int y, int startTime, int endTime, int distance, bool frenzy)
+		{
+			X = x;
+			Y = y;
+			StartTime = startTime;
+			EndTime = endTime;
+			Distance = distance;
+			Frenzy = frenzy;
+		}
+		public override string ToString()
+		{
+			return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4} {4}", X, Y, StartTime, EndTime, Frenzy);
+		}
+
+		public int TotalMinutes()
+		{
+			return TotalMinutes(StartTime, EndTime);
+		}
+
+		public int TotalMinutes(int startTime, int endTime)
+		{
+			// Same hour
+			if (startTime / 100 == endTime / 100)
+			{
+				return endTime - startTime;
+			}
+
+			// Minutes until next hour
+			int minutes = 60 - (startTime % 100);
+
+			// Treat StartTime as being at next hour
+			int time = startTime + minutes + 40;
+
+			int hours = endTime / 100 - time / 100;
+
+			return hours * 60 + minutes + endTime % 100;
+		}
+	}
+
 }
