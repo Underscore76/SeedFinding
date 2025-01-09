@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SeedFinding.Locations;
 using SeedFinding.StardewClasses;
 using StardewValley;
 using System;
@@ -15,6 +14,7 @@ using Microsoft.Xna.Framework;
 using static System.Net.WebRequestMethods;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using SeedFinding.Locations;
 
 namespace SeedFinding.Locations1_6
 {
@@ -31,6 +31,7 @@ namespace SeedFinding.Locations1_6
 		public List<TerrainFeature> TerrainFeatures2 = new();
 		public List<Bush> Bushes = new();
 		public List<ResourceClump> ResourceClumps = new();
+		public List<Bubbles> Bubbles = new();
 
 		public int Seed;
 		public int Day;
@@ -465,6 +466,84 @@ namespace SeedFinding.Locations1_6
 				_ => "(O)674",
 			};
 		}
+		public void ProcessBubbles(bool frenziesAvailable = true)
+		{
+			this.Bubbles.Clear();
+			bool bubblesExist = false;
+			int x = 0;
+			int y = 0;
+			int startTime = 0;
+			int toLand = 0;
+			bool frenzy = false;
+			for (int time = 610; time < 2600; time += 10)
+			{
+				if (time % 100 >= 60)
+				{
+					continue;
+				}
+
+				Random random;
+				if (frenziesAvailable)
+				{
+					random = Utility.CreateDaySaveRandom(Day, Seed, time, map.Width);
+				}
+				else
+				{
+					random = Utility.CreateDaySaveRandom(Day, Seed, time);
+				}
+
+				if (!bubblesExist)
+				{
+					if (random.NextDouble() < 0.5)
+					{
+						for (int tries = 0; tries < 2; tries++)
+						{
+							x = random.Next(0, map.Width);
+							y = random.Next(0, map.Height);
+							if (!map.isOpenWater(x, y))
+							{
+								continue;
+							}
+							toLand = map.distanceToLand(x, y);
+							if (toLand > 1 && toLand < 5)
+							{
+								if (random.NextDouble() < ((Name == "Beach") ? 0.008 : 0.01) && Day-1 > 3 && (Name == "Town" || Name == "Mountain" || Name == "Forest" || Name == "Beach") && time < 2300 /*&& (Game1.player.fishCaught.Count() > 2 || Game1.Date.TotalDays > 14) && !Utility.isFestivalDay()*/)
+								{
+									random.NextDouble();
+									frenzy = true;
+								}
+								startTime = time;
+								bubblesExist = true;
+								break;
+							}
+						}
+					}
+				}
+				else{
+					int splashPointDurationSoFar = Utility.CalculateMinutesBetweenTimes(startTime, time);
+					bool check;
+					if (frenziesAvailable)
+					{
+						check = random.NextDouble() < 0.1 + (double)((float)splashPointDurationSoFar / 1800f) && splashPointDurationSoFar > (frenzy ? 90 : 60);
+					}
+					else
+					{
+						check = random.NextDouble() < 0.1;
+					}
+					if (check)
+					{
+						Bubbles.Add(new Bubbles(x, y, startTime, time, toLand, frenzy));
+						frenzy = false;
+						bubblesExist = false;
+					}
+				}
+			}
+
+			if (bubblesExist)
+			{
+				Bubbles.Add(new Bubbles(x, y, startTime, 2600, toLand, frenzy));
+			}
+		}
 	}
 
 	public class Bush
@@ -636,4 +715,53 @@ namespace SeedFinding.Locations1_6
 	{
 
 	}
+
+	public struct Bubbles
+	{
+		public int X;
+		public int Y;
+		public int StartTime;
+		public int EndTime;
+		public int Distance;
+		public bool Frenzy;
+
+		public Bubbles(int x, int y, int startTime, int endTime, int distance, bool frenzy)
+		{
+			X = x;
+			Y = y;
+			StartTime = startTime;
+			EndTime = endTime;
+			Distance = distance;
+			Frenzy = frenzy;
+		}
+		public override string ToString()
+		{
+			return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4} {4}", X, Y, StartTime, EndTime, Frenzy);
+		}
+
+		public int TotalMinutes()
+		{
+			return TotalMinutes(StartTime, EndTime);
+		}
+
+		public int TotalMinutes(int startTime, int endTime)
+		{
+			// Same hour
+			if (startTime / 100 == endTime / 100)
+			{
+				return endTime - startTime;
+			}
+
+			// Minutes until next hour
+			int minutes = 60 - (startTime % 100);
+
+			// Treat StartTime as being at next hour
+			int time = startTime + minutes + 40;
+
+			int hours = endTime / 100 - time / 100;
+
+			return hours * 60 + minutes + endTime % 100;
+		}
+	}
+
 }

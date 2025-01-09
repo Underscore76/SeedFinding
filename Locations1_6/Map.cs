@@ -83,7 +83,7 @@ namespace SeedFinding.Locations1_6
                     {
                         int tileIndex = layer.GetTileIndex((int)position.X, (int)position.Y);
                         Tile tile = FindTile(tileIndex);
-                        if (tile == null || (tile.HasProperty("Water") != null))
+                        if (tile == null || (tile.HasProperty("Water") != "T"))
                         {
                             foundLand = true;
                             distance = width / 2;

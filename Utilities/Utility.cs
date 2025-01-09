@@ -935,5 +935,14 @@ namespace SeedFinding
 			}
 			return value;
 		}
+		public static int ConvertTimeToMinutes(int time_stamp)
+		{
+			return time_stamp / 100 * 60 + time_stamp % 100;
+		}
+
+		public static int CalculateMinutesBetweenTimes(int startTime, int endTime)
+		{
+			return Utility.ConvertTimeToMinutes(endTime) - Utility.ConvertTimeToMinutes(startTime);
+		}
 	}
 }
