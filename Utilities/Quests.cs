@@ -92,7 +92,7 @@ namespace SeedFinding
             }
             return QuestType.ItemDeliveryQuest;
         }
-        public static QuestResults GetItemDeliveryQuest(int gameId, int daysPlayed, int cookingRecipesKnown, List<string> persons, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static QuestResults GetItemDeliveryQuest(uint gameId, int daysPlayed, int cookingRecipesKnown, List<string> persons, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             QuestType questType = GetQuestType(gameId, daysPlayed);
             if (questType != QuestType.ItemDeliveryQuest)
@@ -136,7 +136,7 @@ namespace SeedFinding
 
             return new QuestResults(target, item, questType);
         }
-        public static int GetItemDeliveryQuestItem(int gameId, int daysPlayed, int cookingRecipesKnown, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static int GetItemDeliveryQuestItem(uint gameId, int daysPlayed, int cookingRecipesKnown, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             Random random = Utility.CreateRandom(gameId, daysPlayed);
             

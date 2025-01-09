@@ -1259,7 +1259,6 @@ namespace StardewValley
                 {
                     return Game1.guntherBonesActive;
                 }
-                throw new NotImplementedException();
                 return false;
             }
 
@@ -1274,7 +1273,6 @@ namespace StardewValley
                 {
                     return Game1.QiBeansActive;
                 }
-                throw new NotImplementedException();
                 return false;
             }
 

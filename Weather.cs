@@ -18,7 +18,13 @@ namespace SeedFinding
 			Debris
 
         }
-        public static WeatherType getWeather(int day, int gameId)
+		public static bool isRain(int day, uint gameId)
+		{
+			WeatherType type = getWeather(day, gameId);
+
+			return type == WeatherType.Rain || type == WeatherType.Storm || type == WeatherType.GreenRain;
+		}
+        public static WeatherType getWeather(int day, uint gameId)
         {
             if (day == 1 || day == 2 || day == 4 || day % 28 == 1) { 
                 return WeatherType.Sun;

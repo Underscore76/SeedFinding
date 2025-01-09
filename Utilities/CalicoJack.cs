@@ -24,7 +24,7 @@ namespace SeedFinding
             index++;
             return result;
         }
-        public static int CalculateHand(int timesPlayed, int daysPlayed, int seed)
+        public static int CalculateHand(int timesPlayed, int daysPlayed, uint seed)
         {
             List<int> playerCards = new();
             List<int> dealerCards = new();

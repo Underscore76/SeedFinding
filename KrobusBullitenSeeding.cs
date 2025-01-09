@@ -35,7 +35,7 @@ namespace SeedFinding
 
 
 
-        public static int CheckTroves(int seed, int startCount, int count)
+        public static int CheckTroves(uint seed, int startCount, int count)
         {
 
             int result = 0;
@@ -77,12 +77,12 @@ namespace SeedFinding
             return true;
         }
 
-        public static bool CheckSeed14(int seed, bool report = false)
+        public static bool CheckSeed14(uint seed, bool report = false)
         {
             int day = 14;
 
             // Billboard
-            Random random = new Random(seed + day);
+            Random random = new Random((int)seed + day);
             double randResult = random.NextDouble();
             if (randResult < 0.8148148148148 || randResult > 0.8518518519)
             {
@@ -152,7 +152,7 @@ namespace SeedFinding
             return true;
         }
 
-        public static bool CheckSeed13(int seed, Desert desert, Forest forest, bool report = false)
+        public static bool CheckSeed13(uint seed, Desert desert, Forest forest, bool report = false)
         {
             int day = 13;
             desert.Seed = seed;
@@ -210,7 +210,7 @@ namespace SeedFinding
             return true;
 
         }
-        public static bool CheckSeed(int seed, bool report = false)
+        public static bool CheckSeed(uint seed, bool report = false)
         {
             if (seed % 2 == 1)
             {
@@ -588,7 +588,7 @@ namespace SeedFinding
                 return false;
             }
 
-            if (new Random(seed).NextDouble() > 0.2)
+            if (new Random((int)seed).NextDouble() > 0.2)
             {
                 return false;
             }
@@ -606,7 +606,7 @@ namespace SeedFinding
         public static void Curate()
         {
 
-            List<int> seeds = new List<int>() { 82613437, 83969985, 100742660, 214766436, 297380551, 544416555, 760421488, 1014481273, 1041939395, 1371048853, 1498807821, 1597249295, 1726676423, 1748531390, 1761218614, 1798681902, 1826210124, 1833921766, 1839306595, 1951743482, 1958193759, 1959236666, 2072166632, 2100230364 };
+            List<uint> seeds = new List<uint>() { 82613437, 83969985, 100742660, 214766436, 297380551, 544416555, 760421488, 1014481273, 1041939395, 1371048853, 1498807821, 1597249295, 1726676423, 1748531390, 1761218614, 1798681902, 1826210124, 1833921766, 1839306595, 1951743482, 1958193759, 1959236666, 2072166632, 2100230364 };
             foreach (var seed in seeds) { 
                 CheckSeed14(seed, true);
             }
@@ -653,19 +653,19 @@ namespace SeedFinding
             return seconds;
         }
 
-        public static bool ValidGeodes(int seed)
+        public static bool ValidGeodes(uint seed)
         {
             Console.WriteLine(Mines.GetGeodeContents(seed, 1, Geode.Geode));
             return true;
         }
 
-        public static bool ValidMines(int seed)
+        public static bool ValidMines(uint seed)
         {
             Console.WriteLine(string.Join( ",",Mines.CheckStone1_5(548284736, 25, 28, 6)));
             return true;
         }
 
-        public static bool ValidCart(int seed, int day)
+        public static bool ValidCart(uint seed, int day)
         {
             //if (NightEvents.GetEvent(seed,6) != NightEvents.Event.Fairy)
             //{

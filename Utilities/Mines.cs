@@ -41,7 +41,7 @@ namespace SeedFinding
             return CheckStone1_5(x*1000 + y + floor + gameId / 2, ladder,geologist,excavator,floor);
         }
 
-        public static List<int> CheckStone1_6(int day, int gameId, int floor, int x, int y, bool ladder = false, bool geologist = false, bool excavator = false)
+        public static List<int> CheckStone1_6(int day, uint gameId, int floor, int x, int y, bool ladder = false, bool geologist = false, bool excavator = false)
         {
 
             Random r = Utility.CreateDaySaveRandom(day, gameId, x * 1000, y, floor);
@@ -505,6 +505,7 @@ namespace SeedFinding
             };
         }
         public static void PrintGeodeContents(int gameId, long playerId, int startingGeode, int count, List<Geode> geodeTypes, string delimiter, bool excludeOres=true, int deepestMineLevel=0, bool qibeans = false, bool printBestGeode=false, int printBestGeodeMinPrice=0, bool before1_5=false, StreamWriter stream = null)
+
         {
             List<string> unsellables = new List<string>() { "100", "101", "103", "104", "105", "106", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "330", "390" };
             if (excludeOres)
@@ -555,9 +556,9 @@ namespace SeedFinding
 
         
 
-        public static (int,int) GetGeodeContents(int gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans=false, bool before1_5=false)
+        public static (int,int) GetGeodeContents(uint gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans=false, bool before1_5=false)
         {
-            Random r = new Random(geodesCracked + gameId / 2);
+            Random r = new Random(geodesCracked + (int)gameId / 2);
             int prewarm_amount;
             prewarm_amount = r.Next(1, 10);
             for (int j = 0; j < prewarm_amount; j++)
@@ -673,8 +674,74 @@ namespace SeedFinding
             }
             return (390, 1);
         }
-        
-        public static FloorType GetFloorType(int gameID, int day, int floor, bool visitedQuarry=false)
+
+		public static FloorType GetFloorType16(uint gameID, int day, int floor, bool visitedQuarry = false)
+		{
+			Random r = Utility.CreateDaySaveRandom(day, gameID, floor * 100);
+			if (r.NextDouble() < 0.044 && (floor >= 121 || floor % 5 != 0 && floor % 40 > 5 && floor % 40 < 30 && floor % 40 != 19))
+			{
+				FloorType type;
+				if (r.NextDouble() < 0.5)
+				{
+					type = FloorType.Monster;
+				}
+				else
+				{
+					type = FloorType.Slime;
+				}
+				if (floor > 126 && r.NextDouble() < 0.5)
+				{
+					type = FloorType.Dino;
+				}
+
+				return type;
+			}
+			else if (floor < 121 && r.NextDouble() < 0.044 && visitedQuarry && floor % 40 > 1 && floor % 5 != 0)
+			{
+				return FloorType.Quarry;
+			}
+
+			r = Utility.CreateDaySaveRandom(day, gameID, day, floor, 4 * floor);
+
+			if (r.NextDouble() < 0.3 && floor > 2)
+			{
+				//this.isLightingDark.Value = true;
+				//this.lighting = new Color(120, 120, 40);
+				if (r.NextDouble() < 0.3)
+				{
+					//this.lighting = new Color(150, 150, 60);
+				}
+			}
+			if (r.NextDouble() < 0.15 && floor > 5 && floor != 120)
+			{
+				//this.isLightingDark.Value = true;
+				/*switch (this.getMineArea())
+                {
+                    case 0:
+                    case 10:
+                        this.lighting = new Color(110, 110, 70);
+                        break;
+                    case 40:
+                        this.lighting = Color.Black;
+                        if (this.GetAdditionalDifficulty() > 0)
+                        {
+                            this.lighting = new Color(237, 212, 185);
+                        }
+                        break;
+                    case 80:
+                        this.lighting = new Color(90, 130, 70);
+                        break;
+                }*/
+			}
+			if (r.NextDouble() < 0.035 && floor >= 80 && floor < 120 && floor % 5 != 0)
+			{
+				return FloorType.Mushroom;
+			}
+
+			return FloorType.None;
+		}
+
+		public static FloorType GetFloorType15(int gameID, int day, int floor, bool visitedQuarry=false)
         {
             Random r = new Random(day + floor * 100 + gameID / 2);
             if ( r.NextDouble() < 0.044 && (floor >= 121 || floor % 5 != 0 && floor % 40 > 5 && floor % 40 < 30 && floor % 40 != 19))

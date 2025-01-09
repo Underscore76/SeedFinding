@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
 using System.Resources;
 using StardewValley;
+using SeedFinding.Locations1_6;
 
 namespace SeedFinding
 {
@@ -44,16 +45,29 @@ namespace SeedFinding
 
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
-			{
-				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
-				//return;a
+            {
+
 				Game1.UseLegacyRandom = true;
-				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
-				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
-				//MAXPERFECTION.checkFile();
-				MAXPERFECTION.checkWinterStar();
-				//MAXPERFECTION.findGoodStepCount(1, 0);
+				uint numSeeds = UInt32.MaxValue;
+				uint start = 0;
+				//KrobusSeeding.CheckSeed(666262426, true);
+				//return;
+				//for (int seed2 = 0; seed2 < 100000; seed2++)
+				//{
+				//KrobusSeeding.CheckSeed(2093299582, true);
+				//}
+				//return;
+				//KrobusSeeding.Curate();
+				//return;		
+				KrobusSeeding.ExploreSeed(3848814016, 39, 58);
+				//KrobusSeeding.CheckSeed(3848814004, true);
+				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
+				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
+				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
 				return;
+				KrobusSeeding.Search(start, numSeeds, blockSize, out List<uint> validSeeds);
+				return;
+				uint seed = 379647118;
 
 				Game1.UseLegacyRandom = true;
 				int startingValue = 655568;
@@ -99,13 +113,13 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                int numSeeds = Int32.MaxValue;
-                double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
+                //int numSeeds = Int32.MaxValue;
+                //double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
 
@@ -150,8 +164,8 @@ namespace SeedFinding
                 StreamWriter sw = new StreamWriter(fs);
                 Console.SetOut(sw);
                 Console.WriteLine("RemixSearch");
-                int numSeeds = Int32.MaxValue;
-                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<int> validSeeds);
+                uint numSeeds = Int32.MaxValue;
+                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<uint> validSeeds);
                 foreach (var item in validSeeds)
                 {
                     Console.WriteLine(item);

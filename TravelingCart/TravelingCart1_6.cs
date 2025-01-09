@@ -727,12 +727,12 @@ namespace SeedFinding.Cart1_6
               5.0f };
         }
 
-        public static List<CartItem> GetStock(int gameSeed, int day, string version = "1.6.3")
+        public static List<CartItem> GetStock(uint gameSeed, int day, string version = "1.6.3")
         {
             bool version163 = new Version(version) >= new Version("1.6.3");
             List<CartItem> stock = new List<CartItem>();
             SortedDictionary<int, Item> randomOrder = new();
-            Random random = Utility.CreateRandom(day, gameSeed / 2);
+            Random random = Utility.CreateDaySaveRandom(day, gameSeed);
             foreach (var item in Item.Items)
                 {
                 int i = random.Next();

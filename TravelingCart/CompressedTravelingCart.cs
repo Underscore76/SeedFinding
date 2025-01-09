@@ -398,9 +398,9 @@ namespace SeedFinding.Cart
             ValidObjects = new HashSet<int>(ObjectOrdering);
         }
 
-        public static HashSet<CompressedCartItem> GetStock(int gameSeed, int day)
+        public static HashSet<CompressedCartItem> GetStock(uint gameSeed, int day)
         {
-            return GetStock(gameSeed + day);
+            return GetStock((int)gameSeed + day);
         }
 
         public static HashSet<CompressedCartItem> GetStock(int seed)

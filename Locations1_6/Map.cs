@@ -24,11 +24,11 @@ namespace SeedFinding.Locations1_6
         [JsonProperty("tilesets")]
         public List<TileSet> TileSets;
 
-        public Layer FindLayer(string layerName)
+        public Layer FindLayer(string layerName, string type = "")
         {
             foreach (var layer in Layers)
             {
-                if (layer.Name == layerName)
+                if (layer.Name == layerName && (type == "" || type == layer.Type))
                 {
                     return layer;
                 }
@@ -284,14 +284,29 @@ namespace SeedFinding.Locations1_6
 
 		public virtual bool doesEitherTileOrTileIndexPropertyEqual(int xTile, int yTile, string propertyName, string layerName, string propertyValue)
 		{
-			Layer layer = FindLayer(layerName);
+			Layer layer = FindLayer(layerName, "objectgroup");
+			if (layer != null)
+			{
+				foreach (TileObject tileObject in layer.Objects)
+				{
+					if (xTile*16 == tileObject.X &&  yTile*16 == tileObject.Y)
+					{
+						foreach (ObjectProperty property in tileObject.Properties)
+						{
+							if (property.Name == propertyName && property.Value == propertyValue)
+							{
+								return true;
+							}
+						}
+						break;
+					}
+				}
+			}
+
+			layer = FindLayer(layerName);
 			if (layer != null)
 			{
 				Tile tmp = FindTile(getTileIndexAt(xTile, yTile, layerName));
-				//if (tmp != null && tmp.TileIndexProperties.TryGetValue(propertyName, out var property2) && property2 == propertyValue)
-				//{
-				//	return true;
-				//}
 				if (tmp != null && tmp.HasProperty(propertyName) == propertyValue)
 				{
 					return true;
@@ -313,6 +328,12 @@ namespace SeedFinding.Locations1_6
 
         [JsonProperty("width")]
         public int Width;
+
+		[JsonProperty("type")]
+		public string Type;
+
+		[JsonProperty("objects")]
+		public List<TileObject> Objects;
 
         public int GetTileIndex(int x, int y)
         {
@@ -362,4 +383,26 @@ namespace SeedFinding.Locations1_6
             return null;
         }
     }
+
+	public class TileObject
+	{
+		[JsonProperty("properties")]
+		public List<ObjectProperty> Properties;
+
+		[JsonProperty("x")]
+		public int X { get; set; }
+
+		[JsonProperty("y")]
+		public int Y { get; set; }
+	}
+
+	public class ObjectProperty
+	{
+		[JsonProperty("name")]
+		public string Name { get; set; }
+		[JsonProperty("type")]
+		public string Type { get; set; }
+		[JsonProperty("value")]
+		public string Value { get; set; }
+	}
 }

@@ -72,7 +72,7 @@ namespace SeedFinding
             return $"{getSeasonFromDay(day)} {getDayOfMonthFromDay(day)} {getYearFromDay(day)}";
         }
 
-        public static int GetRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int cookingRecipesKnown, int gameId, int days, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static int GetRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int cookingRecipesKnown, uint gameId, int days, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             Random r = Utility.CreateRandom(gameId, changeDaily ? days : 0, randomSeedAddition);
 
@@ -397,9 +397,9 @@ namespace SeedFinding
                 {"IslandNorthCave1", new List<(int,double)>{(107, .01)} }
         };
 
-        public static (int,int) GetArtifactspot(int gameId, int day, int x, int y,string location)
+        public static (int,int) GetArtifactspot(uint gameId, int day, int x, int y,string location)
         {
-            Random r = new Random(x * 2000 + y + gameId / 2 + day);
+            Random r = new Random(x * 2000 + y + (int)gameId / 2 + day);
             int toDigUp = -1;
             //bool archaeologyEnchant = who != null && who.CurrentTool != null && who.CurrentTool is Hoe && who.CurrentTool.hasEnchantmentOfType<ArchaeologistEnchantment>();
             foreach (var v in archDict[location])
@@ -575,9 +575,9 @@ namespace SeedFinding
             r.Next();
             return r.NextDouble() < 0.1;
         }
-        public static Random CreateDaySaveRandom(int days, int gameId, double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
+        public static Random CreateDaySaveRandom(int days, uint gameId, double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
         {
-            return Utility.CreateRandom(days, gameId / 2, seedA, seedB, seedC);
+            return Utility.CreateRandom(days, gameId / 2uL, seedA, seedB, seedC);
         }
 
         public static Random CreateRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
@@ -629,7 +629,7 @@ namespace SeedFinding
             return list[random.Next(list.Count)];
         }
 
-        public static bool isGreenRainDay(int day, int gameId)
+        public static bool isGreenRainDay(int day, uint gameId)
         {
             Season season = getSeasonFromDay(day);
             if (season == Season.Summer)
@@ -640,7 +640,7 @@ namespace SeedFinding
             }
             return false;
         }
-        public static int getRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int all_unlocked_cooking_recipes, int gameId, int daysPlayed, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
+        public static int getRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, int all_unlocked_cooking_recipes, uint gameId, int daysPlayed, bool changeDaily = true, bool hasFurnace = false, bool hasDesert = false, int mines = 0)
         {
             int dayOfMonth = (daysPlayed - 1) % 28 + 1;
             int year = (daysPlayed - 1) / (28 * 4) + 1;
