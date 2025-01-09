@@ -111,9 +111,9 @@ namespace SeedFinding
             return value;
         }
 
-        public static (string,int) GetGeodeContents1_6(uint gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans = false, bool farmingMastery=false, int fishingLevel=0, bool hasCoconutHat = false, bool hasMysteryBook = false)
+        public static (string,int) GetGeodeContents1_6(int gameId, int geodesCracked, Geode whichGeode, long playerId, int deepestMineLevel=0, bool qibeans = false, bool farmingMastery=false, int fishingLevel=0, bool hasCoconutHat = false, bool hasMysteryBook = false)
         {
-            Random r = Utility.CreateRandom(geodesCracked, gameId / 2uL); 
+            Random r = Utility.CreateRandom(geodesCracked, gameId / 2, (int)playerId/2); 
             int prewarm_amount = r.Next(1, 10);
             for (int i = 0; i < prewarm_amount; i++)
             {
@@ -504,7 +504,8 @@ namespace SeedFinding
                 _ => ("(O)382", amount),
             };
         }
-        public static void PrintGeodeContents(uint gameId, int startingGeode, int count, List<Geode> geodeTypes, string delimiter, bool excludeOres=true, int deepestMineLevel=0, bool qibeans = false, bool printBestGeode=false, int printBestGeodeMinPrice=0, bool before1_5=false)
+        public static void PrintGeodeContents(int gameId, long playerId, int startingGeode, int count, List<Geode> geodeTypes, string delimiter, bool excludeOres=true, int deepestMineLevel=0, bool qibeans = false, bool printBestGeode=false, int printBestGeodeMinPrice=0, bool before1_5=false, StreamWriter stream = null)
+
         {
             List<string> unsellables = new List<string>() { "100", "101", "103", "104", "105", "106", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "330", "390" };
             if (excludeOres)
@@ -526,7 +527,7 @@ namespace SeedFinding
                 int bestPrice = 0;
                 foreach (Geode geode in geodeTypes)
                 {
-                    var contents = GetGeodeContents1_6(gameId, i, geode, deepestMineLevel, qibeans, before1_5);
+                    var contents = GetGeodeContents1_6(gameId, i, geode, playerId, deepestMineLevel, qibeans, before1_5);
                     int price = 0;
                     if (!unsellables.Contains(Item.Get(contents.Item1).id))
                     {
@@ -545,6 +546,10 @@ namespace SeedFinding
                 {
                     line += $"{delimiter}{bestGeode}{delimiter}{bestPrice}";
                 }
+				if (stream != null)
+				{
+					stream.WriteLine(line);
+				}
                 Console.WriteLine(line);
             }
         }

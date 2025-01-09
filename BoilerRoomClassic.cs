@@ -33,7 +33,7 @@ namespace SeedFinding
             int frozenTear = 0;
             for (int geode = 1; geode < 10; geode++)
             {
-                (string, int) item = Mines.GetGeodeContents1_6(gameId, geode, Geode.OmniGeode);
+                (string, int) item = Mines.GetGeodeContents1_6(gameId, geode, Geode.OmniGeode,0);
                 if (item.Item1 == "(O)82")
                 {
                     fireQuartz = geode;

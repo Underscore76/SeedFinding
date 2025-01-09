@@ -1992,6 +1992,7 @@ namespace StardewValley
                     return false;
                 }
                 GameStateQueryContext context = new GameStateQueryContext(location, player, targetItem, inputItem, random, ignoreQueryKeys);
+				//Console.WriteLine(queryString);
                 return GameStateQuery.CheckConditionsImpl(queryString, context);
             }
             return true;

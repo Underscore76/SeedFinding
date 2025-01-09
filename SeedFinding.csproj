@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -23,6 +23,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.HashFunction.Core" Version="1.8.2.2" />
     <PackageReference Include="System.Data.HashFunction.xxHash" Version="1.8.2.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StardewValley\Code\MonoGame.Framework\MonoGame.Framework.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="data\Beach_water_tilelist.json">
@@ -95,6 +98,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Locations1_6\Farm_Ranching.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Locations1_6\Farm_Standard.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Locations1_6\Forest.json">

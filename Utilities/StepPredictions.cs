@@ -51,13 +51,19 @@ namespace SeedFinding
                     return false;
             }
         }
+		 
+		public static StepResult Predict(int gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+		{
+			Random random;
+			return Predict(gameid, day, steps, friends, out random, numberMachinesProcessing);
+		}
 
-        public static StepResult Predict(uint gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+		public static StepResult Predict(int gameid, int day, int steps, List<string> friends, out Random random, int numberMachinesProcessing = 0)
         {
             int calcDay = day + 1;
             Season season = Utility.getSeasonFromDay(calcDay);
 
-            Random random = Utility.CreateRandom( gameid / 100 + (calcDay * 10) + 1 + steps );
+            random = Utility.CreateRandom( gameid / 100 + (calcDay * 10) + 1 + steps );
 
             for (int k = 0; k < Utility.getDayOfMonthFromDay(calcDay); k++)
             {

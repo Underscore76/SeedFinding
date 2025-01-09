@@ -108,7 +108,8 @@ namespace SeedFinding.Trash1_6
             }
             return "";
         }
-        public static HashSet<TrashItem> getAllTrash(uint gameId, int day, double luck = 0, bool twentyOneChecked = false, bool desertFestival = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false, bool completeCC = false)
+        public static HashSet<TrashItem> getAllTrash(int gameId, int day, double luck = 0, bool twentyOneChecked = false, bool fiftyChecked = false, bool desertFestival = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false, bool completeCC = false)
+
         {
             HashSet<TrashItem> results = new HashSet<TrashItem>();
 
@@ -118,7 +119,7 @@ namespace SeedFinding.Trash1_6
                 {
                     continue;
                 }
-                var trash = getTrash(gameId, day, can, luck, twentyOneChecked, theatre, hasFurnace, hasDesert, mines, hasBook, completeCC);
+                var trash = getTrash(gameId, day, can, luck, twentyOneChecked, fiftyChecked, theatre, hasFurnace, hasDesert, mines, hasBook, completeCC);
                 if (trash.Id != "")
                 {
                     results.Add(trash);
@@ -126,7 +127,8 @@ namespace SeedFinding.Trash1_6
             }
             return results;
         }
-        public static TrashItem getTrash(uint gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
+        public static TrashItem getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool fiftyChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
+
         {
 
             float baseChance = 0.2f;
@@ -154,6 +156,11 @@ namespace SeedFinding.Trash1_6
             double minLuck = roll - 0.2 - (hasBook ? 0.2 : 0);
             bool baseChancePassed = roll < (double)baseChance;
 
+			if (fiftyChecked && garbageRandom.NextDouble() < 0.002)
+			{
+				// Trash Catalogue
+				return new TrashItem("TrashCatalogue", can, day, -0.1);
+			}
 
             if (twentyOneChecked && garbageRandom.NextDouble() < 0.002)
             {

@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Xna.Framework;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace SeedFinding.Locations
 {
@@ -211,9 +213,9 @@ namespace SeedFinding.Locations
             int distance = 1;
             while (!foundLand && r.Width <= 11)
             {
-                foreach (Point v in Utility.getBorderOfThisRectangle(r))
+                foreach (Vector2 v in Utility.getBorderOfThisRectangle(r))
                 {
-                    Tile mapTile = new Tile(v.X, v.Y);
+                    Tile mapTile = new Tile((int)v.X, (int)v.Y);
                     if (InLayer("Back", mapTile) && !IsWaterTile(mapTile))
                     {
                         foundLand = true;

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SeedFinding.Locations;
 using SeedFinding.StardewClasses;
 using StardewValley;
 using System;
@@ -11,23 +10,28 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using static System.Net.WebRequestMethods;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using SeedFinding.Locations;
 
 namespace SeedFinding.Locations1_6
 {
-	internal class Location
+	public class Location
 	{
 		public Map map;
 		public string Name;
-		public Dictionary<Point, Item> ForageSpawns = new();
-		public List<(Point,string)> ArtifactSpots = new();
-		public Dictionary<Point, string> ArtifactSpotsDict = new();
+		public Dictionary<Vector2, Item> ForageSpawns = new();
+		public List<(Vector2,string)> ArtifactSpots = new();
 		public LocationData LocationData;
 		public Dictionary<Season,List<ForageData>> SeasonalForage = new();
-		public Dictionary<Point,Item> Objects = new();
-		public Dictionary<Point, Item> Trees = new();
+		public Dictionary<Vector2,Item> Objects = new();
+		public Dictionary<Vector2, TerrainFeature> TerrainFeatures = new();
+		public List<TerrainFeature> TerrainFeatures2 = new();
 		public List<Bush> Bushes = new();
 		public List<ResourceClump> ResourceClumps = new();
+		public List<Bubbles> Bubbles = new();
 
 		public uint Seed;
 		public int Day;
@@ -35,13 +39,16 @@ namespace SeedFinding.Locations1_6
 		public Version version = new Version("1.6.8");
 		public List<string> log = new List<string>();
 
-		public Location(string name, uint seed)
+		public Location(string name, int seed, bool loadFromMap = true)
 		{
 			Name = name;
 			Seed = seed;
 			Day = 0;
 			map = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Locations1_6/{name}.json"));
-			setupDefaultCollections();
+			if (loadFromMap)
+			{
+				setupDefaultCollections();
+			}
 			LocationData = Game1.locations1_6[name];
 
 
@@ -100,7 +107,7 @@ namespace SeedFinding.Locations1_6
 						tileSet = map.FindTileSet(index);
 					}
 					index -= tileSet.Firstgid;
-					Point tile = new Point(x, y);
+					Vector2 tile = new Vector2(x, y);
 					switch (index)
 					{
 						case 9:
@@ -110,7 +117,7 @@ namespace SeedFinding.Locations1_6
 						case 31:
 						case 32:
 						case 34:
-							Trees.Add(tile, Item.Get("(O)309"));
+							TerrainFeatures.Add(tile, new Tree(tile,this));
 							break;
 						case 13:
 						case 14:
@@ -140,7 +147,7 @@ namespace SeedFinding.Locations1_6
 							Objects.Add(tile, Item.Get("(O)297"));
 							break;
 						case 23:
-							Trees.Add(tile, Item.Get("(O)309"));
+							TerrainFeatures.Add(tile, new Tree(tile,this));
 							break;
 						case 24:
 							Bushes.Add(new Bush() { location = tile, size = 2 });
@@ -163,12 +170,12 @@ namespace SeedFinding.Locations1_6
 				}
 			}
 		}
-		public bool isBehindBush(Point location)
+		public bool isBehindBush(Vector2 location)
 		{
 			foreach (var bush in Bushes)
 			{
 				Rectangle down = new Rectangle((int)location.X * 64, (int)(location.Y + 1f) * 64, 64, 128);
-				if (bush.getBoundingBox().IntersectsWith(down))
+				if (bush.getBoundingBox().Intersects(down))
 				{
 					return true;
 				}
@@ -177,13 +184,16 @@ namespace SeedFinding.Locations1_6
 			return false;
 		}
 
-		public bool isBehindTree(Point location)
+		public bool isBehindTree(Vector2 location)
 		{
 			Rectangle down = new Rectangle((int)(location.X - 1f) * 64, (int)location.Y * 64, 192, 256);
-			foreach (var tree in Trees)
+			foreach (var tree in TerrainFeatures)
 			{
+				if (tree.Value is not Tree){
+					continue;
+				}
 				Rectangle treeTile = new Rectangle((int)tree.Key.X * 64, (int)tree.Key.Y * 64, 64, 64);
-				if (treeTile.IntersectsWith(down))
+				if (treeTile.Intersects(down))
 				{
 					return true;
 				}
@@ -192,9 +202,9 @@ namespace SeedFinding.Locations1_6
 
 		}
 
-		public bool CanItemBePlacedHere(Point location)
+		public bool CanItemBePlacedHere(Vector2 location)
 		{
-			if (Objects.ContainsKey(location) || Trees.ContainsKey(location) || ForageSpawns.ContainsKey(location) || ArtifactSpotsDict.ContainsKey(location))
+			if (Objects.ContainsKey(location) || TerrainFeatures.ContainsKey(location) || ForageSpawns.ContainsKey(location) || ArtifactSpotsDict.ContainsKey(location))
 			{
 				return false;
 			}
@@ -214,7 +224,7 @@ namespace SeedFinding.Locations1_6
 			Rectangle tile = new Rectangle((int)location.X * 64, (int)location.Y * 64, 64, 64);
 			foreach (var clump in ResourceClumps)
 			{
-				if (clump.getBoundingBox().IntersectsWith(tile))
+				if (clump.getBoundingBox().Intersects(tile))
 				{
 					return false;
 				}
@@ -228,13 +238,13 @@ namespace SeedFinding.Locations1_6
 			return true;
 		}
 
-		public bool isTilePassable(Point location)
+		public bool isTilePassable(Vector2 location)
 		{
-			if (map.doesTileHaveProperty(location.X, location.Y, "Passable", "Back") != null)
+			if (map.doesTileHaveProperty((int)location.X, (int)location.Y, "Passable", "Back") != null)
 			{
 				return false;
 			}
-			if (map.getTileIndexAt(location.X,location.Y,"Buildings") != 0 && map.doesTileHaveProperty(location.X, location.Y, "Shadow", "Buildings") == null && map.doesTileHaveProperty(location.X, location.Y, "Passable", "Buildings") == null)
+			if (map.getTileIndexAt((int)location.X,(int)location.Y,"Buildings") != 0 && map.doesTileHaveProperty((int)location.X, (int)location.Y, "Shadow", "Buildings") == null && map.doesTileHaveProperty((int)location.X, (int)location.Y, "Passable", "Buildings") == null)
 			{
 				return false;
 			}
@@ -301,10 +311,10 @@ namespace SeedFinding.Locations1_6
 					{
 						int xCoord2 = rand.Next(map.Width);
 						int yCoord2 = rand.Next(map.Height);
-						Point check = new Point(xCoord2, yCoord2);
+						Vector2 check = new Vector2(xCoord2, yCoord2);
 						log.Add($"Day:	{Day}	Attempted forage placement at {check}");
 
-						if (map.IsNoSpawnTile(check.X, check.Y) || map.doesTileHaveProperty(check.X, check.Y, "Spawnable", "Back") == null || map.doesEitherTileOrTileIndexPropertyEqual(check.X, check.Y, "Spawnable", "Back", "F") || !this.CanItemBePlacedHere(check) || map.getTileIndexAt(check.X, check.Y, "AlwaysFront") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront2") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront3") != 0 || map.getTileIndexAt(check.X, check.Y, "Front") != 0 || this.isBehindBush(check) || (!rand.NextBool(0.1) && this.isBehindTree(check)))
+						if (map.IsNoSpawnTile(xCoord2, yCoord2) || map.doesTileHaveProperty(xCoord2, yCoord2, "Spawnable", "Back") == null || map.doesEitherTileOrTileIndexPropertyEqual(xCoord2, yCoord2, "Spawnable", "Back", "F") || !this.CanItemBePlacedHere(check) || map.getTileIndexAt(xCoord2, yCoord2, "AlwaysFront") != 0 || map.getTileIndexAt(xCoord2, yCoord2, "AlwaysFront2") != 0 || map.getTileIndexAt(xCoord2, yCoord2, "AlwaysFront3") != 0 || map.getTileIndexAt(xCoord2, yCoord2, "Front") != 0 || this.isBehindBush(check) || (!rand.NextBool(0.1) && this.isBehindTree(check)))
 						{
 							continue;
 						}
@@ -347,8 +357,8 @@ namespace SeedFinding.Locations1_6
             {
                 int xCoord = rand.Next(map.Width);
                 int yCoord = rand.Next(map.Height);
-                Point location = new Point(xCoord, yCoord);
-				log.Add($"Day:	{Day}	Attempted spot placement at {location}");
+                Vector2 location = new Vector2(xCoord, yCoord);
+				        log.Add($"Day:	{Day}	Attempted spot placement at {location}");
 				if (this.CanItemBePlacedHere(location) && /*!this.IsTileOccupiedBy(location) &&*/ map.getTileIndexAt(xCoord, yCoord, "AlwaysFront") == 0 && map.getTileIndexAt(xCoord, yCoord, "Front") == 0 && !this.isBehindBush(location) && (map.doesTileHaveProperty(xCoord, yCoord, "Diggable", "Back") != null || (season == Season.Winter && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back") != null && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back").Equals("Grass"))))
 				{
                     if (Name.Equals("Forest") && xCoord >= 93 && yCoord <= 22)
@@ -486,16 +496,105 @@ namespace SeedFinding.Locations1_6
 
 			return list;
 		}
+
+		public static string getWeedForSeason(Random r, Season season)
+		{
+			return season switch
+			{
+				Season.Spring => r.Choose("(O)784", "(O)674", "(O)675"),
+				Season.Summer => r.Choose("(O)785", "(O)676", "(O)677"),
+				Season.Fall => r.Choose("(O)786", "(O)678", "(O)679"),
+				_ => "(O)674",
+			};
+		}
+		public void ProcessBubbles(bool frenziesAvailable = true)
+		{
+			this.Bubbles.Clear();
+			bool bubblesExist = false;
+			int x = 0;
+			int y = 0;
+			int startTime = 0;
+			int toLand = 0;
+			bool frenzy = false;
+			for (int time = 610; time < 2600; time += 10)
+			{
+				if (time % 100 >= 60)
+				{
+					continue;
+				}
+
+				Random random;
+				if (frenziesAvailable)
+				{
+					random = Utility.CreateDaySaveRandom(Day, Seed, time, map.Width);
+				}
+				else
+				{
+					random = Utility.CreateDaySaveRandom(Day, Seed, time);
+				}
+
+				if (!bubblesExist)
+				{
+					if (random.NextDouble() < 0.5)
+					{
+						for (int tries = 0; tries < 2; tries++)
+						{
+							x = random.Next(0, map.Width);
+							y = random.Next(0, map.Height);
+							if (!map.isOpenWater(x, y))
+							{
+								continue;
+							}
+							toLand = map.distanceToLand(x, y);
+							if (toLand > 1 && toLand < 5)
+							{
+								if (random.NextDouble() < ((Name == "Beach") ? 0.008 : 0.01) && Day-1 > 3 && (Name == "Town" || Name == "Mountain" || Name == "Forest" || Name == "Beach") && time < 2300 /*&& (Game1.player.fishCaught.Count() > 2 || Game1.Date.TotalDays > 14) && !Utility.isFestivalDay()*/)
+								{
+									random.NextDouble();
+									frenzy = true;
+								}
+								startTime = time;
+								bubblesExist = true;
+								break;
+							}
+						}
+					}
+				}
+				else{
+					int splashPointDurationSoFar = Utility.CalculateMinutesBetweenTimes(startTime, time);
+					bool check;
+					if (frenziesAvailable)
+					{
+						check = random.NextDouble() < 0.1 + (double)((float)splashPointDurationSoFar / 1800f) && splashPointDurationSoFar > (frenzy ? 90 : 60);
+					}
+					else
+					{
+						check = random.NextDouble() < 0.1;
+					}
+					if (check)
+					{
+						Bubbles.Add(new Bubbles(x, y, startTime, time, toLand, frenzy));
+						frenzy = false;
+						bubblesExist = false;
+					}
+				}
+			}
+
+			if (bubblesExist)
+			{
+				Bubbles.Add(new Bubbles(x, y, startTime, 2600, toLand, frenzy));
+			}
+		}
 	}
 
 	public class Bush
 	{
 		public int size;
-		public Point location;
+		public Vector2 location;
 
 		public Rectangle getBoundingBox()
 		{
-			Point tileLocation = this.location;
+			Vector2 tileLocation = this.location;
 			switch (this.size)
 			{
 				case 0:
@@ -511,7 +610,7 @@ namespace SeedFinding.Locations1_6
 			}
 		}
 
-		public bool isOnTile(Point location)
+		public bool isOnTile(Vector2 location)
 		{
 			switch (this.size)
 			{
@@ -530,13 +629,180 @@ namespace SeedFinding.Locations1_6
 
 	public class ResourceClump
 	{
-		public Point location;
+		public Vector2 location;
 
 		public Rectangle getBoundingBox()
 		{
 
-			Point tileLocation = this.location;
+			Vector2 tileLocation = this.location;
 			return new Rectangle((int)tileLocation.X * 64, (int)tileLocation.Y * 64, (int)2 * 64, (int)2 * 64);
 		}
 	}
+
+
+
+	public class TerrainFeature
+	{
+
+		public Vector2 tile;
+
+		public virtual void dayUpdate(Random random, Season season) { }
+	}
+
+	public class Tree : TerrainFeature
+	{
+		public int growthStage;
+		public bool stump;
+		public bool hasMoss;
+		public bool fertilized;
+		public bool tapped;
+		public bool isTemporaryGreenRainTree;
+		public string treeType;
+		public Location location;
+
+		public Tree(Vector2 tile, Location location)
+		{
+			this.tile = tile;
+			this.location = location;
+		}
+
+		public override void dayUpdate(Random random, Season season)
+		{
+			base.dayUpdate(random, season);
+
+			if (5 > growthStage)
+			{
+				float chance = 0.2f; //TODO lookup based on tree type
+				float fertilisedGrowthChance = 1f;
+				if (random.NextBool(chance) || (fertilized && random.NextBool(fertilisedGrowthChance))){
+					growthStage++;
+				}
+			}
+
+			if (growthStage >= 5 && !stump && true && random.NextBool(15f))
+			{
+				int xCoord = random.Next(-3, 4) + (int)this.tile.X;
+				int yCoord = random.Next(-3, 4) + (int)this.tile.Y;
+				Vector2 newTile = new Vector2(xCoord, yCoord);
+
+				if (!location.map.IsNoSpawnTile(xCoord,yCoord, "Tree") && location.map.isTileLocationOpen(newTile) && location.CanItemBePlacedHere(newTile) && !location.map.isWaterTile(xCoord, yCoord) && location.map.isTileOnMap(newTile))
+				{
+					location.TerrainFeatures.Add(newTile, new Tree(newTile, location));
+				}
+			}
+
+			if (growthStage >= 5)
+			{
+				random.NextBool(0.05);
+			}
+
+			// TODO Mossy Green Rain Trees
+			/*bool accelerateMoss = (int)this.growthStage >= 5 && !Game1.IsWinter && (this.treeType.Value == "10" || this.treeType.Value == "11") && !this.isTemporaryGreenRainTree.Value;
+			if ((int)this.growthStage >= 5 && !Game1.IsWinter && !accelerateMoss)
+			{
+				for (int x = (int)tile.X - 2; (float)x <= tile.X + 2f; x++)
+				{
+					for (int y = (int)tile.Y - 2; (float)y <= tile.Y + 2f; y++)
+					{
+						Vector2 v = new Vector2(x, y);
+						if (this.Location.terrainFeatures.ContainsKey(v) && this.Location.terrainFeatures[v] is Tree tree && tree.growthStage.Value >= 5 && (tree.treeType.Value == "10" || tree.treeType.Value == "11") && !tree.isTemporaryGreenRainTree.Value && (bool)tree.hasMoss)
+						{
+							accelerateMoss = true;
+							break;
+						}
+					}
+					if (accelerateMoss)
+					{
+						break;
+					}
+				}
+			}
+			float mossChance = (Game1.isRaining ? 0.2f : 0.1f);
+			if (accelerateMoss && Game1.random.NextDouble() < 0.5)
+			{
+				this.growthStage.Value++;
+			}*/
+
+			if (growthStage >= 14 && !stump && random.NextBool(0.1))
+			{
+
+			}
+		}
+	}
+
+	public class Grass : TerrainFeature
+	{
+		public int grassType;
+		public int numberOfWeeds;
+		public int grassSourceOffset;
+
+		public override void dayUpdate(Random random, Season season)
+		{
+			base.dayUpdate(random, season);
+
+			if (grassType == 1 && season != Season.Winter && numberOfWeeds < 4)
+			{
+				this.numberOfWeeds = Utility.Clamp(this.numberOfWeeds + random.Next(1, 4), 0, 4);
+			}
+		}
+	}
+
+	public class HoeDirt : TerrainFeature
+	{
+		public bool hasCrop;
+	}
+
+	public class Flooring : TerrainFeature
+	{
+
+	}
+
+	public struct Bubbles
+	{
+		public int X;
+		public int Y;
+		public int StartTime;
+		public int EndTime;
+		public int Distance;
+		public bool Frenzy;
+
+		public Bubbles(int x, int y, int startTime, int endTime, int distance, bool frenzy)
+		{
+			X = x;
+			Y = y;
+			StartTime = startTime;
+			EndTime = endTime;
+			Distance = distance;
+			Frenzy = frenzy;
+		}
+		public override string ToString()
+		{
+			return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4} {4}", X, Y, StartTime, EndTime, Frenzy);
+		}
+
+		public int TotalMinutes()
+		{
+			return TotalMinutes(StartTime, EndTime);
+		}
+
+		public int TotalMinutes(int startTime, int endTime)
+		{
+			// Same hour
+			if (startTime / 100 == endTime / 100)
+			{
+				return endTime - startTime;
+			}
+
+			// Minutes until next hour
+			int minutes = 60 - (startTime % 100);
+
+			// Treat StartTime as being at next hour
+			int time = startTime + minutes + 40;
+
+			int hours = endTime / 100 - time / 100;
+
+			return hours * 60 + minutes + endTime % 100;
+		}
+	}
+
 }
