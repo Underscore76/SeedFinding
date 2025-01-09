@@ -24,6 +24,7 @@ namespace SeedFinding.Locations1_6
 		public string Name;
 		public Dictionary<Vector2, Item> ForageSpawns = new();
 		public List<(Vector2,string)> ArtifactSpots = new();
+		public Dictionary<Vector2, string> ArtifactSpotsDict = new();
 		public LocationData LocationData;
 		public Dictionary<Season,List<ForageData>> SeasonalForage = new();
 		public Dictionary<Vector2,Item> Objects = new();
@@ -33,13 +34,13 @@ namespace SeedFinding.Locations1_6
 		public List<ResourceClump> ResourceClumps = new();
 		public List<Bubbles> Bubbles = new();
 
-		public uint Seed;
+		public long Seed;
 		public int Day;
 		public bool DangerArtifactSpot = false;
 		public Version version = new Version("1.6.8");
 		public List<string> log = new List<string>();
 
-		public Location(string name, int seed, bool loadFromMap = true)
+		public Location(string name, long seed, bool loadFromMap = true)
 		{
 			Name = name;
 			Seed = seed;
@@ -273,7 +274,7 @@ namespace SeedFinding.Locations1_6
 
 			if (Name == "Backwoods" && dayOfMonth == 9)
 			{
-				Point point = new Point(18, 18);
+				Vector2 point = new Vector2(18, 18);
 				if (!ArtifactSpotsDict.ContainsKey(point))
 				{
 					ArtifactSpots.Add((point, "(O)SeedSpot"));
@@ -296,7 +297,7 @@ namespace SeedFinding.Locations1_6
 				ProcessDay();
 			}
 		}
-		public void Spawn(uint gameid, int day)
+		public void Spawn(long gameid, int day)
 		{
 			Season season = Utility.getSeasonFromDay(day);
 			var seasonData = SeasonalForage[season];
@@ -335,7 +336,7 @@ namespace SeedFinding.Locations1_6
 
 			for( int i = ArtifactSpots.Count - 1; i >= 0; i--)
 			{
-				Point point = ArtifactSpots[i].Item1;
+				Vector2 point = ArtifactSpots[i].Item1;
 				log.Add($"Day:	{Day}	Attempted Removal {point}");
 				if (rand.NextBool(0.15))
 				{
@@ -408,7 +409,7 @@ namespace SeedFinding.Locations1_6
 			}
 		}
 
-		public static List<(string,int)> digUpArtifactSpot(int day, uint gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
+		public static List<(string,int)> digUpArtifactSpot(int day, long gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
 		{
 			List<(string, int)> list = new List<(string, int)>();
 			Game1.location = location;

@@ -727,7 +727,7 @@ namespace SeedFinding.Cart1_6
               5.0f };
         }
 
-        public static List<CartItem> GetStock(uint gameSeed, int day, string version = "1.6.3")
+        public static List<CartItem> GetStock(long gameSeed, int day, string version = "1.6.3")
         {
             bool version163 = new Version(version) >= new Version("1.6.3");
             List<CartItem> stock = new List<CartItem>();

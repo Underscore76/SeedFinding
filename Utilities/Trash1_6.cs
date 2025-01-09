@@ -127,7 +127,7 @@ namespace SeedFinding.Trash1_6
             }
             return results;
         }
-        public static TrashItem getTrash(int gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool fiftyChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
+        public static TrashItem getTrash(long gameId, int day, Can can, double luck = 0, bool twentyOneChecked = false, bool fiftyChecked = false, bool theatre = false, bool hasFurnace = false, bool hasDesert = false, int mines = 0, bool hasBook = false,bool completeCC = false)
 
         {
 

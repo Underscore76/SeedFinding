@@ -37,7 +37,7 @@ namespace SeedFinding
             }
         }
 
-        public static bool ValidSeedv2(uint gameId, bool report = false)
+        public static bool ValidSeedv2(long gameId, bool report = false)
         {
             // Day 20 needs to rain
             if (Weather.getWeather(20, gameId) != Weather.WeatherType.Rain)
@@ -138,7 +138,7 @@ namespace SeedFinding
             return true;
         }
 
-        public static bool ValidSeedRecursive(bool first, uint gameId, int startDay, HashSet<string> trashItems, string reportString = "", int questsForWeek = 0, int questCount=0, int currentRecipes=1, int availableRecipes=1, int foundQuests=0, int friendship=0, int springRain=0, int summerRain = 0, string quests = "", string trashString = "", bool report = false, int nonRainSpringQuest = 1, int nonRainSummerQuest = 0, HashSet<Trash1_6.Trash.TrashItem> dayTrashFull = null,int firstSummerQuest = 9999, int springFairy = -1, int availableMailRecipes = 0, int availableTVRecipes = 0, int boughtJoja = 0, bool do3mail = false, bool do7mail = false,bool done3mail = false, bool done7mail = false)
+        public static bool ValidSeedRecursive(bool first, long gameId, int startDay, HashSet<string> trashItems, string reportString = "", int questsForWeek = 0, int questCount=0, int currentRecipes=1, int availableRecipes=1, int foundQuests=0, int friendship=0, int springRain=0, int summerRain = 0, string quests = "", string trashString = "", bool report = false, int nonRainSpringQuest = 1, int nonRainSummerQuest = 0, HashSet<Trash1_6.Trash.TrashItem> dayTrashFull = null,int firstSummerQuest = 9999, int springFairy = -1, int availableMailRecipes = 0, int availableTVRecipes = 0, int boughtJoja = 0, bool do3mail = false, bool do7mail = false,bool done3mail = false, bool done7mail = false)
         {
             for (int day = startDay; day <= 35; day++)
             {

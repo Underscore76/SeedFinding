@@ -65,7 +65,7 @@ namespace SeedFinding
 				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
 				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
 				return;
-				KrobusSeeding.Search(start, numSeeds, blockSize, out List<uint> validSeeds);
+				KrobusSeeding.Search(start, numSeeds, blockSize, out List<long> validSeeds);
 				return;
 				uint seed = 379647118;
 
