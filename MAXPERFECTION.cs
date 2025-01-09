@@ -190,7 +190,7 @@ namespace SeedFinding
 
 				result += $"	Dog: {doggift}";//	Cat: {catgift}	Turtle: {turtlegift}";
 				Console.WriteLine(result);
-			}
+		}
 		}
 
 		public static void rainyDialog()
@@ -246,11 +246,11 @@ namespace SeedFinding
 7,
 6,
 5,
-6,
-7,
-8,
-9,
-10,
+				6,
+				7,
+				8,
+				9,
+				10,
 11,
 12,
 13,
