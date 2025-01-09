@@ -74,41 +74,80 @@ namespace SeedFinding
 
 		}
 
+		public static void rainyDialog()
+		{
+			for (int day = 423; day < 470; day++) {
+
+				Random r = Utility.CreateDaySaveRandom(day, 655571, -1161857373803765789);
+
+				if (r.Next(5) == 2)
+				{
+					Console.WriteLine($"{day}");
+				}
+			}
+		}
+
 		public static void checkWinterStar()
 		{
 			List<int> tiles = new()
 			{
-				1,
-				2,
-				3,
-				4,
-				6,
-				7,
-				8,
-				9,
-				10,
-				38,
-				39,
-				40,
-				41,
-				42,
-				43,
-				44,
-				45,
-				46,
-				47,
-				48,
-				49,
-				50,
-				51,
-				52,
-				53,
-				54,
+				69,
+70,
+71,
+72,
+73,
+74,
+75,
+76,
+77,
+78,
+79,
+80,
+81,
+82,
+83,
+84,
+85,
+86,
+87,
+88,
+89,
+90,
+91,
+92,
+93,
+94,
+95,
+13,
+12,
+11,
+10,
+9,
+8,
+7,
+6,
+5,
+6,
+7,
+8,
+9,
+10,
+11,
+12,
+13,
+14,
+15,
+16,
+17,
+18,
+19,
+20,
+21
 			};
 
 			foreach( var x in tiles)
 			{
-				Console.WriteLine($"{x}:	{winterStar(655571,2,x)}");
+				Console.WriteLine($"{x}:	{Item.Get(winterStar(655571,2,x)).Name}");
 			}
 		}
 
@@ -137,6 +176,22 @@ namespace SeedFinding
             return giftRandom.ChooseFrom(gifts);
 
 
+		}
+
+		public static void checkTrash()
+		{
+			for (int day = 214; day <= 1000; day++)
+			{
+				var trash = Trash1_6.Trash.getAllTrash(655571, day, 0.125, true, true, false, false, true, true, 115, day >=305, false);
+				var fs = new FileStream($"Trash.txt", FileMode.Append);
+
+
+				string line = $"{day}	{String.Join(",", trash)}";
+				StreamWriter stream = new StreamWriter(fs);
+				stream.WriteLine(line);
+				Console.WriteLine(line);
+				stream.Close();
+			}
 		}
 
 		public static void PrintGeodes()
