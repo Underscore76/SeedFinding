@@ -46,14 +46,28 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
 			{
+				/*Game1.UseLegacyRandom = false;
+				Console.WriteLine(Utility.CreateRandomSeed(5, 2/2));
+				Console.WriteLine(Utility.CreateRandomSeed(5, 3/2));
+				return;*/
+
+
 				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
 				//return;a
 				Game1.UseLegacyRandom = true;
 				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
 				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
 				//MAXPERFECTION.checkFile();
-				MAXPERFECTION.checkWinterStar();
+				//MAXPERFECTION.checkWinterStar();
 				//MAXPERFECTION.findGoodStepCount(1, 0);
+				//MAXPERFECTION.checkTrash();
+				//MAXPERFECTION.rainyDialog();
+				//DynamicCCRemixSeeding.ValidSeedDay2(589831, false);
+				//DynamicCCRemixSeeding.Search(-1 + 1, Int32.MaxValue, blockSize, out List<int> validSeeds);
+				DynamicCCRemixSeeding.Curate();
+				//DynamicCCRemixSeeding.testSpot();
+
+				
 				return;
 
 				Game1.UseLegacyRandom = true;
@@ -100,12 +114,12 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                //int numSeeds = Int32.MaxValue;
+                int numSeeds = Int32.MaxValue;
                 //double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
-                foreach (var item in validSeeds)
-                {
-                    Console.WriteLine(item);
-                }
+                //foreach (var item in validSeeds)
+                //{
+                //    Console.WriteLine(item);
+                //}
                 //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
@@ -145,7 +159,7 @@ namespace SeedFinding
 
             if (runRemixSearch)
             {
-                FileStream fs = new FileStream("Remix.txt", FileMode.Create);
+               /* FileStream fs = new FileStream("Remix.txt", FileMode.Create);
                 // First, save the standard output.
                 TextWriter tmp = Console.Out;
                 StreamWriter sw = new StreamWriter(fs);
@@ -159,7 +173,7 @@ namespace SeedFinding
                 }
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 Console.SetOut(tmp);
-                sw.Close();
+                sw.Close();*/
             }
 
             if (runVaultSearch)
