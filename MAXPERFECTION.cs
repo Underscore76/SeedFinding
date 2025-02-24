@@ -74,6 +74,125 @@ namespace SeedFinding
 
 		}
 
+		public static void fishShopBait()
+		{
+
+			int id = 655571;
+			int day = 852;
+
+			for (day = 852; day < 2000; day++)
+			{
+				Random random = Utility.CreateDaySaveRandom(day, id);
+
+				Season season = Utility.getSeasonFromDay(day);
+				List<string> fish = new();
+				switch (season)
+				{
+					case Season.Spring:
+						fish = new() {  "(O)129",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)137",
+										"(O)143",
+										"(O)148",
+										"(O)267",
+										"(O)158"
+						};
+						break;
+					case Season.Summer:
+						fish = new() {  "(O)128",
+										"(O)130",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)138",
+										"(O)144",
+										"(O)146",
+										"(O)149",
+										"(O)155",
+										"(O)267",
+										"(O)698",
+										"(O)704",
+										"(O)701",
+										"(O)161"
+						};
+						break;
+					case Season.Fall:
+						fish = new() {  "(O)129",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)137",
+										"(O)139",
+										"(O)149",
+										"(O)143",
+										"(O)148",
+										"(O)269",
+										"(O)701",
+										"(O)705",
+										"(O)162"
+						};
+						break;
+					case Season.Winter:
+						fish = new() {  "(O)130",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)140",
+										"(O)141",
+										"(O)143",
+										"(O)144",
+										"(O)146",
+										"(O)151",
+										"(O)155",
+										"(O)269",
+										"(O)698",
+										"(O)705",
+										"(O)707",
+										"(O)158",
+										"(O)161",
+										"(O)162"
+						};
+						break;
+					default:
+						break;
+				}
+
+				string selected = random.ChooseFrom(fish);
+
+				Console.WriteLine(Item.Get(selected).Name);
+			}
+		}
+
+		public static void checkPets()
+		{
+			Guid dogid = Guid.Parse("0dab0296-7c7c-40af-976a-59b5c1531815");
+			int dogpet = 161;
+			Guid catid = Guid.Parse("91c39ccc-15f9-4303-a663-54eb4c7e4477");
+			int catpet = 256+7;
+			Guid turtleid = Guid.Parse("0dcb4138-64f9-4019-884c-a4cbde58299f");
+			int turtlepet = 226+1;
+
+			for (int day = 1079; day < 2000; day++)
+			{
+				string result = $"day: {day}";
+				bool doggift = Utility.CreateDaySaveRandom(day, 655571, dogpet, 71928.0, dogid.GetHashCode()).NextDouble() < 0.2;
+				bool catgift = Utility.CreateDaySaveRandom(day, 655571, catpet, 71928.0, catid.GetHashCode()).NextDouble() < 0.2;
+				bool turtlegift = Utility.CreateDaySaveRandom(day, 655571, turtlepet, 71928.0, turtleid.GetHashCode()).NextDouble() < 0.2;
+
+				if (doggift)// && catgift && turtlegift)
+				{
+					dogpet++;
+					catpet++;
+					turtlepet++;
+				}
+
+				result += $"	Dog: {doggift}";//	Cat: {catgift}	Turtle: {turtlegift}";
+				Console.WriteLine(result);
+			}
+		}
+
 		public static void rainyDialog()
 		{
 			for (int day = 423; day < 470; day++) {
@@ -180,9 +299,9 @@ namespace SeedFinding
 
 		public static void checkTrash()
 		{
-			for (int day = 214; day <= 1000; day++)
+			for (int day = 1000; day <= 2000; day++)
 			{
-				var trash = Trash1_6.Trash.getAllTrash(655571, day, 0.125, true, true, false, false, true, true, 115, day >=305, false);
+				var trash = Trash1_6.Trash.getAllTrash(655571, day, 0.125, true, true, false, false, true, true, 115, true, false);
 				var fs = new FileStream($"Trash.txt", FileMode.Append);
 
 
