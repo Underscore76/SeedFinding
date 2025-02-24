@@ -60,14 +60,26 @@ namespace SeedFinding
 				//MAXPERFECTION.checkFile();
 				//MAXPERFECTION.checkWinterStar();
 				//MAXPERFECTION.findGoodStepCount(1, 0);
-				//MAXPERFECTION.checkTrash();
+				MAXPERFECTION.checkPets();
 				//MAXPERFECTION.rainyDialog();
 				//DynamicCCRemixSeeding.ValidSeedDay2(589831, false);
 				//DynamicCCRemixSeeding.Search(-1 + 1, Int32.MaxValue, blockSize, out List<int> validSeeds);
-				DynamicCCRemixSeeding.Curate();
+				//DynamicCCRemixSeeding.Curate();
 				//DynamicCCRemixSeeding.testSpot();
+				return;
 
+				for (int day = 671; day < 2000; day++)
+				{
+					Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
+					string str = "";
+					if (r.NextDouble() < 0.05)
+					{
+						str = "True";
+					}
+					Console.WriteLine($"{day}	{str}");
+				}
 				
+
 				return;
 
 				Game1.UseLegacyRandom = true;
