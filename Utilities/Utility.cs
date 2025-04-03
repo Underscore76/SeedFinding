@@ -8,12 +8,32 @@ using StardewValley.Hashing;
 using System.Linq;
 using SeedFinding.StardewClasses;
 using StardewValley;
-using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
 
 namespace SeedFinding
 {
-    public enum Season
+	public struct Vector2
+	{
+		public int X, Y;
+
+		public Vector2(int x, int y)
+		{
+			this.X = x;
+			this.Y = y;
+		}
+
+		public override bool Equals(object? obj) => obj is Vector2 other && this.Equals(other);
+
+		public bool Equals(Vector2 p) => X == p.X && Y == p.Y;
+
+		public override string ToString()
+		{
+			return $"({X},{Y})";
+		}
+	}
+	public enum Season
     {
         Spring,
         Summer,

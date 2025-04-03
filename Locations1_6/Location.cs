@@ -10,14 +10,17 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework;
 using static System.Net.WebRequestMethods;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
+//using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Rectangle = System.Drawing.Rectangle;
 using SeedFinding.Locations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SeedFinding.Locations1_6
 {
+
+	
 	public class Location
 	{
 		public Map map;
@@ -176,7 +179,7 @@ namespace SeedFinding.Locations1_6
 			foreach (var bush in Bushes)
 			{
 				Rectangle down = new Rectangle((int)location.X * 64, (int)(location.Y + 1f) * 64, 64, 128);
-				if (bush.getBoundingBox().Intersects(down))
+				if (bush.getBoundingBox().IntersectsWith(down))
 				{
 					return true;
 				}
@@ -194,7 +197,7 @@ namespace SeedFinding.Locations1_6
 					continue;
 				}
 				Rectangle treeTile = new Rectangle((int)tree.Key.X * 64, (int)tree.Key.Y * 64, 64, 64);
-				if (treeTile.Intersects(down))
+				if (treeTile.IntersectsWith(down))
 				{
 					return true;
 				}
@@ -225,7 +228,7 @@ namespace SeedFinding.Locations1_6
 			Rectangle tile = new Rectangle((int)location.X * 64, (int)location.Y * 64, 64, 64);
 			foreach (var clump in ResourceClumps)
 			{
-				if (clump.getBoundingBox().Intersects(tile))
+				if (clump.getBoundingBox().IntersectsWith(tile))
 				{
 					return false;
 				}
@@ -617,12 +620,12 @@ namespace SeedFinding.Locations1_6
 			{
 				case 0:
 				case 3:
-					return this.location == location;
+					return this.location.Equals(location);
 				case 1:
 				case 4:
-					return this.location == location || (this.location.X + 1 == location.X && this.location.Y == location.Y);
+					return this.location.Equals(location) || (this.location.X + 1 == location.X && this.location.Y == location.Y);
 				case 2:
-					return this.location == location || (this.location.X + 1 == location.X && this.location.Y == location.Y) || (this.location.X + 2 == location.X && this.location.Y == location.Y);
+					return this.location.Equals(location) || (this.location.X + 1 == location.X && this.location.Y == location.Y) || (this.location.X + 2 == location.X && this.location.Y == location.Y);
 			}
 			return false;
 		}

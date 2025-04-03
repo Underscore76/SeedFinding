@@ -59,7 +59,7 @@ namespace SeedFinding
 				//return;
 				//KrobusSeeding.Curate();
 				//return;		
-				KrobusSeeding.ExploreSeed(3848814016, 39, 58);
+				//KrobusSeeding.ExploreSeed(3848814016, 39, 58);
 				//KrobusSeeding.CheckSeed(3848814004, true);
 				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
 				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);

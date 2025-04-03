@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Xna.Framework;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
+//using Microsoft.Xna.Framework;
+//using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace SeedFinding.Locations
 {
@@ -30,7 +30,7 @@ namespace SeedFinding.Locations
             return minX <= tile.X && tile.X <= maxX && minY <= tile.Y && tile.Y <= maxY;
         }
     }
-    public struct Tile : IEquatable<Tile>
+	public struct Tile : IEquatable<Tile>
     {
         public int X;
         public int Y;

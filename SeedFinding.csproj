@@ -25,9 +25,6 @@
     <PackageReference Include="System.Data.HashFunction.xxHash" Version="1.8.2.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StardewValley\Code\MonoGame.Framework\MonoGame.Framework.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="data\Beach_water_tilelist.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

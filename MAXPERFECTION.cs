@@ -15,9 +15,9 @@ using static SeedFinding.Weather;
 using SeedFinding.StardewClasses;
 using Location = SeedFinding.Locations1_6.Location;
 using System.Reflection.Metadata.Ecma335;
-using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework;
 using System.Numerics;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
+//using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace SeedFinding
 {
