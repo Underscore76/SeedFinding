@@ -18,8 +18,8 @@ using SeedFinding.Locations1_6;
 using SeedFinding.NightEvents1_6;
 using System.Drawing;
 using static SeedFinding.StepPredictions;
-using Microsoft.Xna.Framework;
-using Point = Microsoft.Xna.Framework.Point;
+//using Microsoft.Xna.Framework;
+//using Point = Microsoft.Xna.Framework.Point;
 
 namespace SeedFinding
 {
