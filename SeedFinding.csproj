@@ -3,6 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <NoWarn>NU1701</NoWarn> <!-- Add this line to suppress the warning -->
+
   </PropertyGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -25,7 +28,7 @@
     <PackageReference Include="System.Data.HashFunction.xxHash" Version="1.8.2.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StardewValley\Code\MonoGame.Framework\MonoGame.Framework.csproj" />
+	  <Reference Include="Microsoft.Xna.Framework" HintPath="lib\MonoGame.Framework.dll"/>
   </ItemGroup>
   <ItemGroup>
     <None Update="data\Beach_water_tilelist.json">
