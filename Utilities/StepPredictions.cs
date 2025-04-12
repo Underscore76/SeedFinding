@@ -32,7 +32,7 @@ namespace SeedFinding
             }
             public override string ToString()
             {
-                return string.Format("DailyLuck: {0}, Dish: {1} {2}, Gifter:{3}, Hearts:{4}", DailyLuck, Item.Get(Dish.ToString()).Name,DishAmount, Gifter, HeartsRequired);
+                return string.Format("DailyLuck: {0}, Dish: {1} {2}, Gifter:{3}, Hearts:{4}", DailyLuck, Item.Get(Dish.ToString()).Name, DishAmount, Gifter, HeartsRequired);
             }
         }
         public static bool IsForbiddenDishOfTheDay(string id)
@@ -41,8 +41,8 @@ namespace SeedFinding
             {
                 case "346":
                 case "196":
-                case "197":
                 case "216":
+                case "217":
                 case "224":
                 case "206":
                 case "395":
@@ -51,19 +51,88 @@ namespace SeedFinding
                     return false;
             }
         }
-		 
-		public static StepResult Predict(long gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
-		{
-			Random random;
-			return Predict(gameid, day, steps, friends, out random, numberMachinesProcessing);
-		}
 
-		public static StepResult Predict(long gameid, int day, int steps, List<string> friends, out Random random, int numberMachinesProcessing = 0)
+        public static StepResult Predict(long gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+        {
+            Random random;
+            return Predict(gameid, day, steps, friends, out random, numberMachinesProcessing);
+        }
+
+
+        public static (int, int) DishOfTheDay1_6(Random random)
+        {
+            int itemId;
+            do
+            {
+                itemId = random.Next(194, 240);
+            }
+            while (IsForbiddenDishOfTheDay(itemId.ToString()));
+            int count = random.Next(1, 4 + ((random.NextDouble() < 0.08) ? 10 : 0));
+            random.NextDouble();
+
+            return (itemId, count);
+        }
+
+        public static (int dish, int dishAmount) DishOfTheDay1_6(int gameid, int day, int steps = 0)
+        {
+            int seed = Utility.CreateRandomSeed(gameid / 100, day * 10 + 1, steps);
+            Random random = Utility.CreateRandom(seed);
+            for (int k = 0; k < day; k++)
+            {
+                random.Next();
+            }
+            return DishOfTheDay1_6(random);
+        }
+
+        public static StepResult Predict1_6(int gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
+        {
+            int seed = Utility.CreateRandomSeed(gameid / 100, day * 10 + 1, steps);
+            Random random = Utility.CreateRandom(seed);
+
+            for (int k = 0; k < Utility.getDayOfMonthFromDay(day); k++)
+            {
+                random.Next();
+            }
+
+            (int dish, int dishAmount) = DishOfTheDay1_6(random);
+
+            for (int index = 0; index < numberMachinesProcessing; index++)
+                random.Next();
+
+            if (friends == null) { friends = new() { "Lewis", "Robin" }; }
+
+            string friend = "";
+            int amountRequired = 0;
+            if (friends != null && friends.Count > 0)
+            {
+                friend = friends[random.Next(friends.Count)];
+                amountRequired = random.Next(10) + 1;
+            }
+
+            random.Next();
+
+            double dailyLuck = Math.Min(0.10000000149011612, (double)random.Next(-100, 101) / 1000.0);
+
+            StepResult result = new()
+            {
+                DailyLuck = dailyLuck,
+                Dish = dish,
+                DishAmount = dishAmount,
+                Day = day,
+                Steps = steps,
+                Gifter = friend,
+                HeartsRequired = amountRequired
+            };
+            return result;
+        }
+
+        public static StepResult Predict(long gameid, int day, int steps, List<string> friends, out Random random, int numberMachinesProcessing = 0)
+        // public static StepResult Predict(int gameid, int day, int steps, List<string> friends, int numberMachinesProcessing = 0)
         {
             int calcDay = day + 1;
             Season season = Utility.getSeasonFromDay(calcDay);
 
-            random = Utility.CreateRandom( gameid / 100 + (calcDay * 10) + 1 + steps );
+            random = Utility.CreateRandom(gameid / 100 + (calcDay * 10) + 1 + steps);
 
             for (int k = 0; k < Utility.getDayOfMonthFromDay(calcDay); k++)
             {
@@ -101,7 +170,7 @@ namespace SeedFinding
             // DailyLuck
             double dailyLuck = Math.Min(0.10000000149011612, (double)random.Next(-100, 101) / 1000.0);
 
-            return new StepResult(dailyLuck, itemId, count, friend, amountRequired,day,steps);
+            return new StepResult(dailyLuck, itemId, count, friend, amountRequired, day, steps);
         }
     }
 }
