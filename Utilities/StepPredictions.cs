@@ -63,7 +63,7 @@ namespace SeedFinding
             int calcDay = day + 1;
             Season season = Utility.getSeasonFromDay(calcDay);
 
-            random = Utility.CreateRandom( gameid / 100 + (calcDay * 10) + 1 + steps );
+            random = Utility.CreateRandom( gameid / 100, (calcDay * 10) + 1, steps );
 
             for (int k = 0; k < Utility.getDayOfMonthFromDay(calcDay); k++)
             {
