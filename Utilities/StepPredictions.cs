@@ -32,7 +32,7 @@ namespace SeedFinding
             }
             public override string ToString()
             {
-                return string.Format("DailyLuck: {0}, Dish: {1} {2}, Gifter:{3}, Hearts:{4}", DailyLuck, Item.Get(Dish.ToString()).Name,DishAmount, Gifter, HeartsRequired);
+                return string.Format("Day: {0}, Steps: {1} DailyLuck: {2}, Dish: {3} {4}, Gifter:{5}, Hearts:{6}", Day, Steps, DailyLuck, Item.Get(Dish.ToString()).Name, DishAmount, Gifter, HeartsRequired);
             }
         }
         public static bool IsForbiddenDishOfTheDay(string id)
@@ -42,7 +42,8 @@ namespace SeedFinding
                 case "346":
                 case "196":
                 case "216":
-                case "224":
+				case "217":
+				case "224":
                 case "206":
                 case "395":
                     return true;
