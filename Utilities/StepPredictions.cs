@@ -41,7 +41,6 @@ namespace SeedFinding
             {
                 case "346":
                 case "196":
-                case "197":
                 case "216":
                 case "224":
                 case "206":
