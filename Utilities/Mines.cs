@@ -556,7 +556,7 @@ namespace SeedFinding
 
         
 
-        public static (int,int) GetGeodeContents(uint gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans=false, bool before1_5=false)
+        public static (int,int) GetGeodeContents(long gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans=false, bool before1_5=false)
         {
             Random r = new Random(geodesCracked + (int)gameId / 2);
             int prewarm_amount;

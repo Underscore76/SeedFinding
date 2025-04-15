@@ -168,13 +168,13 @@ namespace SeedFinding
 		public static void checkPets()
 		{
 			Guid dogid = Guid.Parse("0dab0296-7c7c-40af-976a-59b5c1531815");
-			int dogpet = 174;
+			int dogpet = 188;
 			Guid catid = Guid.Parse("91c39ccc-15f9-4303-a663-54eb4c7e4477");
 			int catpet = 256+7;
 			Guid turtleid = Guid.Parse("0dcb4138-64f9-4019-884c-a4cbde58299f");
 			int turtlepet = 226+1;
 
-			for (int day = 1137; day < 2000; day++)
+			for (int day = 1192; day < 2000; day++)
 			{
 				string result = $"day: {day}";
 				bool doggift = Utility.CreateDaySaveRandom(day, 655571, dogpet, 71928.0, dogid.GetHashCode()).NextDouble() < 0.2;

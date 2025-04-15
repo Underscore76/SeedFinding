@@ -473,7 +473,7 @@ namespace SeedFinding
 			//(int, int) range = (start, end);
             Parallel.ForEach(partioner, (range, loopState) =>
             {
-                for (uint seed = (uint)range.Item1; seed < range.Item2; seed++)
+                for (int seed = (int)range.Item1; seed < range.Item2; seed++)
                 {
                     if (seed % 2 == 0) { continue; }
 					//Console.WriteLine(seed);
