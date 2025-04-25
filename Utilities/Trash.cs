@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using SeedFinding.Locations;
 
-namespace SeedFinding.Trash
+namespace SeedFinding.Utilities
 {
     public class Trash
     {

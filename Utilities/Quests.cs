@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     
     public class Quests

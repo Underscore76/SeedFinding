@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SeedFinding.ObjectInfo;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.StardewClasses
 {
@@ -116,7 +116,7 @@ namespace SeedFinding.StardewClasses
 					}
 				}
 			}
-			if (ItemQueryResolver.ItemResolvers.TryGetValue(queryKey, out var resolver))
+			if (ItemResolvers.TryGetValue(queryKey, out var resolver))
 			{
 				return ItemQueryResolver.FilterResults(resolver(queryKey, arguments ?? string.Empty, context, avoidRepeat, avoidItemIds, logError ?? new Action<string, string>(LogNothing)), filter, avoidRepeat, avoidItemIds);
 			}
@@ -288,7 +288,7 @@ namespace SeedFinding.StardewClasses
 			//	item.Quality = quality;
 			//	item.FixQuality();
 			//}
-			if (!(item is Object obj))
+			if (!(item is object obj))
 			{
 				//if (item is Tool tool && toolUpgradeLevel > -1 && toolUpgradeLevel != tool.UpgradeLevel)
 				//{

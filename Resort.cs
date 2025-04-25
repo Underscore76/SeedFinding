@@ -3,42 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Utilities;
 
 namespace SeedFinding
 {
     internal class Resort
     {
-        static Dictionary<int, String[]> hospitalDates = new Dictionary<int, string[]>
+        static Dictionary<int, string[]> hospitalDates = new Dictionary<int, string[]>
         {
-            { 4, new String[] { "Abigail" } },
-            { 9, new String[] { "Willy" } },
-            { 11, new String[] { "Jodi", "Vincent" } },
-            { 16, new String[] { "Leah" } },
-            { 18, new String[] { "Jodi" } },
-            { 25, new String[] { "Pam" } },
-            { 32, new String[] { "Sebastian" } },
-            { 37, new String[] { "Elliot" } },
-            { 44, new String[] { "Alex" } },
-            { 46, new String[] { "Robin" } },
-            { 53, new String[] { "Demetrius" } },
-            { 60, new String[] { "Gus" } },
-            { 65, new String[] { "Lewis" } },
-            { 67, new String[] { "Sam" } },
-            { 74, new String[] { "Marnie" } },
-            { 81, new String[] { "Caroline" } },
-            { 88, new String[] { "Penny" } },
-            { 93, new String[] { "Haley" } },
-            { 95, new String[] { "Emily" } },
-            { 99, new String[] { "Harvey" } },
-            { 100, new String[] { "Clint" } },
-            { 102, new String[] { "Jas", "Marnie" } },
+            { 4, new string[] { "Abigail" } },
+            { 9, new string[] { "Willy" } },
+            { 11, new string[] { "Jodi", "Vincent" } },
+            { 16, new string[] { "Leah" } },
+            { 18, new string[] { "Jodi" } },
+            { 25, new string[] { "Pam" } },
+            { 32, new string[] { "Sebastian" } },
+            { 37, new string[] { "Elliot" } },
+            { 44, new string[] { "Alex" } },
+            { 46, new string[] { "Robin" } },
+            { 53, new string[] { "Demetrius" } },
+            { 60, new string[] { "Gus" } },
+            { 65, new string[] { "Lewis" } },
+            { 67, new string[] { "Sam" } },
+            { 74, new string[] { "Marnie" } },
+            { 81, new string[] { "Caroline" } },
+            { 88, new string[] { "Penny" } },
+            { 93, new string[] { "Haley" } },
+            { 95, new string[] { "Emily" } },
+            { 99, new string[] { "Harvey" } },
+            { 100, new string[] { "Clint" } },
+            { 102, new string[] { "Jas", "Marnie" } },
 
 
         };
 
-        static List<String> GetAvailableNPCs(int daysPlayed)
+        static List<string> GetAvailableNPCs(int daysPlayed)
         {
-            List<String> list = new List<String>();
+            List<string> list = new();
 
             //AddToList(list, daysPlayed, "George");
             AddToList(list, daysPlayed, "Alex");
@@ -87,7 +88,7 @@ namespace SeedFinding
             return list;
         }
 
-        static void AddToList(List<String> list, int daysPlayed, string person)
+        static void AddToList(List<string> list, int daysPlayed, string person)
         {
 
             if (daysPlayed <= 112 && person == "Kent")
@@ -154,17 +155,17 @@ namespace SeedFinding
             return person == "Vincent" || person == "Jas" || person == "Leo";
         }
 
-        public static List<String> CalculateResortVisitors(int seed, int daysPlayed)
+        public static List<string> CalculateResortVisitors(int seed, int daysPlayed)
         {
 
-            List<String> valid_visitors = GetAvailableNPCs(daysPlayed);
-            List<String> visitors = new List<String>();
+            List<string> valid_visitors = GetAvailableNPCs(daysPlayed);
+            List<string> visitors = new();
 
 
             Random seeded_random;
-            float seedf = (float)(ulong)seed;
-            float one = ((float)seedf * 1.21f);
-            float two = ((float)daysPlayed * 2.5f);
+            float seedf = (ulong)seed;
+            float one = (float)seedf * 1.21f;
+            float two = daysPlayed * 2.5f;
             int number = (int)one + (int)two;
             //Random seeded_random = new Random((int)((float)seed * 1.21f) + (int)((float)daysPlayed * 2.5f));
             seeded_random = new Random(number);

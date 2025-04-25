@@ -9,7 +9,7 @@ using System.Reflection.Emit;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public enum Geode
     {

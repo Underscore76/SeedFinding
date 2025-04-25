@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Cart
 {
     public class CompressedCartItem
     {
-        public UInt16 State;
+        public ushort State;
         public CompressedCartItem(int itemID, int costMultipler, int hundredsMultiplier, bool qty)
         {
             int itemIndex = CompressedTravelingCart.ObjectOrdering.IndexOf(itemID);
@@ -15,7 +16,7 @@ namespace SeedFinding.Cart
             State += (ushort)((hundredsMultiplier & 0xF) << 11);    // 0b0XXXX00000000000
             State += (ushort)(qty ? 0x8000 : 0);                    // 0bX000000000000000
         }
-        public CompressedCartItem(UInt16 state) { State = state; }
+        public CompressedCartItem(ushort state) { State = state; }
 
         public int Id
         {

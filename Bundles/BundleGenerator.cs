@@ -8,6 +8,8 @@ using System.Text;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using SeedFinding.Extensions;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Bundles
 {

@@ -5,6 +5,7 @@ using SeedFinding;
 using SeedFinding.StardewClasses;
 using StardewValley.Delegates;
 using StardewValley.StardewClasses;
+using SeedFinding.Utilities;
 
 namespace StardewValley
 {
@@ -1101,7 +1102,6 @@ namespace StardewValley
                     return Game1.guntherBones;
                 }
                 throw new NotImplementedException();
-                return false;
             }
 
             /// <inheritdoc cref="T:StardewValley.Delegates.GameStateQueryDelegate" />

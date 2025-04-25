@@ -10,7 +10,7 @@ using System.Resources;
 using System.Xml.Linq;
 using System.IO;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     internal class Game1
     {
@@ -26,6 +26,7 @@ namespace SeedFinding
 		public static string location = "";
 		public static bool guntherBones = false;
 		public static bool guntherBonesActive = false;
+		public static Version Version = new("1.6.3");
 		
 
 		public static Dictionary<string, LocationData> locations1_6 = JsonConvert.DeserializeObject<Dictionary<string, LocationData>>(File.ReadAllText($@"Locations1_6/Locations.json"));

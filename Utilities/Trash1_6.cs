@@ -4,9 +4,9 @@ using System.Net;
 using SeedFinding.Extensions;
 using SeedFinding.Locations;
 
-namespace SeedFinding.Trash1_6
+namespace SeedFinding.Utilities
 {
-    public class Trash
+    public class Trash1_6
     {
         public enum Can
         {

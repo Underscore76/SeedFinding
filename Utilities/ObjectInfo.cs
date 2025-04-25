@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Data;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public class ObjectInfo
     {
@@ -32,9 +32,9 @@ namespace SeedFinding
             ItemsToIndex = new Dictionary<string, int>();
             foreach (var kvp in ObjectInformation)
             {
-                int id = Int32.Parse(kvp.Key);
+                int id = int.Parse(kvp.Key);
                 string[] tokens = kvp.Value.Split("/");
-                Items.Add(id, new ObjectData(id, tokens[0], Int32.Parse(tokens[1])));
+                Items.Add(id, new ObjectData(id, tokens[0], int.Parse(tokens[1])));
                 if (!ItemsToIndex.ContainsKey(tokens[0]))
                     ItemsToIndex.Add(tokens[0], id);
             }

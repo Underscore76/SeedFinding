@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SeedFinding.Locations1_6;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public class Result
     {

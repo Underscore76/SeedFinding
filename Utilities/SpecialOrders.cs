@@ -8,7 +8,7 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public class SpecialOrders
     {
@@ -43,7 +43,7 @@ namespace SeedFinding
             Season season = Utility.getSeasonFromDay(day);
             SpecialOrder.workingSeason = season;
 
-            List<String> validOrders = new List<String>();
+            List<string> validOrders = new List<string>();
             foreach (var pair in allOrders) { 
                 string key = pair.Key;
                 var order = pair.Value;
