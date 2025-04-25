@@ -826,16 +826,12 @@ namespace SeedFinding
             {
                 case Season.Spring:
                     return dayOfMonth == 13 || dayOfMonth == 24;
-                    break;
                 case Season.Summer:
                     return dayOfMonth == 11 || dayOfMonth == 28;
-                    break;
                 case Season.Fall:
                     return dayOfMonth == 16 || dayOfMonth == 27;
-                    break;
                 case Season.Winter:
                     return dayOfMonth == 11 || dayOfMonth == 25;
-                    break;
 
             }
             return false;

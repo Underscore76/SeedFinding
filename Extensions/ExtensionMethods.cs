@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SeedFinding
+namespace SeedFinding.Extensions
 {
     public static class BitArrayExtensionMethods
     {
