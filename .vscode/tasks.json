@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "msbuild",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "build",
+			"label": "Build: SeedFinding.csproj",
+			"detail": "Build the SeedFinding.csproj project using dotnet build"
+		}
+	]
+}
