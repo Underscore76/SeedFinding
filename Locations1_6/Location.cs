@@ -16,6 +16,7 @@ using static System.Net.WebRequestMethods;
 using Rectangle = System.Drawing.Rectangle;
 using SeedFinding.Locations;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.NetworkInformation;
 
 namespace SeedFinding.Locations1_6
 {
@@ -36,6 +37,7 @@ namespace SeedFinding.Locations1_6
 		public List<Bush> Bushes = new();
 		public List<ResourceClump> ResourceClumps = new();
 		public List<Bubbles> Bubbles = new();
+		public List<Bubbles> Panning = new();
 
 		public long Seed;
 		public int Day;
@@ -511,15 +513,39 @@ namespace SeedFinding.Locations1_6
 				_ => "(O)674",
 			};
 		}
-		public void ProcessBubbles(bool frenziesAvailable = true)
+		public void ProcessBubbles(bool frenziesAvailable = true, int panningLevel = 0)
 		{
 			this.Bubbles.Clear();
+			this.Panning.Clear();
 			bool bubblesExist = false;
+			bool panningExist = false;
 			int x = 0;
 			int y = 0;
 			int startTime = 0;
+			int panningStartTime = 0;
+			int panningX = 0;
+			int panningY = 0;
 			int toLand = 0;
 			bool frenzy = false;
+
+			Point p;
+
+			int mapWidth = map.Width;
+			int mapHeight = map.Height;
+
+			int panningWidth = mapWidth;
+			int panningHeight = mapHeight;
+			int panningWidthStart = 0;
+			int panningHeightStart = 0;
+
+			if (Name == "IslandNorth")
+			{
+				panningWidth = 15;
+				panningHeight = 70;
+				panningWidthStart = 4;
+				panningHeightStart = 45;
+			}
+
 			for (int time = 610; time < 2600; time += 10)
 			{
 				if (time % 100 >= 60)
@@ -582,12 +608,187 @@ namespace SeedFinding.Locations1_6
 						bubblesExist = false;
 					}
 				}
+
+				Layer buildingsLayer = map.FindLayer("Buildings");
+				if (panningLevel > 0 && !(Name == "Beach"))
+				{
+					if (!panningExist)
+					{
+						if (random.NextDouble() < 0.5)
+						{
+							for (int tries = 0; tries < 8; tries++)
+							{
+								p = new Point(random.Next(panningWidthStart, panningWidth), random.Next(panningHeightStart, panningHeight));
+								if (map.isOpenWater(p.X, p.Y) && map.distanceToLand(p.X, p.Y, landMustBeAdjacentToWalkableTile: true) <= 1 && (buildingsLayer == null || buildingsLayer.GetTileIndex(p.X, p.Y) == 0))
+								{
+									panningExist = true;
+									panningStartTime = time;
+									panningX = p.X;
+									panningY = p.Y;
+									break;
+								}
+							}
+						}
+					}
+					else if (random.NextDouble() < 0.1)
+					{
+						panningExist = false;
+						Panning.Add(new Bubbles(panningX, panningY, panningStartTime, time, toLand, false));
+					}
+				}
+
 			}
 
 			if (bubblesExist)
 			{
 				Bubbles.Add(new Bubbles(x, y, startTime, 2600, toLand, frenzy));
 			}
+
+			if (panningExist)
+			{
+				Bubbles.Add(new Bubbles(panningX, panningY, panningStartTime, 2600, toLand, frenzy));
+			}
+		}
+
+		public List<Item> getPanItems1_6(Point point, int panningLevel, string panningEnchant, int day, int timesPanned, int luckLevel, double dailyLuck)
+		{
+			List<Item> items = new List<Item>();
+			int whichOre = 378;
+			int whichExtra = -1;
+			Random r = Utility.CreateRandom(point.X, point.Y * 1000.0, day, (timesPanned + 1) * 77);
+			double roll = r.NextDouble() - (double)(int)luckLevel * 0.001 - dailyLuck;
+			roll -= (panningLevel - 1) * 0.05;
+			if (roll < 0.01)
+			{
+				whichOre = 386;
+			}
+			else if (roll < 0.241)
+			{
+				whichOre = 384;
+			}
+			else if (roll < 0.6)
+			{
+				whichOre = 380;
+			}
+			if (whichOre != 386 && r.NextDouble() < 0.1 + (panningEnchant == "Archaeologist" ? 0.1 : 0.0))
+			{
+				whichOre = 881;
+			}
+			int orePieces = r.Next(2, 7) + 1 + (int)((r.NextDouble() + 0.1 + (double)((float)(int)luckLevel / 10f) + dailyLuck) * 2.0);
+			int extraPieces = r.Next(5) + 1 + (int)((r.NextDouble() + 0.1 + (double)((float)(int)luckLevel / 10f)) * 2.0);
+			orePieces += panningLevel - 1;
+			roll = r.NextDouble() - dailyLuck;
+			int numRolls = panningLevel;
+			bool gotRing = false;
+			double extraChance = (double)(panningLevel - 1) * 0.04;
+			if (panningEnchant != "")
+			{
+				extraChance *= 1.25;
+			}
+			if (panningEnchant == "Generous")
+			{
+				numRolls += 2;
+			}
+			while (r.NextDouble() - dailyLuck < 0.4 + (double)luckLevel * 0.04 + extraChance && numRolls > 0)
+			{
+				roll = r.NextDouble() - dailyLuck;
+				roll -= (double)(panningLevel - 1) * 0.005;
+				whichExtra = 382;
+				if (roll < 0.02 + (double)luckLevel * 0.002 && r.NextDouble() < 0.75)
+				{
+					whichExtra = 72;
+					extraPieces = 1;
+				}
+				else if (roll < 0.1 && r.NextDouble() < 0.75)
+				{
+					whichExtra = 60 + r.Next(5) * 2;
+					extraPieces = 1;
+				}
+				else if (roll < 0.36)
+				{
+					whichExtra = 749;
+					extraPieces = Math.Max(1, extraPieces / 2);
+				}
+				else if (roll < 0.5)
+				{
+					whichExtra = r.Choose(82, 84, 86);
+					extraPieces = 1;
+				}
+				if (roll < (double)luckLevel * 0.002 && !gotRing && r.NextDouble() < 0.33)
+				{
+					items.Add(Item.Get("(O)859"));
+					gotRing = true;
+				}
+				if (roll < 0.01 && r.NextDouble() < 0.5)
+				{
+					Item item = Utility.getRandomCosmeticItem(r);
+					items.Add(item);
+				}
+				if (r.NextDouble() < 0.1 && panningEnchant == "Fisher")
+				{
+					int depth = r.Next(1, 6);
+					items.Add(Item.Get("(O)Fish"));
+					/*(Item f = location.getFish(1f, null, r.Next(1, 6), who, 0.0, who.Tile);
+                    if (f != null && f.Category == -4)
+                    {
+                        items.Add(f);
+                    }*/
+				}
+				if (r.NextDouble() < 0.02 + (panningEnchant == "Archaeologist" ? 0.05 : 0.0))
+				{
+					/*Item artifact = tryGetRandomArtifactFromThisLocation(who, r);
+					if (artifact != null)
+					{
+						artifact.tileLocation = point;
+						items.Add(artifact);
+					}*/
+				}
+				r.Next(); // Mystery box
+				/*if (Utility.tryRollMysteryBox(0.05, r))
+				{
+					items.Add(new SDVObject(Game1.hasForagingMaster ? "(O)GoldenMysteryBox" : "(O)MysteryBox"));
+				}*/
+
+				if (whichExtra != -1)
+				{
+					Item item = Item.Get("(O)" + whichExtra);
+					item.Stack = extraPieces;
+					items.Add(item);
+				}
+				numRolls--;
+			}
+			int amount = 0;
+			while (r.NextDouble() < 0.05 + (panningEnchant == "Archaeologist" ? 0.15 : 0.0))
+			{
+				amount++;
+			}
+			if (amount > 0)
+			{
+				Item item = Item.Get("(O)275");
+				item.Stack = amount;
+				items.Add(item);
+			}
+
+			{
+				Item item = Item.Get("(O)" + whichOre);
+				item.Stack = orePieces;
+				items.Add(item);
+			}
+
+			if (Name == "IslandNorth")
+			{
+				if ( /*((IslandNorth)location).bridgeFixed && */ r.NextDouble() < 0.2)
+					items.Add(Item.Get("(O)822"));
+			}
+			else if (Name.Contains("Island") && r.NextDouble() < 0.2)
+			{
+				Item item = Item.Get("(O)831");
+				item.Stack = r.Next(2, 6);
+				items.Add(item);
+			}
+			items.Add(Item.Get($"Forage XP - {items.Count * 7}"));
+			items.Add(Item.Get($"Mining XP - {orePieces + extraPieces}"));
+			return items;
 		}
 	}
 

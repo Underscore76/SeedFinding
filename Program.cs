@@ -60,15 +60,24 @@ namespace SeedFinding
 				//MAXPERFECTION.checkFile();
 				//MAXPERFECTION.checkWinterStar();
 				//MAXPERFECTION.findGoodStepCount(1, 0);
-				MAXPERFECTION.checkPets();
+				//MAXPERFECTION.findVolcanoDays();
+				//MAXPERFECTION.checkPets();
+				MAXPERFECTION.doveIncubating();
 				//MAXPERFECTION.rainyDialog();
+				//MAXPERFECTION.findPanning();
+				//var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
 				//DynamicCCRemixSeeding.ValidSeedDay2(589831, false);
 				//DynamicCCRemixSeeding.Search(-1 + 1, Int32.MaxValue, blockSize, out List<int> validSeeds);
 				//DynamicCCRemixSeeding.Curate();
 				//DynamicCCRemixSeeding.testSpot();
-				return;
 
-				for (int day = 671; day < 2000; day++)
+
+				//Locations1_6.Location location = new Locations1_6.Location("IslandNorth", 655571, false);
+				//var items = location.getPanItems1_6(new System.Drawing.Point(13, 61), 1, "", 2996, 0, 0,-0.041);
+				//Console.WriteLine(String.Join(",", items));
+				return;
+				Console.WriteLine("Start");
+				for (int day = 1923; day < 5000; day++)
 				{
 					Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
 					string str = "";
@@ -76,7 +85,7 @@ namespace SeedFinding
 					{
 						str = "True";
 					}
-					Console.WriteLine($"{day}	{str}");
+					Console.WriteLine($"{str}");
 				}
 				
 

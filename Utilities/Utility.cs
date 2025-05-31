@@ -254,7 +254,17 @@ namespace SeedFinding
             }
             return possibleItems[r.Next(possibleItems.Count)];
         }
-        public static List<int> possibleCropsAtThisTime(Season season, bool firstWeek, int year, bool desert)
+		public static List<Vector2> getAdjacentTileLocations(Vector2 tileLocation)
+		{
+			return new List<Vector2>
+			{
+				new Vector2(-1+tileLocation.X, 0+tileLocation.Y),
+				new Vector2(1+tileLocation.X, 0+tileLocation.Y),
+				new Vector2(0+tileLocation.X, 1+tileLocation.Y),
+				new Vector2(0+tileLocation.X, -1+tileLocation.Y)
+			};
+		}
+		public static List<int> possibleCropsAtThisTime(Season season, bool firstWeek, int year, bool desert)
         {
             List<int> firstWeekCrops = null;
             List<int> secondWeekCrops = null;
@@ -417,7 +427,71 @@ namespace SeedFinding
                 {"IslandNorthCave1", new List<(int,double)>{(107, .01)} }
         };
 
-        public static (int,int) GetArtifactspot(uint gameId, int day, int x, int y,string location)
+		public static Item getRandomCosmeticItem(Random r)
+		{
+			if (r.NextDouble() < 0.2)
+			{
+				if (r.NextDouble() < 0.05)
+				{
+					return Item.Get("(F)1369");
+				}
+				Item item = null;
+				switch (r.Next(3))
+				{
+					case 0:
+						item = Item.Get(Utility.getRandomSingleTileFurniture(r));
+						break;
+					case 1:
+						item = Item.Get("(F)" + r.Next(1362, 1370));
+						break;
+					case 2:
+						item = Item.Get("(F)" + r.Next(1376, 1391));
+						break;
+				}
+				if (item == null)
+				{
+					item = Item.Get("(F)1369");
+				}
+				return item;
+			}
+			if (r.NextDouble() < 0.25)
+			{
+				List<string> hats = new List<string>
+			{
+				"(H)45", "(H)46", "(H)47", "(H)49", "(H)52", "(H)53", "(H)54", "(H)55", "(H)57", "(H)58",
+				"(H)59", "(H)62", "(H)63", "(H)68", "(H)69", "(H)70", "(H)84", "(H)85", "(H)87", "(H)88",
+				"(H)89", "(H)90"
+			};
+				return Item.Get(hats[r.Next(hats.Count)]);
+			}
+			return Item.Get("(S)" + Utility.getRandomIntWithExceptions(r, 1112, 1291, new List<int>
+		{
+			1038, 1041, 1129, 1130, 1132, 1133, 1136, 1152, 1176, 1177,
+			1201, 1202, 1127
+		}));
+		}
+
+		public static string getRandomSingleTileFurniture(Random r)
+		{
+			return r.Next(3) switch
+			{
+				0 => "(F)" + r.Next(10) * 3,
+				1 => "(F)" + r.Next(1376, 1391),
+				_ => "(F)" + (r.Next(6) * 2 + 1391),
+			};
+		}
+
+		public static int getRandomIntWithExceptions(Random r, int minValue, int maxValueExclusive, List<int> exceptions)
+		{
+			int value = r.Next(minValue, maxValueExclusive);
+			while (exceptions != null && exceptions.Contains(value))
+			{
+				value = r.Next(minValue, maxValueExclusive);
+			}
+			return value;
+		}
+
+		public static (int,int) GetArtifactspot(uint gameId, int day, int x, int y,string location)
         {
             Random r = new Random(x * 2000 + y + (int)gameId / 2 + day);
             int toDigUp = -1;

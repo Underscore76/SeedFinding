@@ -338,13 +338,22 @@ namespace SeedFinding.Locations1_6
         public int GetTileIndex(int x, int y)
         {
             int index = x + Width * y;
-            if (index > Data.Length)
+            if (index >= Data.Length)
             {
                 return 0;
             }
             return Data[index];
         }
-    }
+
+		public bool IsValidTileLocation(int tileX, int tileY)
+		{
+			if (tileX >= 0 && tileX < Width && tileY >= 0)
+			{
+				return tileY < Height;
+			}
+			return false;
+		}
+	}
 
     public class TileSet
     {
