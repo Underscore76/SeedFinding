@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 //using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Rectangle = System.Drawing.Rectangle;
-using SeedFinding.Locations;
+//using SeedFinding.Locations;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.NetworkInformation;
 
@@ -181,7 +181,7 @@ namespace SeedFinding.Locations1_6
 			foreach (var bush in Bushes)
 			{
 				Rectangle down = new Rectangle((int)location.X * 64, (int)(location.Y + 1f) * 64, 64, 128);
-				if (bush.getBoundingBox().Intersects(down))
+				if (bush.getBoundingBox().IntersectsWith(down))
 				{
 					return true;
 				}
@@ -199,7 +199,7 @@ namespace SeedFinding.Locations1_6
 					continue;
 				}
 				Rectangle treeTile = new Rectangle((int)tree.Key.X * 64, (int)tree.Key.Y * 64, 64, 64);
-				if (treeTile.Intersects(down))
+				if (treeTile.IntersectsWith(down))
 				{
 					return true;
 				}
@@ -230,7 +230,7 @@ namespace SeedFinding.Locations1_6
 			Rectangle tile = new Rectangle((int)location.X * 64, (int)location.Y * 64, 64, 64);
 			foreach (var clump in ResourceClumps)
 			{
-				if (clump.getBoundingBox().Intersects(tile))
+				if (clump.getBoundingBox().IntersectsWith(tile))
 				{
 					return false;
 				}
@@ -962,222 +962,7 @@ namespace SeedFinding.Locations1_6
 
 	}
 
-	public class Tree : TerrainFeature
-	{
-		public int growthStage;
-		public bool stump;
-		public bool hasMoss;
-		public bool fertilized;
-		public bool tapped;
-		public bool isTemporaryGreenRainTree;
-		public string treeType;
-		public Location location;
-
-		public Tree(Vector2 tile, Location location)
-		{
-			this.tile = tile;
-			this.location = location;
-		}
-
-		public override void dayUpdate(Random random, Season season)
-		{
-			base.dayUpdate(random, season);
-
-			if (5 > growthStage)
-			{
-				float chance = 0.2f; //TODO lookup based on tree type
-				float fertilisedGrowthChance = 1f;
-				if (random.NextBool(chance) || (fertilized && random.NextBool(fertilisedGrowthChance))){
-					growthStage++;
-				}
-			}
-
-			if (growthStage >= 5 && !stump && true && random.NextBool(15f))
-			{
-				int xCoord = random.Next(-3, 4) + (int)this.tile.X;
-				int yCoord = random.Next(-3, 4) + (int)this.tile.Y;
-				Vector2 newTile = new Vector2(xCoord, yCoord);
-
-				if (!location.map.IsNoSpawnTile(xCoord,yCoord, "Tree") && location.map.isTileLocationOpen(newTile) && location.CanItemBePlacedHere(newTile) && !location.map.isWaterTile(xCoord, yCoord) && location.map.isTileOnMap(newTile))
-				{
-					location.TerrainFeatures.Add(newTile, new Tree(newTile, location));
-				}
-			}
-
-			if (growthStage >= 5)
-			{
-				random.NextBool(0.05);
-			}
-
-			// TODO Mossy Green Rain Trees
-			/*bool accelerateMoss = (int)this.growthStage >= 5 && !Game1.IsWinter && (this.treeType.Value == "10" || this.treeType.Value == "11") && !this.isTemporaryGreenRainTree.Value;
-			if ((int)this.growthStage >= 5 && !Game1.IsWinter && !accelerateMoss)
-			{
-				for (int x = (int)tile.X - 2; (float)x <= tile.X + 2f; x++)
-				{
-					for (int y = (int)tile.Y - 2; (float)y <= tile.Y + 2f; y++)
-					{
-						Vector2 v = new Vector2(x, y);
-						if (this.Location.terrainFeatures.ContainsKey(v) && this.Location.terrainFeatures[v] is Tree tree && tree.growthStage.Value >= 5 && (tree.treeType.Value == "10" || tree.treeType.Value == "11") && !tree.isTemporaryGreenRainTree.Value && (bool)tree.hasMoss)
-						{
-							accelerateMoss = true;
-							break;
-						}
-					}
-					if (accelerateMoss)
-					{
-						break;
-					}
-				}
-			}
-			float mossChance = (Game1.isRaining ? 0.2f : 0.1f);
-			if (accelerateMoss && Game1.random.NextDouble() < 0.5)
-			{
-				this.growthStage.Value++;
-			}*/
-
-			if (growthStage >= 14 && !stump && random.NextBool(0.1))
-			{
-
-			}
-		}
-	}
-
-	public class Grass : TerrainFeature
-	{
-		public int grassType;
-		public int numberOfWeeds;
-		public int grassSourceOffset;
-
-		public override void dayUpdate(Random random, Season season)
-		{
-			base.dayUpdate(random, season);
-
-			if (grassType == 1 && season != Season.Winter && numberOfWeeds < 4)
-			{
-				this.numberOfWeeds = Utility.Clamp(this.numberOfWeeds + random.Next(1, 4), 0, 4);
-			}
-		}
-	}
-
-	public class HoeDirt : TerrainFeature
-	{
-		public bool hasCrop;
-	}
-
-	public class Flooring : TerrainFeature
-	{
-
-	}
-
-	public class Tree : TerrainFeature
-	{
-		public int growthStage;
-		public bool stump;
-		public bool hasMoss;
-		public bool fertilized;
-		public bool tapped;
-		public bool isTemporaryGreenRainTree;
-		public string treeType;
-		public Location location;
-
-		public Tree(Vector2 tile, Location location)
-		{
-			this.tile = tile;
-			this.location = location;
-		}
-
-		public override void dayUpdate(Random random, Season season)
-		{
-			base.dayUpdate(random, season);
-
-			if (5 > growthStage)
-			{
-				float chance = 0.2f; //TODO lookup based on tree type
-				float fertilisedGrowthChance = 1f;
-				if (random.NextBool(chance) || (fertilized && random.NextBool(fertilisedGrowthChance))){
-					growthStage++;
-				}
-			}
-
-			if (growthStage >= 5 && !stump && true && random.NextBool(15f))
-			{
-				int xCoord = random.Next(-3, 4) + (int)this.tile.X;
-				int yCoord = random.Next(-3, 4) + (int)this.tile.Y;
-				Vector2 newTile = new Vector2(xCoord, yCoord);
-
-				if (!location.map.IsNoSpawnTile(xCoord,yCoord, "Tree") && location.map.isTileLocationOpen(newTile) && location.CanItemBePlacedHere(newTile) && !location.map.isWaterTile(xCoord, yCoord) && location.map.isTileOnMap(newTile))
-				{
-					location.TerrainFeatures.Add(newTile, new Tree(newTile, location));
-				}
-			}
-
-			if (growthStage >= 5)
-			{
-				random.NextBool(0.05);
-			}
-
-			// TODO Mossy Green Rain Trees
-			/*bool accelerateMoss = (int)this.growthStage >= 5 && !Game1.IsWinter && (this.treeType.Value == "10" || this.treeType.Value == "11") && !this.isTemporaryGreenRainTree.Value;
-			if ((int)this.growthStage >= 5 && !Game1.IsWinter && !accelerateMoss)
-			{
-				for (int x = (int)tile.X - 2; (float)x <= tile.X + 2f; x++)
-				{
-					for (int y = (int)tile.Y - 2; (float)y <= tile.Y + 2f; y++)
-					{
-						Vector2 v = new Vector2(x, y);
-						if (this.Location.terrainFeatures.ContainsKey(v) && this.Location.terrainFeatures[v] is Tree tree && tree.growthStage.Value >= 5 && (tree.treeType.Value == "10" || tree.treeType.Value == "11") && !tree.isTemporaryGreenRainTree.Value && (bool)tree.hasMoss)
-						{
-							accelerateMoss = true;
-							break;
-						}
-					}
-					if (accelerateMoss)
-					{
-						break;
-					}
-				}
-			}
-			float mossChance = (Game1.isRaining ? 0.2f : 0.1f);
-			if (accelerateMoss && Game1.random.NextDouble() < 0.5)
-			{
-				this.growthStage.Value++;
-			}*/
-
-			if (growthStage >= 14 && !stump && random.NextBool(0.1))
-			{
-
-			}
-		}
-	}
-
-	public class Grass : TerrainFeature
-	{
-		public int grassType;
-		public int numberOfWeeds;
-		public int grassSourceOffset;
-
-		public override void dayUpdate(Random random, Season season)
-		{
-			base.dayUpdate(random, season);
-
-			if (grassType == 1 && season != Season.Winter && numberOfWeeds < 4)
-			{
-				this.numberOfWeeds = Utility.Clamp(this.numberOfWeeds + random.Next(1, 4), 0, 4);
-			}
-		}
-	}
-
-	public class HoeDirt : TerrainFeature
-	{
-		public bool hasCrop;
-	}
-
-	public class Flooring : TerrainFeature
-	{
-
-	}
-
+	
 	public struct Bubbles
 	{
 		public int X;
@@ -1226,100 +1011,6 @@ namespace SeedFinding.Locations1_6
 		}
 	}
 
-	public struct Bubbles
-	{
-		public int X;
-		public int Y;
-		public int StartTime;
-		public int EndTime;
-		public int Distance;
-		public bool Frenzy;
-
-		public Bubbles(int x, int y, int startTime, int endTime, int distance, bool frenzy)
-		{
-			X = x;
-			Y = y;
-			StartTime = startTime;
-			EndTime = endTime;
-			Distance = distance;
-			Frenzy = frenzy;
-		}
-		public override string ToString()
-		{
-			return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4} {4}", X, Y, StartTime, EndTime, Frenzy);
-		}
-
-		public int TotalMinutes()
-		{
-			return TotalMinutes(StartTime, EndTime);
-		}
-
-		public int TotalMinutes(int startTime, int endTime)
-		{
-			// Same hour
-			if (startTime / 100 == endTime / 100)
-			{
-				return endTime - startTime;
-			}
-
-			// Minutes until next hour
-			int minutes = 60 - (startTime % 100);
-
-			// Treat StartTime as being at next hour
-			int time = startTime + minutes + 40;
-
-			int hours = endTime / 100 - time / 100;
-
-			return hours * 60 + minutes + endTime % 100;
-		}
-	}
-
-	public struct Bubbles
-	{
-		public int X;
-		public int Y;
-		public int StartTime;
-		public int EndTime;
-		public int Distance;
-		public bool Frenzy;
-
-		public Bubbles(int x, int y, int startTime, int endTime, int distance, bool frenzy)
-		{
-			X = x;
-			Y = y;
-			StartTime = startTime;
-			EndTime = endTime;
-			Distance = distance;
-			Frenzy = frenzy;
-		}
-		public override string ToString()
-		{
-			return string.Format("({0:D2},{1:D2}) {2:D4}-{3:D4} {4}", X, Y, StartTime, EndTime, Frenzy);
-		}
-
-		public int TotalMinutes()
-		{
-			return TotalMinutes(StartTime, EndTime);
-		}
-
-		public int TotalMinutes(int startTime, int endTime)
-		{
-			// Same hour
-			if (startTime / 100 == endTime / 100)
-			{
-				return endTime - startTime;
-			}
-
-			// Minutes until next hour
-			int minutes = 60 - (startTime % 100);
-
-			// Treat StartTime as being at next hour
-			int time = startTime + minutes + 40;
-
-			int hours = endTime / 100 - time / 100;
-
-			return hours * 60 + minutes + endTime % 100;
-		}
-	}
-
+	
+	
 }
