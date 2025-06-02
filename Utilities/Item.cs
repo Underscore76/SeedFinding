@@ -63,13 +63,23 @@ namespace SeedFinding
             return Hats;
         }
 
+		public override string ToString()
+		{
+			string result = Name;
+			if (Stack > 0)
+			{
+				result += " (" + Stack + ")";
+			}
+			return result;
+		}
+
         public static Item Get(string id)
         {
             // Assume Object
             if (Items.ContainsKey(id))
             {
 
-                return Items[id];
+                return (Item)Items[id].MemberwiseClone();
             }
 
             if (id.StartsWith("(O)"))

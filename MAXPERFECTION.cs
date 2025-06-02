@@ -17,6 +17,7 @@ using Location = SeedFinding.Locations1_6.Location;
 using System.Reflection.Metadata.Ecma335;
 //using Microsoft.Xna.Framework;
 using System.Numerics;
+using System.Reflection.Emit;
 //using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace SeedFinding
@@ -73,42 +74,366 @@ namespace SeedFinding
 			}
 
 		}
+		public static void doveIncubating()
+		{
+			int kid = 52;
+			int nextValidDay = 3754+25;
+			int incubationDay = -1;
+			bool first = false;
+			bool incubating = false;
+
+			for (int day = 3754; day < 12000; day++)
+			{
+				if (incubationDay > 0 && day >= incubationDay)
+				{
+					if (incubating)
+					{
+						Console.WriteLine($"Squab {kid} born");
+						incubating = false;
+						continue;
+					}
+				}
+				if (nextValidDay > 0 && day < nextValidDay)
+				{
+					Console.WriteLine(" ");
+					continue;
+				}
+
+				Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
+				//string str = "";
+				if (!(r.NextDouble() < 0.05))
+				{
+					Console.WriteLine(" ");
+					continue;
+				}
+				kid++;
+				Console.WriteLine($"Kid {kid} incubating");
+				nextValidDay = day + 14;
+				incubationDay = nextValidDay;
+				if (first)
+				{
+					nextValidDay += 55; 
+				}
+				first = !first;
+				incubating = true;
+
+				//Console.WriteLine($"{day}	{str}");
+			}
+		}
+		public static void fishShopBait()
+		{
+
+			int id = 655571;
+			int day = 852;
+
+			for (day = 852; day < 2000; day++)
+			{
+				Random random = Utility.CreateDaySaveRandom(day, id);
+
+				Season season = Utility.getSeasonFromDay(day);
+				List<string> fish = new();
+				switch (season)
+				{
+					case Season.Spring:
+						fish = new() {  "(O)129",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)137",
+										"(O)143",
+										"(O)148",
+										"(O)267",
+										"(O)158"
+						};
+						break;
+					case Season.Summer:
+						fish = new() {  "(O)128",
+										"(O)130",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)138",
+										"(O)144",
+										"(O)146",
+										"(O)149",
+										"(O)155",
+										"(O)267",
+										"(O)698",
+										"(O)704",
+										"(O)701",
+										"(O)161"
+						};
+						break;
+					case Season.Fall:
+						fish = new() {  "(O)129",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)137",
+										"(O)139",
+										"(O)149",
+										"(O)143",
+										"(O)148",
+										"(O)269",
+										"(O)701",
+										"(O)705",
+										"(O)162"
+						};
+						break;
+					case Season.Winter:
+						fish = new() {  "(O)130",
+										"(O)131",
+										"(O)132",
+										"(O)136",
+										"(O)140",
+										"(O)141",
+										"(O)143",
+										"(O)144",
+										"(O)146",
+										"(O)151",
+										"(O)155",
+										"(O)269",
+										"(O)698",
+										"(O)705",
+										"(O)707",
+										"(O)158",
+										"(O)161",
+										"(O)162"
+						};
+						break;
+					default:
+						break;
+				}
+
+				string selected = random.ChooseFrom(fish);
+
+				Console.WriteLine(Item.Get(selected).Name);
+			}
+		}
+
+		public static void findVolcanoDays()
+		{
+			var fs = new FileStream($"Volcano.txt", FileMode.Append);
+
+
+			StreamWriter stream = new StreamWriter(fs);
+			for (int day = 2756; day < 11951; day++)
+			{
+				string output = day.ToString();
+				string line = "";
+				int count = 0;
+				var levels = Volcano.Volcano.GetLevels16(655571, day, 0.1, 3, true, true);
+				foreach (var level in levels) { 
+					if (level.level == 39)
+					{
+						break;
+					}
+					string levelItems = "";
+					//Volcano.VolcanoFloor level = levels.First();
+					foreach (var chest in level.volcanoChests)
+					{
+						if(chest.basicItem.Name == "Cinder Shard" || chest.upgradedItem.Name == "Cinder Shard" || chest.upgradedItem.Name == "Dragontooth Club" || chest.upgradedItem.Name == "Dragontooth Shiv")
+						{
+							levelItems += $"{chest.upgradeLuck} {chest.upgradedItem} ";
+
+						}
+					}
+
+					foreach (var barrelLocation in level.barrelLocations)
+					{
+						var items = Volcano.Volcano.BarrelContents(barrelLocation.X, barrelLocation.Y);
+						foreach (var item in items)
+						{
+							if (item.Name == "Cinder Shard" || item.Name == "Warp Totem: Island")
+							{
+								levelItems += $"{barrelLocation} {item} ";
+							}
+						}
+					}
+
+					foreach (var toothLocation in level.teethLocations)
+					{
+						levelItems += $"{toothLocation} Dragon Tooth ";
+					}
+					if (levelItems != "")
+					{
+						line += $"\t{level.level} " + levelItems;
+					}
+
+					count += level.teethLocations.Count();
+				}
+				output += $"\t{count}" + line;
+				Console.WriteLine(output);
+				stream.WriteLine(output);
+
+				/*
+				foreach (var level in levels) {
+					Console.WriteLine($"{level.level} {level.layout}");
+					foreach (var chest in level.volcanoChests) {
+						Console.WriteLine($"{chest.upgraded} {chest.basicItem} {chest.upgradedItem}");
+					}
+					foreach (var tooth in level.teethLocations)
+					{
+						Console.WriteLine("Tooth " + tooth.ToString()); 
+					}
+					foreach (var barrel in level.barrelLocations)
+					{
+						Console.WriteLine("Barrel " + barrel.ToString());
+					}
+					//if (desiredLevels.ContainsKey(level.layout))
+					//{
+					//	score += desiredLevels[level.layout];
+					//}
+				}*/
+
+				//Console.WriteLine($"{day} {score}");
+			}
+
+			stream.Close();
+		}
+
+		public static void checkPets()
+		{
+			Guid catid = Guid.Parse("91c39ccc-15f9-4303-a663-54eb4c7e4477");
+			int catpet = 256+7;
+			Guid turtleid = Guid.Parse("0dcb4138-64f9-4019-884c-a4cbde58299f");
+			int turtlepet = 226+1;
+
+
+			Guid beansId = Guid.Parse("0dab0296-7c7c-40af-976a-59b5c1531815");
+			int beansPet = 468;
+
+			Guid BakedId = Guid.Parse("b8ec47fa-80f9-4d20-ae25-8decfb9ec68c");
+			int BakedPet = 47;
+
+			Guid ToastId = Guid.Parse("ffff4de2-4949-470f-8bb2-54135b7e933d");
+			int ToastPet = 57;
+
+			Guid CoffeeId = Guid.Parse("5c73e605-1d5e-4d3d-b50e-eee2fd20d4aa");
+			int CoffeePet = 60;
+
+			Guid QiId = Guid.Parse("2c6266d3-060e-40af-8e7a-2900a48932a3");
+			int QiPet = 50;
+
+			Guid CocoaId = Guid.Parse("3112af68-1693-4f8c-8833-203827ddc7c0");
+			int CocoaPet = 62;
+
+			Guid GreenId = Guid.Parse("6f515f0a-7108-464e-b2ab-bd4363d49dbd");
+			int GreenPet = 47;
+
+			Guid MrId = Guid.Parse("7969a5a3-8756-4bfa-8ff2-33c0909fdff1");
+			int MrPet = 54;
+
+			Guid ToeId = Guid.Parse("95ba3ef0-81fa-4a74-818e-8e817b4a1a07");
+			int ToePet = 61;
+
+			for (int day = 2299; day < 3256; day++)
+			{
+				string result = $"day: {day}";
+				bool beansgift = Utility.CreateDaySaveRandom(day, 655571, beansPet, 71928.0, beansId.GetHashCode()).NextDouble() < 0.2;
+				bool Bakedgift = Utility.CreateDaySaveRandom(day, 655571, BakedPet, 71928.0, BakedId.GetHashCode()).NextDouble() < 0.2;
+				bool Toastgift = Utility.CreateDaySaveRandom(day, 655571, ToastPet, 71928.0, ToastId.GetHashCode()).NextDouble() < 0.2;
+				bool Coffeegift = Utility.CreateDaySaveRandom(day, 655571, CoffeePet, 71928.0, CoffeeId.GetHashCode()).NextDouble() < 0.2;
+				bool Qigift = Utility.CreateDaySaveRandom(day, 655571, QiPet, 71928.0, QiId.GetHashCode()).NextDouble() < 0.2;
+				bool Cocoagift = Utility.CreateDaySaveRandom(day, 655571, CocoaPet, 71928.0, CocoaId.GetHashCode()).NextDouble() < 0.2;
+				bool Greengift = Utility.CreateDaySaveRandom(day, 655571, GreenPet, 71928.0, GreenId.GetHashCode()).NextDouble() < 0.2;
+				bool Mrgift = Utility.CreateDaySaveRandom(day, 655571, MrPet, 71928.0, MrId.GetHashCode()).NextDouble() < 0.2;
+				bool Toegift = Utility.CreateDaySaveRandom(day, 655571, ToePet, 71928.0, ToeId.GetHashCode()).NextDouble() < 0.2;
+				bool pet = false;
+				if (beansgift && Bakedgift && Toastgift && Coffeegift && Qigift && Cocoagift && Greengift && Mrgift && Toegift)
+				{
+					beansPet++;
+					BakedPet++;
+					ToastPet++;
+					CoffeePet++;
+					QiPet++;
+					CocoaPet++;
+					GreenPet++;
+					MrPet++;
+					ToePet++;
+
+					pet = true;
+				}
+				result += $"	{pet}";
+				//result += $"	Beans: {beansgift}	Baked: {Bakedgift}	Toast: {Toastgift}	Coffee: {Coffeegift}	Qi: {Qigift}	Cocoa: {Cocoagift}	Green: {Greengift}	Mr: {Mrgift}	Toe: {Toegift}";//	Cat: {catgift}	Turtle: {turtlegift}";
+				Console.WriteLine(result);
+		}
+		}
+
+		public static void rainyDialog()
+		{
+			for (int day = 423; day < 470; day++) {
+
+				Random r = Utility.CreateDaySaveRandom(day, 655571, -1161857373803765789);
+
+				if (r.Next(5) == 2)
+				{
+					Console.WriteLine($"{day}");
+				}
+			}
+		}
 
 		public static void checkWinterStar()
 		{
 			List<int> tiles = new()
 			{
-				1,
-				2,
-				3,
-				4,
+				69,
+70,
+71,
+72,
+73,
+74,
+75,
+76,
+77,
+78,
+79,
+80,
+81,
+82,
+83,
+84,
+85,
+86,
+87,
+88,
+89,
+90,
+91,
+92,
+93,
+94,
+95,
+13,
+12,
+11,
+10,
+9,
+8,
+7,
+6,
+5,
 				6,
 				7,
 				8,
 				9,
 				10,
-				38,
-				39,
-				40,
-				41,
-				42,
-				43,
-				44,
-				45,
-				46,
-				47,
-				48,
-				49,
-				50,
-				51,
-				52,
-				53,
-				54,
+11,
+12,
+13,
+14,
+15,
+16,
+17,
+18,
+19,
+20,
+21
 			};
 
 			foreach( var x in tiles)
 			{
-				Console.WriteLine($"{x}:	{winterStar(655571,2,x)}");
+				Console.WriteLine($"{x}:	{Item.Get(winterStar(655571,2,x)).Name}");
 			}
 		}
 
@@ -139,6 +464,69 @@ namespace SeedFinding
 
 		}
 
+		public static void checkTrash()
+		{
+			for (int day = 1000; day <= 2000; day++)
+			{
+				var trash = Trash1_6.Trash.getAllTrash(655571, day, 0.125, true, true, false, false, true, true, 115, true, false);
+				var fs = new FileStream($"Trash.txt", FileMode.Append);
+
+
+				string line = $"{day}	{String.Join(",", trash)}";
+				StreamWriter stream = new StreamWriter(fs);
+				stream.WriteLine(line);
+				Console.WriteLine(line);
+				stream.Close();
+			}
+		}
+
+		public static void findPanning()
+		{
+			Location islandNorth = new Location("IslandNorth", 655571, false);
+			int day = 4585;
+			double luck = -0.1;
+			//for (day = 3754; day < 5000; day++)
+			for (luck = -0.1; luck < 0.1;  luck += 0.001)
+			{
+				islandNorth.Day = day;
+				islandNorth.ProcessBubbles(true, 1);
+
+				foreach (var panning in islandNorth.Panning)
+				{
+					if (panning.StartTime > 1200)
+					{
+						//continue;
+					}
+					var items = islandNorth.getPanItems1_6(new System.Drawing.Point(panning.X,panning.Y),1,"Reaching",day,0,0,luck);
+					bool tail = false;
+					bool miningXP = false;
+					bool forageXP = false;
+					foreach (var item in items)
+					{
+						if (item.Name == "Fossilized Tail")
+						{
+							tail = true;
+						}
+
+						if (item.Name == "Mining XP - 4" || item.Name == "Mining XP - 3")
+						{
+							miningXP = true;
+						}
+
+						if (item.Name == "Forage XP - 14" )
+						{
+							forageXP = true;
+						}
+					}
+					if (tail && miningXP && forageXP)
+					{
+						Console.WriteLine($"{day}	{luck}	{panning.StartTime} - {panning.EndTime} {String.Join(",", items)}");
+					}
+
+					//Console.WriteLine($"{panning.X},{panning.Y} {panning.StartTime}");
+				}
+			}
+		}
 		public static void PrintGeodes()
 		{
 			//Mines.PrintGeodeContents(655571, 1, 200, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false);

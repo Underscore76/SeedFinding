@@ -568,7 +568,7 @@ namespace SeedFinding
             int badCount = 0;
             int count21 = 0;
             List<int> idealLayouts = new() {12,20, 21,23,24, 26, 29,30,31, 32, 33,34};
-            var levels = Volcano.GetLevels(seed, day);
+            var levels = Volcano.Volcano.GetLevels(seed, day);
             foreach (var level in levels)
             {
                 if (!idealLayouts.Contains(level))

@@ -45,29 +45,51 @@ namespace SeedFinding
 
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
-            {
+			{
+				/*Game1.UseLegacyRandom = false;
+				Console.WriteLine(Utility.CreateRandomSeed(5, 2/2));
+				Console.WriteLine(Utility.CreateRandomSeed(5, 3/2));
+				return;*/
 
+
+				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
+				//return;a
 				Game1.UseLegacyRandom = true;
-				uint numSeeds = UInt32.MaxValue;
-				uint start = 0;
-				//KrobusSeeding.CheckSeed(666262426, true);
-				//return;
-				//for (int seed2 = 0; seed2 < 100000; seed2++)
-				//{
-				//KrobusSeeding.CheckSeed(2093299582, true);
-				//}
-				//return;
-				//KrobusSeeding.Curate();
-				//return;		
-				//KrobusSeeding.ExploreSeed(3848814016, 39, 58);
-				//KrobusSeeding.CheckSeed(3848814004, true);
-				//KrobusSeeding.ExploreSeed(3848814004, 45, 64);
-				//Locations1_6.Location.digUpArtifactSpot(5, 3848814004, "Town", 70, 75);
-				//Console.WriteLine(KrobusSeeding.GeodeOpening(3848814004, true));
+				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
+				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
+				//MAXPERFECTION.checkFile();
+				//MAXPERFECTION.checkWinterStar();
+				//MAXPERFECTION.findGoodStepCount(1, 0);
+				//MAXPERFECTION.findVolcanoDays();
+				//MAXPERFECTION.checkPets();
+				MAXPERFECTION.doveIncubating();
+				//MAXPERFECTION.rainyDialog();
+				//MAXPERFECTION.findPanning();
+				//var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
+				//DynamicCCRemixSeeding.ValidSeedDay2(589831, false);
+				//DynamicCCRemixSeeding.Search(-1 + 1, Int32.MaxValue, blockSize, out List<int> validSeeds);
+				//DynamicCCRemixSeeding.Curate();
+				//DynamicCCRemixSeeding.testSpot();
+
+
+				//Locations1_6.Location location = new Locations1_6.Location("IslandNorth", 655571, false);
+				//var items = location.getPanItems1_6(new System.Drawing.Point(13, 61), 1, "", 2996, 0, 0,-0.041);
+				//Console.WriteLine(String.Join(",", items));
 				return;
-				KrobusSeeding.Search(start, numSeeds, blockSize, out List<long> validSeeds);
+				Console.WriteLine("Start");
+				for (int day = 1923; day < 5000; day++)
+				{
+					Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
+					string str = "";
+					if (r.NextDouble() < 0.05)
+					{
+						str = "True";
+					}
+					Console.WriteLine($"{str}");
+				}
+				
+
 				return;
-				uint seed = 379647118;
 
 				Game1.UseLegacyRandom = true;
 				int startingValue = 655568;
@@ -113,12 +135,12 @@ namespace SeedFinding
                 //TextWriter tmp = Console.Out;
                 //StreamWriter sw = new StreamWriter(fs);
                 //Console.SetOut(sw);
-                //int numSeeds = Int32.MaxValue;
+                int numSeeds = Int32.MaxValue;
                 //double time = MarriageSpeedrun.Search(-1 + 1, numSeeds, blockSize, out List<int> validSeeds);
-                foreach (var item in validSeeds)
-                {
-                    Console.WriteLine(item);
-                }
+                //foreach (var item in validSeeds)
+                //{
+                //    Console.WriteLine(item);
+                //}
                 //Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 // Console.SetOut(tmp);
                 // sw.Close();
@@ -158,7 +180,7 @@ namespace SeedFinding
 
             if (runRemixSearch)
             {
-                FileStream fs = new FileStream("Remix.txt", FileMode.Create);
+               /* FileStream fs = new FileStream("Remix.txt", FileMode.Create);
                 // First, save the standard output.
                 TextWriter tmp = Console.Out;
                 StreamWriter sw = new StreamWriter(fs);
@@ -172,7 +194,7 @@ namespace SeedFinding
                 }
                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
                 Console.SetOut(tmp);
-                sw.Close();
+                sw.Close();*/
             }
 
             if (runVaultSearch)
