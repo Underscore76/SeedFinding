@@ -1,42 +1,31 @@
 ﻿/* 
- * bit mask used for defining bundle configurations
- * 
- * These are initiated in order, each one corresponding to the next bit in a BigInteger which is as large as necessary
- * 
- * You can define a specific state you're interested in searching for by
+ * 64 bit mask used for defining bundle configurations
+ * you can define a specific state you're interested in searching for by
  * ORing these flags together, for example
- * 
- * BigInteger searchState = (
+ * ulong searchState = (
  *  CRAFTS_CONSTRUCTION |
  *  BOILER_ENGINEER
  * )
- * 
  * will limit your seed search to those that have the construction bundle and the engineer bundle.
  */
 
 using System;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Reflection;
-using SeedFinding.Bundles;
-
-namespace SeedFinding.Bundles1_6
+namespace SeedFinding.Bundles1_5
 {
-    public class CompressedFlags
+    public class CompressedFlags1_5
     {
-        static CompressedFlags()
+        static CompressedFlags1_5()
         {
-            BigInteger flag = new BigInteger();
-            FieldInfo[] Flags = typeof(CompressedFlags).GetFields();
+            BigInteger flag = new();
+            FieldInfo[] Flags = typeof(CompressedFlags1_5).GetFields();
             for (int i = 0; i < Flags.Length; i++)
             {
                 Flags[i].SetValue(flag, (BigInteger)0b1 << i);
-                //Console.WriteLine(Flags[i].Name + " " + Flags[i].GetValue(flag).ToString());
             }
         }
-
-        public static BigInteger 
-
+        public static BigInteger
         //Crafts Room
 
             //Spring Forage Selection
@@ -55,38 +44,9 @@ namespace SeedFinding.Bundles1_6
 
             CRAFTS_CONSTRUCTION, CRAFTS_STICKY, CRAFTS_FOREST,
 
-            //Forest Selection
-                CRAFTS_FOREST_MOSS,
-                CRAFTS_FOREST_FIBER,
-                CRAFTS_FOREST_ACORN,
-                CRAFTS_FOREST_MAPLE_SEED,
-
             CRAFTS_EXOTIC, CRAFTS_WILD_MEDICINE,
             
         //Pantry
-            
-            //Spring Crops Selection
-                PANTRY_SPRING_CROPS_PARSNIP,
-                PANTRY_SPRING_CROPS_GREEN_BEAN,
-                PANTRY_SPRING_CROPS_CAULIFLOWER,
-                PANTRY_SPRING_CROPS_POTATO,
-                PANTRY_SPRING_CROPS_KALE,
-                PANTRY_SPRING_CROPS_CARROT,
-
-            //Summer Crops Selection
-                PANTRY_SUMMER_CROPS_TOMATO,
-                PANTRY_SUMMER_CROPS_HOT_PEPPER,
-                PANTRY_SUMMER_CROPS_BLUEBERRY,
-                PANTRY_SUMMER_CROPS_MELON,
-                PANTRY_SUMMER_CROPS_SUMMER_SQUASH,
-
-            //Fall Crops Selection
-                PANTRY_FALL_CROPS_CORN,
-                PANTRY_FALL_CROPS_EGGPLANT,
-                PANTRY_FALL_CROPS_PUMPKIN,
-                PANTRY_FALL_CROPS_YAM,
-                PANTRY_FALL_CROPS_BROCCOLI,
-
             PANTRY_QUALITY, PANTRY_RARE,
 
             //Quality Crops Selection
@@ -127,9 +87,6 @@ namespace SeedFinding.Bundles1_6
             BULLETIN_CHILDREN,
             BULLETIN_FORAGER,
             BULLETIN_HOME_COOK,
-            BULLETIN_HELPERS,
-            BULLETIN_SPIRITS_EVE,
-            BULLETIN_WINTER_STAR,
 
             //Dye selection
                 BULLETIN_DYE_RED_MUSHROOM, BULLETIN_DYE_BEET,

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Locations1_6
 {
@@ -68,7 +69,7 @@ namespace SeedFinding.Locations1_6
             while (!foundLand && width <= 11)
             {
 
-                List<Point> vector2List = new List<Point>();
+                List<Point> vector2List = new();
                 for (int index = startx; index < endx; ++index)
                     vector2List.Add(new Point(index, starty));
                 for (int index = starty + 1; index < endy; ++index)

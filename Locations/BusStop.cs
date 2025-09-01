@@ -15,11 +15,13 @@ namespace SeedFinding.Locations
         {
             SpawnableTiles = Location.LoadTiles(@"data/busstop_spawn_tiles.json");
             BadTiles = Location.LoadTiles(@"data/busstop_bad_tiles.json");
-            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>();
-            SeasonalSpawns[0] = new List<SpawnChance>() { new SpawnChance(18, 0.9), new SpawnChance(20, 0.4), new SpawnChance(22, 0.7) };
-            SeasonalSpawns[1] = new List<SpawnChance>() { new SpawnChance(396, 0.4), new SpawnChance(398, 0.4), new SpawnChance(402, 0.7) };
-            SeasonalSpawns[2] = new List<SpawnChance>() { new SpawnChance(406, 0.6), new SpawnChance(408, 0.4) };
-            SeasonalSpawns[3] = new List<SpawnChance>() { new SpawnChance(414, 0.33), new SpawnChance(418, 0.6), new SpawnChance(283, 0.5) };
+            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>
+            {
+                [0] = new List<SpawnChance>() { new(18, 0.9), new(20, 0.4), new(22, 0.7) },
+                [1] = new List<SpawnChance>() { new(396, 0.4), new(398, 0.4), new(402, 0.7) },
+                [2] = new List<SpawnChance>() { new(406, 0.6), new(408, 0.4) },
+                [3] = new List<SpawnChance>() { new(414, 0.33), new(418, 0.6), new(283, 0.5) }
+            };
         }
 
         public BusStop(uint seed) : base(seed, 35, 30)

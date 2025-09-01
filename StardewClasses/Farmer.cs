@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.StardewClasses
 {
 	public class Farmer
 	{
 		//public Stats stats = new Stats();
-		public Double DailyLuck;
+		public double DailyLuck;
 		public int MiningLevel;
 		public int LuckLevel;
 		public int FarmingLevel;
@@ -18,7 +19,7 @@ namespace SeedFinding.StardewClasses
 		public int uniqueMultiplayerID;
 		public int UniqueMultiplayerID;
 		public int timesReachedMineBottom = 0;
-		public List<int> professions = new List<int>();
+		public List<int> professions = new();
 		//public FarmerTeam team = new FarmerTeam();
 
 		public Farmer()

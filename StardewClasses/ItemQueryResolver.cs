@@ -104,7 +104,7 @@ namespace SeedFinding.StardewClasses
 			context.QueryString = query;
 			if (context.ParentContext != null)
 			{
-				List<string> path = new List<string>();
+				List<string> path = new();
 				for (ItemQueryContext cur = context; cur != null; cur = cur.ParentContext)
 				{
 					bool num = path.Contains(cur.QueryString);

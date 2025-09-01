@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Locations
 {
@@ -102,7 +102,7 @@ namespace SeedFinding.Locations
         {
             int dimY = 0;
             int dimX = 0;
-            Dictionary<(int, int), Tile> tiles = new Dictionary<(int, int), Tile>();
+            Dictionary<(int, int), Tile> tiles = new();
 
             using (var reader = new StreamReader(filepath))
             {
@@ -124,7 +124,7 @@ namespace SeedFinding.Locations
                     dimY++;
                 }
             }
-            Layer layer = new Layer();
+            Layer layer = new();
             layer.Width = dimX;
             layer.Height = dimY;
             layer.Tiles = tiles;
@@ -206,14 +206,14 @@ namespace SeedFinding.Locations
         {
             int tileX = tile.X;
             int tileY = tile.Y;
-            Rectangle r = new Rectangle(tileX - 1, tileY - 1, 3, 3);
+            Rectangle r = new(tileX - 1, tileY - 1, 3, 3);
             bool foundLand = false;
             int distance = 1;
             while (!foundLand && r.Width <= 11)
             {
                 foreach (Point v in Utility.getBorderOfThisRectangle(r))
                 {
-                    Tile mapTile = new Tile(v.X, v.Y);
+                    Tile mapTile = new(v.X, v.Y);
                     if (InLayer("Back", mapTile) && !IsWaterTile(mapTile))
                     {
                         foundLand = true;
@@ -267,13 +267,13 @@ namespace SeedFinding.Locations
             int season = (Day == 0) ? 0 : (((Day - 1) / 28) % 4);
             if (ForageSpawns.Count < 6)
             {
-                Random rand = new Random((int)(Seed / 2) + Day);
+                Random rand = new((int)(Seed / 2) + Day);
                 int numToSpawn = rand.Next(1, Math.Min(5, 7 - ForageSpawns.Count));
                 for (int i = 0; i < numToSpawn; i++)
                 {
                     for (int t = 0; t < 11; t++)
                     {
-                        Tile check = new Tile(rand.Next(Width), rand.Next(Height));
+                        Tile check = new(rand.Next(Width), rand.Next(Height));
                         int index = rand.Next(SeasonalSpawns[season].Count);
                         if (!ForageSpawns.ContainsKey(check) && (SpawnableTiles != null && SpawnableTiles.Contains(check)) || map != null && map.IsSpawnableTile(check,SpawnableIndexes))
                         {
@@ -365,7 +365,7 @@ namespace SeedFinding.Locations
             int y;
             int startTime = 0;
             int toLand = 0;
-            Tile tile = new Tile(0,0);
+            Tile tile = new(0,0);
             for(int time = 610; time < 2600; time += 10)
             {
                 if (time % 100 >= 60)
@@ -373,7 +373,7 @@ namespace SeedFinding.Locations
                     continue;
                 }
 
-                Random random = new Random(time + (int)Seed / 2 + Day);
+                Random random = new(time + (int)Seed / 2 + Day);
 
                 if (!bubblesExist)
                 {

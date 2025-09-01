@@ -406,8 +406,8 @@ namespace SeedFinding.Cart
 
         public static HashSet<CompressedCartItem> GetStock(int seed)
         {
-            Dictionary<int, CompressedCartItem> stock = new Dictionary<int, CompressedCartItem>();
-            Random random = new Random(seed);
+            Dictionary<int, CompressedCartItem> stock = new();
+            Random random = new(seed);
             for (int i = 0; i < 10; i++)
             {
                 int costMultiplier, hundredsMultiplier;

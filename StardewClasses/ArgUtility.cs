@@ -82,7 +82,7 @@ namespace StardewValley
             }
             bool splitOptionsRemoveEmpty = splitOptions.HasFlag(StringSplitOptions.RemoveEmptyEntries);
             string[] segments = input.Split('"');
-            List<string> values = new List<string>(segments.Length * 4);
+            List<string> values = new(segments.Length * 4);
             bool isQuoted = true;
             bool prevEndsWithDelimiter = true;
             string prevValue = null;

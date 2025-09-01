@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     internal class CalicoJack { 
 
@@ -85,7 +85,7 @@ namespace SeedFinding
 
             if (distance > 1 && distance < 6 && NextDouble(results, ref index) < (double)(1f / (float)distance))
             {
-                nextCard = ((NextDouble(results, ref index) < 0.5) ? distance : (distance - 1));
+                nextCard = (NextDouble(results, ref index) < 0.5) ? distance : (distance - 1);
             }
 
             playerCards.Add(nextCard);
@@ -101,7 +101,7 @@ namespace SeedFinding
 
             int dealerTotal = dealerCards.Sum();
 
-            List<int> newDealerCards = new List<int>();
+            List<int> newDealerCards = new();
 
             // Clone the random
             int indexCopy = index;

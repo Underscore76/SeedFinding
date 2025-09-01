@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using SeedFinding.Extensions;
 using SeedFinding.Utilities;
 
-namespace SeedFinding.Bundles
+namespace SeedFinding.Bundles1_5
 {
     public class BundleGenerator
     {
@@ -33,9 +33,9 @@ namespace SeedFinding.Bundles
             bundleData = new Dictionary<string, List<int>>();
             foreach (RandomBundleData area_data in randomBundleData)
             {
-                List<int> index_lookups = new List<int>();
+                List<int> index_lookups = new();
                 string[] array = area_data.Keys.Trim().Split(' ');
-                Dictionary<int, BundleData> selected_bundles = new Dictionary<int, BundleData>();
+                Dictionary<int, BundleData> selected_bundles = new();
                 string[] array2 = array;
                 foreach (string index_string in array2)
                 {
@@ -49,7 +49,7 @@ namespace SeedFinding.Bundles
                         selected_bundles[bundle_data4.Index] = bundle_data4;
                     }
                 }
-                List<BundleData> random_bundle_pool = new List<BundleData>();
+                List<BundleData> random_bundle_pool = new();
                 foreach (BundleData bundle_data3 in area_data.Bundles)
                 {
                     random_bundle_pool.Add(bundle_data3);
@@ -58,7 +58,7 @@ namespace SeedFinding.Bundles
                 {
                     if (!selected_bundles.ContainsKey(i))
                     {
-                        List<BundleData> index_bundles = new List<BundleData>();
+                        List<BundleData> index_bundles = new();
                         foreach (BundleData bundle_data2 in random_bundle_pool)
                         {
                             if (bundle_data2.Index == i)
@@ -93,7 +93,7 @@ namespace SeedFinding.Bundles
                 foreach (int key in selected_bundles.Keys)
                 {
                     BundleData data = selected_bundles[key];
-                    StringBuilder string_data = new StringBuilder();
+                    StringBuilder string_data = new();
                     string_data.Append(data.Name);
                     string_data.Append("/");
                     var selectedItems = ParseItemList(string_data, data.Items, data.Pick, data.RequiredItems);
@@ -160,7 +160,7 @@ namespace SeedFinding.Bundles
         {
             item_list = ParseRandomTags(item_list);
             string[] items = item_list.Split(',');
-            List<string> item_strings = new List<string>();
+            List<string> item_strings = new();
             for (int j = 0; j < items.Length; j++)
             {
                 string item = ParseItemString(items[j]);

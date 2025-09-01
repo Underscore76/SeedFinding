@@ -1,8 +1,10 @@
 ﻿// clone of SDV's BundleData object
 using System;
-namespace SeedFinding.Bundles
+
+
+namespace SeedFinding.Bundles1_6 //rename to Bundles when merge complete
 {
-    public class BundleData
+    public class BundleData1_6
 	{
         public string Name;
         public int Index;

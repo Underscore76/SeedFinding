@@ -8,7 +8,7 @@ namespace SeedFinding.Extensions
     {
         public static BitArray CopySlice(this BitArray source, int offset, int length)
         {
-            BitArray ret = new BitArray(length);
+            BitArray ret = new(length);
             for (int i = 0; i < length; i++)
             {
                 ret[i] = source[offset + i];

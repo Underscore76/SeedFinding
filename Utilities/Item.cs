@@ -5,9 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SeedFinding.ObjectInfo;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public class Item
     {

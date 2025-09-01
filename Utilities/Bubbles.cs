@@ -67,11 +67,11 @@ namespace SeedFinding.Utilities
     }
     public class Bubbles
     {
-        public static Version version164 = new Version("1.6.4");
+        public static Version version164 = new("1.6.4");
 
         public static List<Result> Predict(Map map, uint gameId, int day, string version = "1.6.4", int timesFished = 0, int panningLevel = 0, string panningEnchant = "")
         {
-            List<Result> results = new List<Result>();
+            List<Result> results = new();
             Point p;
 
             int mapWidth = map.Width;
@@ -96,7 +96,7 @@ namespace SeedFinding.Utilities
             bool bubblesExist = false;
             bool panningExist = false;
 
-            Version gameVersion = new Version(version);
+            Version gameVersion = new(version);
 
             if (gameVersion >= version164)
             {

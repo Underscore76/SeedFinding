@@ -9,7 +9,7 @@ namespace SeedFinding
 {
     internal class Resort
     {
-        static Dictionary<int, string[]> hospitalDates = new Dictionary<int, string[]>
+        static Dictionary<int, string[]> hospitalDates = new()
         {
             { 4, new string[] { "Abigail" } },
             { 9, new string[] { "Willy" } },
@@ -184,19 +184,21 @@ namespace SeedFinding
             }
             else
             {
-                List<List<string>> potentialGroups = new List<List<string>>();
-                potentialGroups.Add(new List<string> { "Sebastian", "Sam", "Abigail" });
-                potentialGroups.Add(new List<string> { "Jodi", "Kent", "Vincent", "Sam" });
-                potentialGroups.Add(new List<string> { "Jodi", "Vincent", "Sam" });
-                potentialGroups.Add(new List<string> { "Pierre", "Caroline", "Abigail" });
-                potentialGroups.Add(new List<string> { "Robin", "Demetrius", "Maru", "Sebastian" });
-                potentialGroups.Add(new List<string> { "Lewis", "Marnie" });
-                potentialGroups.Add(new List<string> { "Marnie", "Shane", "Jas" });
-                potentialGroups.Add(new List<string> { "Penny", "Jas", "Vincent" });
-                potentialGroups.Add(new List<string> { "Pam", "Penny" });
-                potentialGroups.Add(new List<string> { "Caroline", "Marnie", "Robin", "Jodi" });
-                potentialGroups.Add(new List<string> { "Haley", "Penny", "Leah", "Emily", "Maru", "Abigail" });
-                potentialGroups.Add(new List<string> { "Alex", "Sam", "Sebastian", "Elliott", "Shane", "Harvey" });
+                List<List<string>> potentialGroups = new()
+                {
+                    new List<string> { "Sebastian", "Sam", "Abigail" },
+                    new List<string> { "Jodi", "Kent", "Vincent", "Sam" },
+                    new List<string> { "Jodi", "Vincent", "Sam" },
+                    new List<string> { "Pierre", "Caroline", "Abigail" },
+                    new List<string> { "Robin", "Demetrius", "Maru", "Sebastian" },
+                    new List<string> { "Lewis", "Marnie" },
+                    new List<string> { "Marnie", "Shane", "Jas" },
+                    new List<string> { "Penny", "Jas", "Vincent" },
+                    new List<string> { "Pam", "Penny" },
+                    new List<string> { "Caroline", "Marnie", "Robin", "Jodi" },
+                    new List<string> { "Haley", "Penny", "Leah", "Emily", "Maru", "Abigail" },
+                    new List<string> { "Alex", "Sam", "Sebastian", "Elliott", "Shane", "Harvey" }
+                };
                 List<string> group = potentialGroups[seeded_random.Next(potentialGroups.Count)];
                 bool failed = false;
                 foreach (string s in group)

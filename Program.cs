@@ -8,11 +8,9 @@ using System.Diagnostics;
 using System.IO;
 
 using SeedFinding.Cart1_6;
-using SeedFinding.Bundles;
+using SeedFinding.Bundles1_5;
 using SeedFinding.Locations;
-using SeedFinding.Trash1_6;
 using Newtonsoft.Json;
-using static SeedFinding.ObjectInfo;
 using System.Resources;
 using StardewValley;
 using SeedFinding.Locations1_6;

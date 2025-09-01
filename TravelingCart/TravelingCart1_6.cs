@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Cart1_6
 {
@@ -730,7 +731,7 @@ namespace SeedFinding.Cart1_6
         public static List<CartItem> GetStock(uint gameSeed, int day, string version = "1.6.3")
         {
             bool version163 = new Version(version) >= new Version("1.6.3");
-            List<CartItem> stock = new List<CartItem>();
+            List<CartItem> stock = new();
             SortedDictionary<int, Item> randomOrder = new();
             Random random = Utility.CreateDaySaveRandom(day, gameSeed);
             foreach (var item in Item.Items)

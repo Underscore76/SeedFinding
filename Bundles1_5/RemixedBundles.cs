@@ -5,9 +5,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using SeedFinding.Extensions;
+using SeedFinding.Utilities;
 using System.Numerics;
 
-namespace SeedFinding.Bundles1_6
+namespace SeedFinding.Bundles1_5
 {
     public class RemixedBundles
     {
@@ -16,32 +18,32 @@ namespace SeedFinding.Bundles1_6
 
         static RemixedBundles()
 		{
-            RandomBundles = JsonConvert.DeserializeObject<List<RandomBundleData>>(File.ReadAllText(@"data/RandomBundles1_6.json"));
+            RandomBundles = JsonConvert.DeserializeObject<List<RandomBundleData>>(File.ReadAllText(@"data/RandomBundles.json"));
             CompRandomBundles = new List<CompRandomBundleData>(RandomBundles.Select(o => new CompRandomBundleData(o)));
         }
-        public static CompressedRemixBundles Generate(int seed)
+        public static CompressedRemixBundles Generate(uint seed)
         {
-            Random random = Utility.CreateRandom((double)seed * 9.0);
+            Random random = new((int)seed * 9);
             var result = new CompressedRemixBundles(0);
             foreach (var area_data in CompRandomBundles)
             {
-                Dictionary<int, CompBundleData> selected_bundles = new Dictionary<int, CompBundleData>();
+                Dictionary<int, CompBundleData1_5> selected_bundles = new();
                 CompBundleSetData bundle_set = random.ChooseFrom(area_data.BundleSets);
                 if (bundle_set != null)
                 {
-                    foreach (CompBundleData bundle_data4 in bundle_set.Bundles)
+                    foreach (CompBundleData1_5 bundle_data4 in bundle_set.Bundles)
                     {
                         selected_bundles[bundle_data4.Index] = bundle_data4;
                     }
                 }
-                List<CompBundleData> random_bundle_pool = new List<CompBundleData>(area_data.Bundles);
+                List<CompBundleData1_5> random_bundle_pool = new(area_data.Bundles);
                 for (int i = 0; i < area_data.Keys.Length; i++)
                 {
                     if (selected_bundles.ContainsKey(i))
                     {
                         continue;
                     }
-                    List<CompBundleData> index_bundles = new List<CompBundleData>();
+                    List<CompBundleData1_5> index_bundles = new();
                     foreach (var data in random_bundle_pool)
                     {
                         if (data.Index == i)
@@ -49,39 +51,31 @@ namespace SeedFinding.Bundles1_6
                             index_bundles.Add(data);
                         }
                     }
-                    if (index_bundles.Count > 0)
+                    if (index_bundles.Count == 0)
                     {
-                        CompBundleData selected_bundle = random.ChooseFrom(index_bundles);
-                        random_bundle_pool.Remove(selected_bundle);
-                        selected_bundles[i] = selected_bundle;
-                        continue;
-                    }
-                    foreach (CompBundleData bundle_data in random_bundle_pool)
-                    {
-                        if (bundle_data.Index == -1)
+                        foreach (CompBundleData1_5 bundle_data in random_bundle_pool)
                         {
-                            index_bundles.Add(bundle_data);
+                            if (bundle_data.Index == -1)
+                            {
+                                index_bundles.Add(bundle_data);
+                            }
                         }
                     }
-                    if(index_bundles.Count > 0)
-                    {
-                        CompBundleData selected_bundle2 = random.ChooseFrom(index_bundles);
-                        random_bundle_pool.Remove(selected_bundle2);
-                        selected_bundles[i] = selected_bundle2;
-                    }
-
+                    CompBundleData1_5 selected_bundle = random.ChooseFrom(index_bundles);
+                    random_bundle_pool.Remove(selected_bundle);
+                    selected_bundles[i] = selected_bundle;
                 }
                 foreach(int key in selected_bundles.Keys)
                 {
-                    CompBundleData data = selected_bundles[key];
+                    CompBundleData1_5 data = selected_bundles[key];
                     result.State |= data.BaseFlag;
                     // handle random flags
-                    List<BigInteger> flags = new List<BigInteger>();
+                    List<BigInteger> flags = new();
                     if (data.HasRandom)
                     {
                         foreach (var flag in data.Flags)
                         {
-                            flags.Add(random.ChooseFrom(flag));
+                            flags.Add(flag.GetRandom(random));
                         }
                         flags.Reverse();
                     }

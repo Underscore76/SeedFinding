@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SeedFinding.Bundles
+namespace SeedFinding.Bundles1_5
 {
     public class CompBundleSetData
     {
-        public List<CompBundleData> Bundles;
+        public List<CompBundleData1_5> Bundles;
         public CompBundleSetData(BundleSetData bundleSetData)
         {
-            Bundles = new List<CompBundleData>(
-                bundleSetData.Bundles.Select(o => new CompBundleData(o))
+            Bundles = new List<CompBundleData1_5>(
+                bundleSetData.Bundles.Select(o => new CompBundleData1_5(o))
                 );
         }
     }

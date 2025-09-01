@@ -22,11 +22,13 @@ namespace SeedFinding.Locations
             BadTiles.UnionWith(new HashSet<Tile>(map.AlwaysFront.Tiles.Values));
             BadTiles.UnionWith(new HashSet<Tile>(map.Front.Tiles.Values));
             BadTiles.UnionWith(new HashSet<Tile>(map.Buildings.Tiles.Values));
-            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>();
-            SeasonalSpawns[0] = new List<SpawnChance>() { new SpawnChance(372, 0.9), new SpawnChance(718, 0.1), new SpawnChance(719, 0.3), new SpawnChance(723, 0.3) };
-            SeasonalSpawns[1] = new List<SpawnChance>() { new SpawnChance(372, 0.9), new SpawnChance(394, 0.5), new SpawnChance(718, 0.1), new SpawnChance(719, 0.3), new SpawnChance(723, 0.3) };
-            SeasonalSpawns[2] = new List<SpawnChance>() { new SpawnChance(372, 0.9), new SpawnChance(718, 0.1), new SpawnChance(719, 0.3), new SpawnChance(723, 0.3) };
-            SeasonalSpawns[3] = new List<SpawnChance>() { new SpawnChance(372, 0.4), new SpawnChance(392, 0.8), new SpawnChance(718, 0.05), new SpawnChance(719, 0.2), new SpawnChance(723, 0.2) };
+            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>
+            {
+                [0] = new List<SpawnChance>() { new(372, 0.9), new(718, 0.1), new(719, 0.3), new(723, 0.3) },
+                [1] = new List<SpawnChance>() { new(372, 0.9), new(394, 0.5), new(718, 0.1), new(719, 0.3), new(723, 0.3) },
+                [2] = new List<SpawnChance>() { new(372, 0.9), new(718, 0.1), new(719, 0.3), new(723, 0.3) },
+                [3] = new List<SpawnChance>() { new(372, 0.4), new(392, 0.8), new(718, 0.05), new(719, 0.2), new(723, 0.2) }
+            };
         }
 
         public Beach(uint seed) : base(seed, 104, 50)

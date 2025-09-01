@@ -22,11 +22,13 @@ namespace SeedFinding.Locations
             BadTiles.UnionWith(new HashSet<Tile>(map.AlwaysFront.Tiles.Values));
             BadTiles.UnionWith(new HashSet<Tile>(map.Front.Tiles.Values));
             BadTiles.UnionWith(new HashSet<Tile>(map.Buildings.Tiles.Values));
-            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>();
-            SeasonalSpawns[0] = new List<SpawnChance>() { new SpawnChance(16, .9), new SpawnChance(22, .9) };
-            SeasonalSpawns[1] = new List<SpawnChance>() { new SpawnChance(396, .6), new SpawnChance(402, .9) };
-            SeasonalSpawns[2] = new List<SpawnChance>() { new SpawnChance(404, .9), new SpawnChance(410, .9) };
-            SeasonalSpawns[3] = new List<SpawnChance>() { new SpawnChance(418, .9), new SpawnChance(414, .9), new SpawnChance(283, .5) };
+            SeasonalSpawns = new Dictionary<int, List<SpawnChance>>
+            {
+                [0] = new List<SpawnChance>() { new(16, .9), new(22, .9) },
+                [1] = new List<SpawnChance>() { new(396, .6), new(402, .9) },
+                [2] = new List<SpawnChance>() { new(404, .9), new(410, .9) },
+                [3] = new List<SpawnChance>() { new(418, .9), new(414, .9), new(283, .5) }
+            };
         }
 
         public Forest(uint seed) : base(seed, 120, 120)

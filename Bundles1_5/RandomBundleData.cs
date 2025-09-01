@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace SeedFinding.Bundles
+namespace SeedFinding.Bundles1_5
 {
 	public class RandomBundleData
     {
         public string AreaName = "";
         public string Keys = "";
-        public List<BundleSetData> BundleSets = new List<BundleSetData>();
-        public List<BundleData> Bundles = new List<BundleData>();
+        public List<BundleSetData> BundleSets = new();
+        public List<BundleData> Bundles = new();
     }
 }
 

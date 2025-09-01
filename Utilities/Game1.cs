@@ -27,6 +27,8 @@ namespace SeedFinding.Utilities
 		public static bool guntherBones = false;
 		public static bool guntherBonesActive = false;
 		public static Version Version = new("1.6.3");
+		public static Version Version1_6 = new("1.6.0");
+		public static Version Version1_6_3 = new("1.6.3");
 		
 
 		public static Dictionary<string, LocationData> locations1_6 = JsonConvert.DeserializeObject<Dictionary<string, LocationData>>(File.ReadAllText($@"Locations1_6/Locations.json"));

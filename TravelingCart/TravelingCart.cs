@@ -375,8 +375,8 @@ namespace SeedFinding.Cart
         }
         public static HashSet<CartItem> GetStock(int seed)
         {
-            Dictionary<int, CartItem> stock = new Dictionary<int, CartItem>();
-            Random random = new Random(seed);
+            Dictionary<int, CartItem> stock = new();
+            Random random = new(seed);
             for (int i = 0; i < 10; i++)
             {
                 int cost, qty;

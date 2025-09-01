@@ -26,7 +26,7 @@ namespace SeedFinding.Utilities
         [ThreadStatic]
         public static bool qiDropBoxActive;
 
-        public static Version version1_6 = new Version("1.6");
+        public static Version version1_6 = new("1.6");
 
         public SpecialOrders()
         {
@@ -43,7 +43,7 @@ namespace SeedFinding.Utilities
             Season season = Utility.getSeasonFromDay(day);
             SpecialOrder.workingSeason = season;
 
-            List<string> validOrders = new List<string>();
+            List<string> validOrders = new();
             foreach (var pair in allOrders) { 
                 string key = pair.Key;
                 var order = pair.Value;
@@ -72,7 +72,7 @@ namespace SeedFinding.Utilities
                 }
             }
 
-            Version gameVersion = new Version(version);
+            Version gameVersion = new(version);
             Random r;
             if (gameVersion >= version1_6)
             {
@@ -93,7 +93,7 @@ namespace SeedFinding.Utilities
                 {
                     r = Utility.CreateRandom(gameId, (double)day * 1.3);
                 }
-                List<string> typed_keys = new List<string>();
+                List<string> typed_keys = new();
                 foreach (string key3 in validOrders)
                 {
                     if (allOrders[key3].OrderType == type_to_find)
@@ -101,7 +101,7 @@ namespace SeedFinding.Utilities
                         typed_keys.Add(key3);
                     }
                 }
-                List<string> all_keys = new List<string>(typed_keys);
+                List<string> all_keys = new(typed_keys);
                 if (type_to_find != "Qi")
                 {
                     for (int j = 0; j < typed_keys.Count; j++)
@@ -194,11 +194,11 @@ namespace SeedFinding.Utilities
         public string questKey;
         public string name;
         protected SpecialOrderData _orderData;
-        public Dictionary<string, int> selectedRandomElements = new Dictionary<string, int>();
-        public Dictionary<string, string> preSelectedItems = new Dictionary<string, string>();
+        public Dictionary<string, int> selectedRandomElements = new();
+        public Dictionary<string, string> preSelectedItems = new();
         public string duration;
         public string questDescription;
-        public List<OrderObjective> objectives = new List<OrderObjective>();
+        public List<OrderObjective> objectives = new();
         public static SpecialOrder GetSpecialOrder(string key, int? generation_seed, string version = "1.6")
         {
             Dictionary<string, SpecialOrderData> order_data = SpecialOrders.allOrders;
@@ -206,7 +206,7 @@ namespace SeedFinding.Utilities
             if (order_data.ContainsKey(key))
             {
                 Random r;
-                Version gameVersion = new Version(version);
+                Version gameVersion = new(version);
                 if (gameVersion >= SpecialOrders.version1_6)
                 {
                     r = Utility.CreateRandom(generation_seed.Value);
@@ -216,7 +216,7 @@ namespace SeedFinding.Utilities
                     r = new Random(generation_seed.Value);
                 }
                 SpecialOrderData data = order_data[key];
-                SpecialOrder order = new SpecialOrder();
+                SpecialOrder order = new();
                 order.generationSeed = generation_seed.Value;
                 order._orderData = data;
                 order.questKey = key;
@@ -226,7 +226,7 @@ namespace SeedFinding.Utilities
                 {
                     foreach (RandomizedElement randomized_element in data.RandomizedElements)
                     {
-                        List<int> valid_indices = new List<int>();
+                        List<int> valid_indices = new();
                         for (int i = 0; i < randomized_element.Values.Count; i++)
                         {
                             if (SpecialOrder.CheckTags(randomized_element.Values[i].RequiredTags))
@@ -241,7 +241,7 @@ namespace SeedFinding.Utilities
                         {
                             value = value.Substring("PICK_ITEM".Length);
                             string[] array = value.Split(',');
-                            List<string> valid_item_ids = new List<string>();
+                            List<string> valid_item_ids = new();
                             string[] array2 = array;
                             for (int j = 0; j < array2.Length; j++)
                             {
@@ -363,7 +363,7 @@ namespace SeedFinding.Utilities
             {
                 return true;
             }
-            List<string> tags = new List<string>();
+            List<string> tags = new();
             string[] array = tag_list.Split(',');
             foreach (string tag in array)
             {

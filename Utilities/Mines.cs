@@ -51,13 +51,13 @@ namespace SeedFinding.Utilities
         public static List<int> CheckStone1_5(int seed, bool ladder = false, bool geologist = false, bool excavator = false, int floor = 0)
         {
 
-            Random r = new Random(seed);
+            Random r = new(seed);
             return CheckStone(r, ladder, geologist, excavator, floor);
         }
 
         private static List<int> CheckStone(Random r,bool ladder=false, bool geologist = false, bool excavator=false, int floor=0)
         {
-            List<int> results = new List<int>();
+            List<int> results = new();
             r.Next();
             if (!ladder)
             {
@@ -506,7 +506,7 @@ namespace SeedFinding.Utilities
         }
         public static void PrintGeodeContents(uint gameId, int startingGeode, int count, List<Geode> geodeTypes, string delimiter, bool excludeOres=true, int deepestMineLevel=0, bool qibeans = false, bool printBestGeode=false, int printBestGeodeMinPrice=0, bool before1_5=false)
         {
-            List<string> unsellables = new List<string>() { "100", "101", "103", "104", "105", "106", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "330", "390" };
+            List<string> unsellables = new() { "100", "101", "103", "104", "105", "106", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "330", "390" };
             if (excludeOres)
             {
                 unsellables = (List<string>)unsellables.Union(new List<string>() { "378", "380", "382", "384", "386" });
@@ -553,7 +553,7 @@ namespace SeedFinding.Utilities
 
         public static (int,int) GetGeodeContents(uint gameId, int geodesCracked, Geode whichGeode, int deepestMineLevel=0, bool qibeans=false, bool before1_5=false)
         {
-            Random r = new Random(geodesCracked + (int)gameId / 2);
+            Random r = new(geodesCracked + (int)gameId / 2);
             int prewarm_amount;
             prewarm_amount = r.Next(1, 10);
             for (int j = 0; j < prewarm_amount; j++)
@@ -738,7 +738,7 @@ namespace SeedFinding.Utilities
 
 		public static FloorType GetFloorType15(int gameID, int day, int floor, bool visitedQuarry=false)
         {
-            Random r = new Random(day + floor * 100 + gameID / 2);
+            Random r = new(day + floor * 100 + gameID / 2);
             if ( r.NextDouble() < 0.044 && (floor >= 121 || floor % 5 != 0 && floor % 40 > 5 && floor % 40 < 30 && floor % 40 != 19))
             {
                 FloorType type;
@@ -804,7 +804,7 @@ namespace SeedFinding.Utilities
 
         public static int DropShaftDrop(int gameid, int floor, int day)
         {
-            Random random = new Random(floor + gameid + day-1);
+            Random random = new(floor + gameid + day-1);
             int levelsDown = random.Next(3, 9);
             if (random.NextDouble() < 0.1)
             {

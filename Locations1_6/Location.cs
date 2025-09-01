@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
+using SeedFinding.Utilities;
 
 namespace SeedFinding.Locations1_6
 {
@@ -32,8 +33,8 @@ namespace SeedFinding.Locations1_6
 		public uint Seed;
 		public int Day;
 		public bool DangerArtifactSpot = false;
-		public Version version = new Version("1.6.8");
-		public List<string> log = new List<string>();
+		public Version version = new("1.6.8");
+		public List<string> log = new();
 
 		public Location(string name, uint seed)
 		{
@@ -46,10 +47,10 @@ namespace SeedFinding.Locations1_6
 
 
 
-			List<ForageData> spring = new List<ForageData>();
-			List<ForageData> summer = new List<ForageData>();
-			List<ForageData> fall = new List<ForageData>();
-			List<ForageData> winter = new List<ForageData>();
+			List<ForageData> spring = new();
+			List<ForageData> summer = new();
+			List<ForageData> fall = new();
+			List<ForageData> winter = new();
 
 			SeasonalForage.Add(Season.Spring, spring);
 			SeasonalForage.Add(Season.Summer, summer);
@@ -100,7 +101,7 @@ namespace SeedFinding.Locations1_6
 						tileSet = map.FindTileSet(index);
 					}
 					index -= tileSet.Firstgid;
-					Point tile = new Point(x, y);
+					Point tile = new(x, y);
 					switch (index)
 					{
 						case 9:
@@ -167,7 +168,7 @@ namespace SeedFinding.Locations1_6
 		{
 			foreach (var bush in Bushes)
 			{
-				Rectangle down = new Rectangle((int)location.X * 64, (int)(location.Y + 1f) * 64, 64, 128);
+				Rectangle down = new((int)location.X * 64, (int)(location.Y + 1f) * 64, 64, 128);
 				if (bush.getBoundingBox().IntersectsWith(down))
 				{
 					return true;
@@ -179,10 +180,10 @@ namespace SeedFinding.Locations1_6
 
 		public bool isBehindTree(Point location)
 		{
-			Rectangle down = new Rectangle((int)(location.X - 1f) * 64, (int)location.Y * 64, 192, 256);
+			Rectangle down = new((int)(location.X - 1f) * 64, (int)location.Y * 64, 192, 256);
 			foreach (var tree in Trees)
 			{
-				Rectangle treeTile = new Rectangle((int)tree.Key.X * 64, (int)tree.Key.Y * 64, 64, 64);
+				Rectangle treeTile = new((int)tree.Key.X * 64, (int)tree.Key.Y * 64, 64, 64);
 				if (treeTile.IntersectsWith(down))
 				{
 					return true;
@@ -211,7 +212,7 @@ namespace SeedFinding.Locations1_6
 				}
 			}
 
-			Rectangle tile = new Rectangle((int)location.X * 64, (int)location.Y * 64, 64, 64);
+			Rectangle tile = new((int)location.X * 64, (int)location.Y * 64, 64, 64);
 			foreach (var clump in ResourceClumps)
 			{
 				if (clump.getBoundingBox().IntersectsWith(tile))
@@ -263,7 +264,7 @@ namespace SeedFinding.Locations1_6
 
 			if (Name == "Backwoods" && dayOfMonth == 9)
 			{
-				Point point = new Point(18, 18);
+				Point point = new(18, 18);
 				if (!ArtifactSpotsDict.ContainsKey(point))
 				{
 					ArtifactSpots.Add((point, "(O)SeedSpot"));
@@ -301,7 +302,7 @@ namespace SeedFinding.Locations1_6
 					{
 						int xCoord2 = rand.Next(map.Width);
 						int yCoord2 = rand.Next(map.Height);
-						Point check = new Point(xCoord2, yCoord2);
+						Point check = new(xCoord2, yCoord2);
 						log.Add($"Day:	{Day}	Attempted forage placement at {check}");
 
 						if (map.IsNoSpawnTile(check.X, check.Y) || map.doesTileHaveProperty(check.X, check.Y, "Spawnable", "Back") == null || map.doesEitherTileOrTileIndexPropertyEqual(check.X, check.Y, "Spawnable", "Back", "F") || !this.CanItemBePlacedHere(check) || map.getTileIndexAt(check.X, check.Y, "AlwaysFront") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront2") != 0 || map.getTileIndexAt(check.X, check.Y, "AlwaysFront3") != 0 || map.getTileIndexAt(check.X, check.Y, "Front") != 0 || this.isBehindBush(check) || (!rand.NextBool(0.1) && this.isBehindTree(check)))
@@ -347,7 +348,7 @@ namespace SeedFinding.Locations1_6
             {
                 int xCoord = rand.Next(map.Width);
                 int yCoord = rand.Next(map.Height);
-                Point location = new Point(xCoord, yCoord);
+                Point location = new(xCoord, yCoord);
 				log.Add($"Day:	{Day}	Attempted spot placement at {location}");
 				if (this.CanItemBePlacedHere(location) && /*!this.IsTileOccupiedBy(location) &&*/ map.getTileIndexAt(xCoord, yCoord, "AlwaysFront") == 0 && map.getTileIndexAt(xCoord, yCoord, "Front") == 0 && !this.isBehindBush(location) && (map.doesTileHaveProperty(xCoord, yCoord, "Diggable", "Back") != null || (season == Season.Winter && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back") != null && map.doesTileHaveProperty(xCoord, yCoord, "Type", "Back").Equals("Grass"))))
 				{
@@ -400,7 +401,7 @@ namespace SeedFinding.Locations1_6
 
 		public static List<(string,int)> digUpArtifactSpot(int day, uint gameId, string location, int xLocation, int yLocation, int totemsUsed = 0, int artifactSpotsDug = 0, bool hasDefenseBook = false, bool hasGenerousEnchantment = false, double dailyLuck = 0.0, bool sawQiPlane = false)
 		{
-			List<(string, int)> list = new List<(string, int)>();
+			List<(string, int)> list = new();
 			Game1.location = location;
 			//Object.performToolAction
 			Random r2 = Utility.CreateDaySaveRandom(day, gameId, (0f - xLocation) * 7f, yLocation * 777f, totemsUsed * 777);
@@ -429,10 +430,10 @@ namespace SeedFinding.Locations1_6
 				locationName = "Farm_Standard";
 			}
 			LocationData locationData = dictionary[locationName];
-			Farmer farmer = new Farmer();
+			Farmer farmer = new();
 
-			GameLocation gameLocation = new GameLocation() { Name = locationName };
-			ItemQueryContext itemQueryContext = new ItemQueryContext(gameLocation, farmer, r);
+			GameLocation gameLocation = new() { Name = locationName };
+			ItemQueryContext itemQueryContext = new(gameLocation, farmer, r);
 			IEnumerable<ArtifactSpotDropData> possibleDrops = dictionary["Default"].ArtifactSpots;
 			if (locationData != null && locationData.ArtifactSpots?.Count > 0)
 			{

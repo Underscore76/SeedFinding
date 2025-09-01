@@ -36,7 +36,7 @@ namespace SeedFinding
                 }
 
 
-                Random layout_random = new Random(day * level + level * 5152 + (int)gameId / 2);
+                Random layout_random = new(day * level + level * 5152 + (int)gameId / 2);
                 if (level > 1 && layout_random.NextDouble() < 0.5 * luckMultiplier) {
                     if (!foundSpecialLevel)
                     {

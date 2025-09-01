@@ -11,7 +11,7 @@ using System.Linq;
 using SeedFinding.StardewClasses;
 using StardewValley;
 
-namespace SeedFinding
+namespace SeedFinding.Utilities
 {
     public enum Season
     {
@@ -81,7 +81,7 @@ namespace SeedFinding
 
         public static int GetRandomItemFromSeason(Season season, bool forQuest, Random r, int cookingRecipesKnown, bool hasFurnace = false, bool hasDesert = false, int mines = 0) { 
             //}
-            List<int> possibleItems = new List<int>
+            List<int> possibleItems = new()
             {
                 68, //Topaz
                 66, //Amethyst
@@ -341,7 +341,7 @@ namespace SeedFinding
 
         public static List<Point> getBorderOfThisRectangle(Rectangle r)
         {
-            List<Point> border = new List<Point>();
+            List<Point> border = new();
             for (int l = r.X; l < r.Right; l++)
             {
                 border.Add(new Point(l, r.Y));
@@ -361,8 +361,8 @@ namespace SeedFinding
             return border;
         }
     
-        static Dictionary<string, List<(int, double)>> archDict = new Dictionary<string, List<(int, double)>>
-            {
+        static Dictionary<string, List<(int, double)>> archDict = new()
+        {
                 {"Town", new List<(int, double)> { (100, .04), (103, .01), (105, .01), (106, .008), (110, .05), (119, .005), (123, .005), (126, .001), (127, .001), (579, .01) } },
                 {"Mountain", new List<(int, double)> { (101, .02), (103, .04), (105, .02), (107, .008), (109, .008), (112, .05), (114, .01), (115, .03), (119, .01), (120, .05), (126, .001), (127, .001), (581, .01), (587, .01), (589, .03) } },
                 {"Forest", new List<(int, double)> { (101, .02), (103, .03), (104, .01), (105, .02), (106, .01), (109, .01), (114, .01), (115, .03), (119, .01), (120, .05), (123, .01), (126, .001), (127, .001), (580, .01), (587, .01), (588, .01), (589, .03) } },
@@ -375,8 +375,8 @@ namespace SeedFinding
                 {"Backwoods", new List<(int, double)> { }
             }
         };
-        static Dictionary<string, List<(int, double)>> locationDict = new Dictionary<string, List<(int, double)>>
-            {
+        static Dictionary<string, List<(int, double)>> locationDict = new()
+        {
                 {"Farm", new List<(int,double)>{(382, .05), (770, .1), (390, .25), (330, 1)}},
                 {"UndergroundMine", new List<(int,double)>{(107, .01)}},
                 {"Desert", new List<(int,double)>{(390, .25), (330, 1)}},
@@ -399,7 +399,7 @@ namespace SeedFinding
 
         public static (int,int) GetArtifactspot(uint gameId, int day, int x, int y,string location)
         {
-            Random r = new Random(x * 2000 + y + (int)gameId / 2 + day);
+            Random r = new(x * 2000 + y + (int)gameId / 2 + day);
             int toDigUp = -1;
             //bool archaeologyEnchant = who != null && who.CurrentTool != null && who.CurrentTool is Hoe && who.CurrentTool.hasEnchantmentOfType<ArchaeologistEnchantment>();
             foreach (var v in archDict[location])
@@ -503,7 +503,7 @@ namespace SeedFinding
 
         public static Quality ForageQuality(int gameId, int day, int x, int y, int level)
         {
-            Random r = new Random(gameId / 2 + day + x + y * 777);
+            Random r = new(gameId / 2 + day + x + y * 777);
             if (r.NextDouble() < level / 30.0)
             {
                 return Quality.Gold;
@@ -517,7 +517,7 @@ namespace SeedFinding
 
         public static bool ForageDoubled(int gameId, int day, int x, int y, int level,bool botanist = false)
         {
-            Random r = new Random(gameId / 2 + day + x + y * 777);
+            Random r = new(gameId / 2 + day + x + y * 777);
             if (!botanist)
             {
                 if (r.NextDouble() < level / 30.0)
@@ -537,7 +537,7 @@ namespace SeedFinding
         public static Quality CropQuality(int gameId, int day, int x, int y, int level, Fertilizer fert)
         {
             int fertilizerQualityLevel = 0;
-            Random r = new Random(x * 7 + y * 11 + day + gameId);
+            Random r = new(x * 7 + y * 11 + day + gameId);
             switch (fert)
             {
                 case Fertilizer.Basic:
@@ -570,7 +570,7 @@ namespace SeedFinding
 
         public static bool MusselNutDrop(int gameId, int day, int x, int y)
         {
-            Random r = new Random(day + gameId / 2 + x * 4000 + y);
+            Random r = new(day + gameId / 2 + x * 4000 + y);
 
             r.Next();
             return r.NextDouble() < 0.1;
@@ -645,7 +645,7 @@ namespace SeedFinding
             int dayOfMonth = (daysPlayed - 1) % 28 + 1;
             int year = (daysPlayed - 1) / (28 * 4) + 1;
             Random r = Utility.CreateRandom(gameId, changeDaily ? daysPlayed : 0, randomSeedAddition);
-            List<int> possibleItems = new List<int>
+            List<int> possibleItems = new()
             {
                 68,
                 66,
@@ -803,14 +803,14 @@ namespace SeedFinding
         {
             return new Point[8]
             {
-            new Point(-1+tileLocation.X, 0+tileLocation.Y),
-            new Point(1+tileLocation.X, 0+tileLocation.Y),
-            new Point(0+tileLocation.X, 1+tileLocation.Y),
-            new Point(0+tileLocation.X, -1+tileLocation.Y),
-            new Point(-1+tileLocation.X, -1+tileLocation.Y),
-            new Point(1+tileLocation.X, -1+tileLocation.Y),
-            new Point(1+tileLocation.X, 1+tileLocation.Y),
-            new Point(-1+tileLocation.X, 1+tileLocation.Y)
+            new(-1+tileLocation.X, 0+tileLocation.Y),
+            new(1+tileLocation.X, 0+tileLocation.Y),
+            new(0+tileLocation.X, 1+tileLocation.Y),
+            new(0+tileLocation.X, -1+tileLocation.Y),
+            new(-1+tileLocation.X, -1+tileLocation.Y),
+            new(1+tileLocation.X, -1+tileLocation.Y),
+            new(1+tileLocation.X, 1+tileLocation.Y),
+            new(-1+tileLocation.X, 1+tileLocation.Y)
             };
         }
         public static bool isFestivalDay(int day)

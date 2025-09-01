@@ -23,9 +23,9 @@ namespace SeedFinding.Bundles1_6
 
         public List<string> Curate()
         {
-            List<string> result = new List<string>();
-            BigInteger flag = new BigInteger();
-            FieldInfo[] Flags = typeof(CompressedFlags).GetFields();
+            List<string> result = new();
+            BigInteger flag = new();
+            FieldInfo[] Flags = typeof(CompressedFlags1_6).GetFields();
             for (int i = 0; i < Flags.Length; i++)
             {
                 if (this.Contains((BigInteger)Flags[i].GetValue(flag)))

@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace SeedFinding.Bundles
+namespace SeedFinding.Bundles1_5
 {
     public class BundleSetData
 	{
-        public List<BundleData> Bundles = new List<BundleData>();
+        public List<BundleData> Bundles = new();
     }
 }
 
