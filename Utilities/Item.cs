@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SeedFinding.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -92,7 +93,12 @@ namespace SeedFinding
                 return Hats[id[3..]];
             }
 
-            return new Item() { Name = id};
+			if (id.StartsWith("(W)"))
+			{
+				return MeleeWeapon.GetWeapon(id);
+			}
+
+			return new Item() { Name = id};
         }
 
 		public bool IsBreakableStone()

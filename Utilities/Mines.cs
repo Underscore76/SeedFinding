@@ -822,5 +822,69 @@ namespace SeedFinding
 
             return levelsDown;
         }
+
+		public static Item RemixedChest(int gameid, int floor)
+		{
+			List<string> valid_items = null;
+			valid_items = new List<string>();
+			switch (floor)
+			{
+				case 10:
+					valid_items.Add("(B)506");
+					valid_items.Add("(B)507");
+					valid_items.Add("(W)12");
+					valid_items.Add("(W)17");
+					valid_items.Add("(W)22");
+					valid_items.Add("(W)31");
+					break;
+				case 20:
+					valid_items.Add("(W)11");
+					valid_items.Add("(W)24");
+					valid_items.Add("(W)20");
+					valid_items.Add("517");
+					valid_items.Add("519");
+					break;
+				case 50:
+					valid_items.Add("(B)509");
+					valid_items.Add("(B)510");
+					valid_items.Add("(B)508");
+					valid_items.Add("(W)1");
+					valid_items.Add("(W)43");
+					break;
+				case 60:
+					valid_items.Add("(W)21");
+					valid_items.Add("(W)44");
+					valid_items.Add("(W)6");
+					valid_items.Add("(W)18");
+					valid_items.Add("(W)27");
+					break;
+				case 80:
+					valid_items.Add("(B)512");
+					valid_items.Add("(B)511");
+					valid_items.Add("(W)10");
+					valid_items.Add("(W)7");
+					valid_items.Add("(W)46");
+					valid_items.Add("(W)19");
+					break;
+				case 90:
+					valid_items.Add("(W)8");
+					valid_items.Add("(W)52");
+					valid_items.Add("(W)45");
+					valid_items.Add("(W)5");
+					valid_items.Add("(W)60");
+					break;
+				case 110:
+					valid_items.Add("(B)514");
+					valid_items.Add("(B)878");
+					valid_items.Add("(W)50");
+					valid_items.Add("(W)28");
+					break;
+			}
+			if (valid_items != null && valid_items.Count > 0)
+			{
+				return Item.Get(Utility.CreateRandom((double)gameid * 512.0, floor).ChooseFrom(valid_items));
+			}
+			return null;
+		}
     }
 }
