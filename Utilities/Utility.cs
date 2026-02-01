@@ -674,9 +674,14 @@ namespace SeedFinding
             return Utility.CreateRandom(days, gameId / 2, seedA, seedB, seedC);
         }
 
-        public static Random CreateRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
+        public static Random CreateSlowRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
         {
             return new Random(Utility.CreateRandomSeed(seedA, seedB, seedC, seedD, seedE));
+        }
+
+        public static Random CreateRandom(double seedA, double seedB = 0.0, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
+        {
+            return FastRandom.createFR(Utility.CreateRandomSeed(seedA, seedB, seedC, seedD, seedE));
         }
 
         public static int CreateRandomSeed(double seedA, double seedB, double seedC = 0.0, double seedD = 0.0, double seedE = 0.0)
