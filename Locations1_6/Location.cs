@@ -175,6 +175,38 @@ namespace SeedFinding.Locations1_6
 					}
 				}
 			}
+
+			foreach (var property in map.Properties)
+			{
+				switch (property.Name)
+				{
+					case "Stumps":
+						string[] stumpData = ArgUtility.SplitBySpace(property.Value);
+						for (int i = 0; i < stumpData.Length; i += 3)
+						{
+							if (!ArgUtility.TryGetVector2(stumpData, i, out Vector2 tile, out var error, integerOnly: false))
+							{
+								continue;
+							}
+							bool foundStump = false;
+							foreach (ResourceClump resourceClump in ResourceClumps)
+							{
+								if (resourceClump.location.Equals(tile))
+								{
+									foundStump = true;
+									break;
+								}
+							}
+							if (!foundStump)
+							{
+								ResourceClumps.Add(new ResourceClump() { location = tile });
+							}
+
+						}
+							
+						break;
+				}
+			}
 		}
 		public bool isBehindBush(Vector2 location)
 		{

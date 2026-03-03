@@ -535,7 +535,7 @@ namespace SeedFinding
                     }
                     line += $"{delimiter}{Item.Get(contents.Item1).Name}{delimiter}{contents.Item2}{delimiter}{price}";
 
-                    if (price >= bestPrice)
+                    if (price > bestPrice)
                     {
                         bestPrice = price;
                         bestGeode = geode;
