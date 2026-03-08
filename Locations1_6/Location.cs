@@ -491,7 +491,8 @@ namespace SeedFinding.Locations1_6
 			{
 				list.Add(("(O)MysteryBox",r.Next(1,3)));
 			}
-			//Utility.trySpawnRareObject(who, tilePixelPos, this, 10.0); Game1.random
+
+			Utility.trySpawnRareObject(day, dailyLuck, false, 9.0, 1.0, -1, r);
 			foreach (ArtifactSpotDropData drop in possibleDrops)
 			{
 				if (!r.NextBool(drop.Chance) || (drop.Condition != null && !GameStateQuery.CheckConditions(drop.Condition, gameLocation, farmer, null, null, r)))
