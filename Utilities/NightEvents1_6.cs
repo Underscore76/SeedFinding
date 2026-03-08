@@ -65,5 +65,16 @@ namespace SeedFinding.NightEvents1_6
 
 			return location;
 		}
-    }
+
+		public static double getFairyResult(long gameId, int day)
+		{
+			return Utility.CreateRandom(gameId, day).NextDouble();
+		}
+
+		public static int getFairyCrop(long gameId, int day, int cropCount)
+		{
+			return (int)(getFairyResult(gameId, day) * cropCount);
+		}
+
+	}
 }

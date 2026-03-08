@@ -1043,5 +1043,33 @@ namespace SeedFinding
 		{
 			return Utility.ConvertTimeToMinutes(endTime) - Utility.ConvertTimeToMinutes(startTime);
 		}
+
+		public static Item trySpawnRareObject(int day, double dailyLuck, bool farmingMastery, double chanceModifier = 1.0, double dailyLuckWeight = 1.0, int groundLevel = -1, Random random = null)
+		{
+			if (random == null)
+			{
+				return null;
+			}
+			double luckMod = 1.0;
+			
+			luckMod = 1.0 + dailyLuck * dailyLuckWeight;
+			if (farmingMastery && random.NextDouble() < 0.001 * chanceModifier * luckMod)
+			{
+				return Item.Get("(O)GoldenAnimalCracker");
+				//Game1.createItemDebris(ItemRegistry.Create("(O)GoldenAnimalCracker"), position, -1, location, groundLevel);
+			}
+			if (day > 2 && random.NextDouble() < 0.002 * chanceModifier)
+			{
+				return Utility.getRandomCosmeticItem(random);
+				
+				//Game1.createItemDebris(Utility.getRandomCosmeticItem(random), position, -1, location, groundLevel);
+			}
+			if (day > 2 && random.NextDouble() < 0.0006 * chanceModifier)
+			{
+				return Item.Get("(O)SkillBook_" + random.Next(5));
+				//Game1.createItemDebris(ItemRegistry.Create("(O)SkillBook_" + random.Next(5)), position, -1, location, groundLevel);
+			}
+			return null;
+		}
 	}
 }

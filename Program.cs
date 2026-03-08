@@ -52,24 +52,35 @@ namespace SeedFinding
 				return;*/
 
 
-				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
 				//return;a
 				Game1.UseLegacyRandom = true;
+				//Mines.PrintGeodeContents(1417233291, -7909155559185519700l, 1, 446, new List<Geode> { Geode.FrozenGeode }, ",", false, printBestGeode:true,printBestGeodeMinPrice:90);
+				//Console.WriteLine(Utility.CreateRandom(272092133, 5).NextDouble());
 				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
-				//Mines.PrintGeodeContents(655571, -1161857373803765789L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
+				//Mines.PrintGeodeContents(1763094885, -7909155559185519700L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
 				//MAXPERFECTION.checkFile();
 				//MAXPERFECTION.checkWinterStar();
 				//MAXPERFECTION.findGoodStepCount(1, 0);
 				//MAXPERFECTION.findVolcanoDays();
 				//MAXPERFECTION.checkPets();
-				MAXPERFECTION.doveIncubating();
+				//MAXPERFECTION.doveIncubating();
 				//MAXPERFECTION.rainyDialog();
 				//MAXPERFECTION.findPanning();
 				//var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
-				//DynamicCCRemixSeeding.ValidSeedDay2(589831, false);
-				//DynamicCCRemixSeeding.Search(-1 + 1, Int32.MaxValue, blockSize, out List<int> validSeeds);
+				Locations1_6.Location woods = null;
+				//DynamicCCRemixSeeding.ValidSeedDay8(589831, ref woods, false);
+				DynamicCCRemixSeeding.Search(0, Int32.MaxValue, blockSize, out List<int> validSeeds);
 				//DynamicCCRemixSeeding.Curate();
 				//DynamicCCRemixSeeding.testSpot();
+				//Console.WriteLine(StepPredictions.Predict(1695041469, 1, 448, new List<string>() { "One" }).ToString());
+				//for (int step = 0; step < 600; step++)
+				//{
+				//	var result = StepPredictions.Predict(1695041469, 1, step, new List<string>() { "One" });
+				//if (result.Dish == 213 & result.DailyLuck > 0.08)
+				//	{
+				//		Console.WriteLine($"Step: {step} Dish: {Item.Get(result.Dish.ToString()).Name} Luck: {result.DailyLuck}");
+				//	}
+				//}
 
 
 				//Locations1_6.Location location = new Locations1_6.Location("IslandNorth", 655571, false);

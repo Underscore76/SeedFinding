@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace SeedFinding.Locations1_6
 
         [JsonProperty("tilesets")]
         public List<TileSet> TileSets;
+
+		[JsonProperty("properties")]
+		public List<ObjectProperty> Properties;
 
         public Layer FindLayer(string layerName, string type = "")
         {

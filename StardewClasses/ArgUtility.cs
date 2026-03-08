@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using SeedFinding;
+using Vector2 = SeedFinding.Vector2;
 
 namespace StardewValley
 {
@@ -587,20 +589,20 @@ namespace StardewValley
         {
             float x2;
             float y2;
-            if (integerOnly)
-            {
+            //if (integerOnly)
+           // {
                 if (ArgUtility.TryGetInt(array, index, out var x, out error) && ArgUtility.TryGetInt(array, index + 1, out var y, out error))
                 {
                     value = new Vector2(x, y);
                     return true;
                 }
-            }
-            else if (ArgUtility.TryGetFloat(array, index, out x2, out error) && ArgUtility.TryGetFloat(array, index + 1, out y2, out error))
-            {
-                value = new Vector2(x2, y2);
-                return true;
-            }
-            value = Vector2.Zero;
+            //}
+           // else if (ArgUtility.TryGetFloat(array, index, out x2, out error) && ArgUtility.TryGetFloat(array, index + 1, out y2, out error))
+           // {
+           //     value = new Vector2(x2, y2);
+           //     return true;
+            //}
+            value = new Vector2(0,0);
             return false;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using SeedFinding;
@@ -1853,7 +1854,7 @@ namespace StardewValley
         private static int NextClearCacheTick;
 
         /// <summary>The cache of parsed game state queries.</summary>
-        private static readonly Dictionary<string, ParsedGameStateQuery[]> ParseCache;
+        private static readonly ConcurrentDictionary<string, ParsedGameStateQuery[]> ParseCache;
 
         /// <summary>The query keys which check the season, like <c>LOCATION_SEASON</c> or <c>SEASON</c>.</summary>
         public static HashSet<string> SeasonQueryKeys;
@@ -1866,7 +1867,7 @@ namespace StardewValley
         {
             GameStateQuery.QueryTypeLookup = new Dictionary<string, GameStateQueryDelegate>(StringComparer.OrdinalIgnoreCase);
             GameStateQuery.Aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            GameStateQuery.ParseCache = new Dictionary<string, ParsedGameStateQuery[]>();
+            GameStateQuery.ParseCache = new ConcurrentDictionary<string, ParsedGameStateQuery[]>();
             GameStateQuery.SeasonQueryKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "LOCATION_SEASON", "SEASON" };
             GameStateQuery.MagicBaitIgnoreQueryKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "DAY_OF_MONTH", "DAY_OF_WEEK", "DAYS_PLAYED", "LOCATION_SEASON", "SEASON", "SEASON_DAY", "WEATHER", "TIME" };
             MethodInfo[] methods = typeof(DefaultResolvers).GetMethods(BindingFlags.Static | BindingFlags.Public);

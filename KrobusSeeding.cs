@@ -265,13 +265,13 @@ namespace SeedFinding
 
 			List<string> artifacts = new List<string> { "96", "97", "98", "99", "100", "101", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "579", "580", "581", "582", "583", "584", "585", "586", "587", "588", "589" };
 			List<Location> Locations = new List<Location>(){
-				new Location("BusStop", seed){version = new Version("1.6.3")},
-				new Location("Backwoods", seed){version = new Version("1.6.3")},
-				new Location("Town", seed){version = new Version("1.6.3")},
-				new Location("Beach", seed){version = new Version("1.6.3")},
-				new Location("Mountain", seed){version = new Version("1.6.3")},
-				new Location("Forest", seed){version = new Version("1.6.3")},
-				new Location("Railroad", seed){version = new Version("1.6.3")}
+				new Location("BusStop", seed){version = new Version("1.6.15")},
+				new Location("Backwoods", seed){version = new Version("1.6.15")},
+				new Location("Town", seed){version = new Version("1.6.15")},
+				new Location("Beach", seed){version = new Version("1.6.15")},
+				//new Location("Mountain", seed){version = new Version("1.6.15")},
+				new Location("Forest", seed){version = new Version("1.6.15")},
+				//new Location("Railroad", seed){version = new Version("1.6.15")}
 			};
 
 			/*for (int day = 1; day <= minesDay; day++)
@@ -317,6 +317,11 @@ namespace SeedFinding
 					}
 
 					if (location.Name == "Railroad" && day < 31)
+					{
+						continue;
+					}
+
+					if (location.DangerArtifactSpot)
 					{
 						continue;
 					}
@@ -385,7 +390,7 @@ namespace SeedFinding
 			// Seed requirements
 			// Fairy early Fall
 			// Geode/omni spot on floor 25 at some point before the end of Fall
-			// Short geode list
+			// Short geode list - Now tied to uniqueMultiplayerId manip
 			// Dish of the day with spicy eel
 			// Artifacts from artifact spots
 			// Giant crop spots within fairy range.
@@ -639,7 +644,7 @@ namespace SeedFinding
 				{
 					try
 					{
-						fs = new FileStream($"KrobusDynamicResult{i}.txt", FileMode.Append);
+						fs = new FileStream($"KrobusResult{i}.txt", FileMode.Append);
 					}
 					catch
 					{
