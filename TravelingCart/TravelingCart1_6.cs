@@ -1,12 +1,5 @@
-﻿using SeedFinding.Extensions;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SeedFinding.Cart1_6
 {
@@ -33,6 +26,11 @@ namespace SeedFinding.Cart1_6
         public static HashSet<string> possibleItemsMaster163;
         public static List<float> randomAmounts;
         public static List<float> randomMultiply;
+        public static (int,int)[] itemAndAdvances163;
+        public static (int,int)[] itemAndAdvances;
+        public static int totalCallsAfter; //Same between 1.6.3+ and 1.6.0
+        public static Dictionary<string,int> idToCall;
+        public static bool version163;
 
         static TravelingCart()
         {
@@ -712,6 +710,7 @@ namespace SeedFinding.Cart1_6
                 "265",
                 "269"
             };
+
             randomAmounts = new() { 100.0f,
               200.0f,
               300.0f,
@@ -725,14 +724,154 @@ namespace SeedFinding.Cart1_6
             randomMultiply = new() {3.0f,
               4.0f,
               5.0f };
+            idToCall = new();
+            itemAndAdvances163 = new (int,int)[possibleItemsMaster163.Count];
+            int amountToAdvance163 = 0;
+            int spot163 = 0;
+            itemAndAdvances = new (int,int)[possibleItemsMaster.Count];
+            int amountToAdvance = 0;
+            int spot = 0;
+            int callsDeep = 0;
+            foreach (var item in Item.Items)
+            {
+                if (possibleItemsMaster163.Contains(item.Key))
+                {
+                    idToCall.Add(item.Key,callsDeep);
+                    itemAndAdvances163[spot163] = (int.Parse(item.Key),amountToAdvance163);
+                    amountToAdvance163 = 0;
+                    spot163++;
+                }
+                else
+                {
+                    amountToAdvance163++;
+                }
+                if (possibleItemsMaster.Contains(item.Key))
+                {
+                    idToCall.TryAdd(item.Key,callsDeep);
+                    itemAndAdvances[spot] = (int.Parse(item.Key),amountToAdvance);
+                    amountToAdvance = 0;
+                    spot++;
+                }
+                else
+                {
+                    amountToAdvance++;
+                } 
+                callsDeep++;
+            }
+            totalCallsAfter = amountToAdvance;
+        }
+        
+        // Takes a list of string ids, the game seed, and the day, and returns a smaller list containing all items with a chance of showing up that day.
+        // Catches 99% of hits at 1/17, 99.9999% at 1/10, 99.99999998 at 1/8 confidence. Defaults to 1/8 for maximal inclusiveness.
+        public static List<string> getPlausibles(string[] stringIds, int seed, int day, double confidence = 0.125) 
+        {
+            int lowerThreshold = (int) Math.Round((double)0x7FFFFFFF * confidence);
+            int upperThreshold = 0x7FFFFFFF - 100000;
+            int rngSeed = Utility.CreateRandomSeed(day, seed / 2, 0, 0, 0);
+            List<string> plausibles = new List<string>();
+            foreach (string id in stringIds)
+            {
+                int guess = FastRandom.fastForward(rngSeed,idToCall.GetValueOrDefault(id));
+                if (guess < lowerThreshold || guess > upperThreshold)
+                {
+                    plausibles.Add(id);
+                }
+            }
+            return plausibles;
         }
 
-        public static List<CartItem> GetStock(long gameSeed, int day, string version = "1.6.3")
+        // Takes a string id, the game seed, and the day and returns if there is a chance at all for that item to show up that day.
+        // Catches 99% of hits at 1/17, 99.9999% at 1/10, 99.99999998 at 1/8 confidence. Defaults to 1/8 for maximal inclusiveness.
+        public static bool isPlausible(string stringId, int seed, int day, double confidence = 0.125)
+        {
+            int lowerThreshold = (int) Math.Round((double)0x7FFFFFFF * confidence);
+            int upperThreshold = 0x7FFFFFFF - 100000;
+            int rngSeed = Utility.CreateRandomSeed(day, seed / 2, 0, 0, 0);
+            int guess = FastRandom.fastForward(rngSeed,idToCall.GetValueOrDefault(stringId));
+            return guess < lowerThreshold || guess > upperThreshold;
+        }
+
+        // Returns if it is a cart day, including desert festival and night market.
+        public static bool isCartDay(int day)
+        {
+            return day % 7 == 0 || day % 7 == 5 || (day % 28 >= 15 && day%28 <= 17 && (day/28%4 == 0 || day/28%4 == 3));
+        }
+
+
+       public static List<CartItem> GetStock(long gameSeed, int day, string version = "1.6.3")
+        {
+            bool version163 = new Version(version) >= new Version("1.6.3");
+            int seed = Utility.CreateRandomSeed(day, gameSeed / 2);
+            seed = (seed == int.MinValue) ? int.MaxValue : Math.Abs(seed);
+            if (seed > (1 << 27)) //Loses guaranteed accuracy somewhere around 1.5 * 2^27 but don't want to try to be overly precise [still is like 99.9% but]
+            {
+                return GetStockOldRNG(seed,version163);
+            }
+            int counter = 0;
+            List<CartItem> stock = new List<CartItem>();
+            SortedList<long, int> tenBest = new();
+            FastRandom random = FastRandom.createFR(seed);
+            foreach (var item in version163 ? itemAndAdvances163 : itemAndAdvances)
+            {
+                random.counter+=item.Item2;
+                counter++;
+                long i = random.Next();
+                tenBest.Add(counter + (i << 12), item.Item1);
+                if (tenBest.Count > 10)
+                {
+                    tenBest.RemoveAt(10);
+                }
+            }
+            random.counter+=totalCallsAfter;
+            foreach (var item in tenBest)
+            {
+                Item actualItem = Item.Items[item.Value.ToString()];
+                int cost = (int)Math.Max(random.ChooseFrom(randomAmounts), random.ChooseFrom(randomMultiply) * actualItem.Price);
+                int qty = random.NextBool(0.1f) ? 5 : 1;
+                stock.Add(new CartItem(actualItem.id, cost, qty));
+            }
+            return stock;
+        }
+
+        private static List<CartItem> GetStockOldRNG(int seed, bool version163)
+        {
+            Random random = new Random(seed);
+            List<CartItem> stock = new List<CartItem>();
+            SortedList<long, int> tenBest = new();
+            int counter = 0;
+            foreach (var item in version163 ? itemAndAdvances163 : itemAndAdvances)
+            {
+                for (int x = 0; x < item.Item2; x++){
+                    random.Next();
+                }
+                counter++;
+                long i = random.Next();
+                tenBest.Add(counter + (i << 12), item.Item1);
+                if (tenBest.Count > 10)
+                {
+                    tenBest.RemoveAt(10);
+                }
+            }
+            for (int x = 0; x < totalCallsAfter; x++){
+                random.Next();
+            }
+            foreach (var item in tenBest)
+            {
+                Item actualItem = Item.Items[item.Value.ToString()];
+                int cost = (int)Math.Max(random.ChooseFrom(randomAmounts), random.ChooseFrom(randomMultiply) * actualItem.Price);
+                int qty = random.NextBool(0.1f) ? 5 : 1;
+                stock.Add(new CartItem(actualItem.id, cost, qty));
+            }
+            return stock;
+        }
+
+        // Left alive here just to allow comparing / validating accuracy.
+        public static List<CartItem> GetStockPreviousImplementation(long gameSeed, int day, string version = "1.6.3")
         {
             bool version163 = new Version(version) >= new Version("1.6.3");
             List<CartItem> stock = new List<CartItem>();
             SortedDictionary<int, Item> randomOrder = new();
-            Random random = Utility.CreateDaySaveRandom(day, gameSeed);
+            Random random = Utility.CreateSlowRandom(day, gameSeed / 2);
             foreach (var item in Item.Items)
                 {
                 int i = random.Next();
@@ -760,6 +899,37 @@ namespace SeedFinding.Cart1_6
                 }
             }
             return stock;
+        }
+
+        // Says if a skill book will show up in the travelling cart that day (does not say which one)
+        public static bool hasBook(long gameSeed, int day)
+        {
+            ///SYNCED_RANDOM day travelerSkillBook .05
+            return Utility.CreateRandom(-451051273, gameSeed, day).NextSingle() < 0.05;
+        }
+
+        // Says what a skill book would be in the traveling cart that day, regardless of if one would show up. Slow implementation.
+        public static int whatBook(long gameSeed, int day)
+        {
+            bool bonusCall = false;
+            if ((day - 1) % 112 < 56)
+            {
+                bool hasRare = false;
+                foreach (CartItem x in GetStock(gameSeed, day))
+                {
+                    if (x.Id == "(O)347")
+                    {
+                        hasRare = true;
+                    }
+                }
+                bonusCall = !hasRare;
+            }
+            Random shopRandom = Utility.CreateDaySaveRandom(day, gameSeed);
+            for (int i = 0; i < (bonusCall ? 1484 : 1483); i++)
+            {
+                shopRandom.Next();
+            }
+            return shopRandom.Next(5);
         }
 
         
