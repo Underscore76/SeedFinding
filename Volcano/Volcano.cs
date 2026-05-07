@@ -1,22 +1,23 @@
 ﻿using Newtonsoft.Json;
 using SeedFinding.Locations;
+using SeedFinding.Locations1_6;
+using SeedFinding.StardewClasses;
+using SeedFinding.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using System.Reflection.Emit;
+using System.Resources;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using SeedFinding.Locations1_6;
-using Map = SeedFinding.Locations1_6.Map;
 using Layer = SeedFinding.Locations1_6.Layer;
+using Map = SeedFinding.Locations1_6.Map;
 using Tile = SeedFinding.Locations1_6.Tile;
-using System.Net.NetworkInformation;
-using SeedFinding.Utilities;
-using System.Threading;
-using SeedFinding.StardewClasses;
 
 namespace SeedFinding.Volcano
 {
@@ -37,6 +38,20 @@ namespace SeedFinding.Volcano
 			this.location = location;
 		}
 	}
+
+	public struct SetPiece
+	{
+		public int size;
+		public Vector2 coordinates;
+		public Vector2 location;
+
+		public SetPiece(int size, Vector2 coordinates, Vector2 location)
+		{
+			this.size = size;
+			this.coordinates = coordinates;
+			this.location = location;
+		}
+	}
 	public class VolcanoFloor
 	{
 		public int level = -1;
@@ -49,9 +64,13 @@ namespace SeedFinding.Volcano
 		public int[] heightMap;
 		public List<Vector2> barrelLocations = new List<Vector2>();
 		public List<Vector2> teethLocations = new List<Vector2>();
-		public List<VolcanoChest> volcanoChests = new List<VolcanoChest>();
+		public List<Vector2> magmaCapLocations = new List<Vector2>();
+		public Dictionary<Vector2, string> stones = new Dictionary<Vector2, string>();
+		public Dictionary<Vector2, VolcanoChest> volcanoChests = new();
 		public int monsterCount = 0;
-		public Dictionary<Vector2, string> monsters = new Dictionary<Vector2,string>();
+		public Dictionary<Vector2, string> monsters = new Dictionary<Vector2, string>();
+		public List<Item> items = new List<Item>();
+		public Dictionary<string, int> monsterCounts = new();
 
 		private const int mapWidth = 64;
 		private const int mapHeight = 64;
@@ -66,36 +85,40 @@ namespace SeedFinding.Volcano
 		public Point? endPosition;
 
 		private HashSet<Point> blockedTiles = new HashSet<Point>();
+		private HashSet<Point> buildingTiles = new HashSet<Point>();
+		private HashSet<Point> frontTiles = new HashSet<Point>();
+		private HashSet<Point> dirtAdjacentTiles = new HashSet<Point>();
+		private HashSet<Point> dungeonBackTiles = new HashSet<Point>();
 
-		protected static Dictionary<int, Point> _blobIndexLookup = null;
-		protected static Dictionary<int, Point> _lavaBlobIndexLookup = null;
+		protected Dictionary<int, Point> _blobIndexLookup = null;
+		protected Dictionary<int, Point> _lavaBlobIndexLookup = null;
+
+		private Dictionary<Point, List<Item>> itemsList = new Dictionary<Point, List<Item>>();
+
+		//public Bitmap FloorImage = null;
+
+		public List<SetPiece> SetPieces = new();
 
 		public VolcanoFloor(int level, int layout, int generationSeed)
 		{
 			this.level = level;
 			this.layout = layout;
 
-			Rectangle cloneRect = new Rectangle(new Point(layout % 10 * 64, layout / 10 * 64), new Size(64, 64));
+			if (level == 0)
+			{
+				return;
+			}
 
-			generationRandom = new Random(generationSeed);
+			generationRandom = Utility.CreateRandom(generationSeed);
 			generationRandom.Next();
 
 			flipped = generationRandom.Next(2) == 1;
-
-			Bitmap image = Volcano.LayoutImage.Clone(cloneRect, Volcano.LayoutImage.PixelFormat);
-
-			if (flipped)
+			if (level == 0 || level == 5)
 			{
-				image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+				flipped = false;
 			}
 
-			for (int y = 0; y < 64; y++)
-			{
-				for (int x = 0; x < 64; x++)
-				{
-					pixelMap[x + y * 64] = image.GetPixel(x, y);
-				}
-			}
+			pixelMap = VolcanoFloorPixelMaps.getPixelMap(layout, flipped);
 
 			PlaceGroundTiles();
 			this.ApplyToColor(Color.FromArgb(0, 255, 0), delegate (int x, int y)
@@ -113,6 +136,13 @@ namespace SeedFinding.Volcano
 					//base.warps.Add(new Warp(x, y + 2, VolcanoDungeon.GetLevelName(this.level.Value - 1), x - this.startPosition.Value.X, 0, flipFarmer: false));
 				}
 			});
+
+			this.ApplyToColor(Color.FromArgb(255, 255, 0), delegate (int x, int y)
+			{
+				this.SetPixelMap(x, y, Color.FromArgb(255, 255, 255));
+			});
+
+
 			this.ApplyToColor(Color.FromArgb(255, 0, 0), delegate (int x, int y)
 			{
 				if (!this.endPosition.HasValue)
@@ -186,6 +216,13 @@ namespace SeedFinding.Volcano
 
 			GenerateEntities();
 			// pixelMap. origin is top left.  Rows first.
+
+
+		}
+
+		public void AddToBuildingTile(Point point)
+		{
+			buildingTiles.Add(point);
 		}
 		public virtual void CreateEntrance(Point? position)
 		{
@@ -195,12 +232,21 @@ namespace SeedFinding.Volcano
 				{
 					if (isTileOnMap(position.Value.X + x, position.Value.Y + y))
 					{
+						Point point = new Point(position.Value.X + x, position.Value.Y + y);
 						//base.removeTile(position.Value.X + x, position.Value.Y + y, "Back");
 						//base.removeTile(position.Value.X + x, position.Value.Y + y, "Buildings");
 						//base.removeTile(position.Value.X + x, position.Value.Y + y, "Front");
-						if (blockedTiles.Contains(new Point( position.Value.X + x, position.Value.Y + y)))
+						if (blockedTiles.Contains(point))
 						{
-							blockedTiles.Remove(new Point(position.Value.X + x, position.Value.Y + y));
+							blockedTiles.Remove(point);
+						}
+						if (buildingTiles.Contains(point))
+						{
+							buildingTiles.Remove(point);
+						}
+						if (frontTiles.Contains(point))
+						{
+							frontTiles.Remove(point);
 						}
 					}
 				}
@@ -210,6 +256,7 @@ namespace SeedFinding.Volcano
 			//	this.SetTile(this.frontLayer, position.Value.X - 1, position.Value.Y - 1, VolcanoDungeon.GetTileIndex(13, 16));
 			//}
 			//base.removeTile(position.Value.X, position.Value.Y - 1, "Front");
+			frontTiles.Remove(new Point(position.Value.X, position.Value.Y - 1));
 			//this.SetTile(this.buildingsLayer, position.Value.X - 1, position.Value.Y, VolcanoDungeon.GetTileIndex(13, 17));
 			//this.SetTile(this.buildingsLayer, position.Value.X - 1, position.Value.Y + 1, VolcanoDungeon.GetTileIndex(13, 18));
 			//this.SetTile(this.buildingsLayer, position.Value.X - 1, position.Value.Y + 2, VolcanoDungeon.GetTileIndex(13, 19));
@@ -217,6 +264,9 @@ namespace SeedFinding.Volcano
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y));
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y + 1));
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y + 2));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y + 1));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y + 2));
 			//if (base.hasTileAt(position.Value.X + 1, position.Value.Y - 1, "Front"))
 			//{
 			//	this.SetTile(this.frontLayer, position.Value.X + 1, position.Value.Y - 1, VolcanoDungeon.GetTileIndex(15, 16));
@@ -227,15 +277,22 @@ namespace SeedFinding.Volcano
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y + 1));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y + 2));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y + 1));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y + 2));
 			//this.SetTile(this.backLayer, position.Value.X, position.Value.Y, VolcanoDungeon.GetTileIndex(14, 17));
 			//this.SetTile(this.backLayer, position.Value.X, position.Value.Y + 1, VolcanoDungeon.GetTileIndex(14, 18));
 			//this.SetTile(this.frontLayer, position.Value.X, position.Value.Y + 2, VolcanoDungeon.GetTileIndex(14, 19));
 			//this.SetTile(this.buildingsLayer, position.Value.X - 1, position.Value.Y + 3, VolcanoDungeon.GetTileIndex(12, 4));
 			//this.SetTile(this.buildingsLayer, position.Value.X, position.Value.Y + 3, VolcanoDungeon.GetTileIndex(12, 4));
 			//this.SetTile(this.buildingsLayer, position.Value.X + 1, position.Value.Y + 3, VolcanoDungeon.GetTileIndex(12, 4));
+			frontTiles.Add(new Point(position.Value.X, position.Value.Y + 2));
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y + 3));
 			blockedTiles.Add(new Point(position.Value.X, position.Value.Y + 3));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y + 3));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y + 3));
+			AddToBuildingTile(new Point(position.Value.X, position.Value.Y + 3));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y + 3));
 		}
 
 		private void CreateExit(Point? position, bool draw_stairs = true)
@@ -256,6 +313,14 @@ namespace SeedFinding.Volcano
 						{
 							blockedTiles.Remove(new Point(position.Value.X + x, position.Value.Y + y));
 						}
+						if (buildingTiles.Contains(new Point(position.Value.X + x, position.Value.Y + y)))
+						{
+							buildingTiles.Remove(new Point(position.Value.X + x, position.Value.Y + y));
+						}
+						if (frontTiles.Contains(new Point(position.Value.X + x, position.Value.Y + y)))
+						{
+							frontTiles.Remove(new Point(position.Value.X + x, position.Value.Y + y));
+						}
 					}
 				}
 			}
@@ -267,9 +332,16 @@ namespace SeedFinding.Volcano
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y - 1));
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y - 2));
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y - 3));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y - 1));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y - 2));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y - 3));
 			//this.SetTile(this.alwaysFrontLayer, position.Value.X - 1, position.Value.Y - 4, VolcanoDungeon.GetTileIndex(12, 4));
 			//this.SetTile(this.alwaysFrontLayer, position.Value.X, position.Value.Y - 4, VolcanoDungeon.GetTileIndex(12, 4));
 			//this.SetTile(this.alwaysFrontLayer, position.Value.X + 1, position.Value.Y - 4, VolcanoDungeon.GetTileIndex(12, 4));
+			frontTiles.Add(new Point(position.Value.X - 1, position.Value.Y - 4));
+			frontTiles.Add(new Point(position.Value.X, position.Value.Y - 4));
+			frontTiles.Add(new Point(position.Value.X + 1, position.Value.Y - 4));
 			//this.SetTile(this.buildingsLayer, position.Value.X, position.Value.Y - 3, VolcanoDungeon.GetTileIndex(10, 16));
 			//this.SetTile(this.buildingsLayer, position.Value.X + 1, position.Value.Y, VolcanoDungeon.GetTileIndex(11, 19));
 			//this.SetTile(this.buildingsLayer, position.Value.X + 1, position.Value.Y - 1, VolcanoDungeon.GetTileIndex(11, 18));
@@ -280,6 +352,11 @@ namespace SeedFinding.Volcano
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y - 1));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y - 2));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y - 3));
+			AddToBuildingTile(new Point(position.Value.X, position.Value.Y - 3));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y - 1));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y - 2));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y - 3));
 			//if (draw_stairs)
 			//{
 			//	this.SetTile(this.backLayer, position.Value.X, position.Value.Y, VolcanoDungeon.GetTileIndex(12, 19));
@@ -293,6 +370,9 @@ namespace SeedFinding.Volcano
 			blockedTiles.Add(new Point(position.Value.X - 1, position.Value.Y - 4));
 			blockedTiles.Add(new Point(position.Value.X, position.Value.Y - 4));
 			blockedTiles.Add(new Point(position.Value.X + 1, position.Value.Y - 4));
+			AddToBuildingTile(new Point(position.Value.X - 1, position.Value.Y - 4));
+			AddToBuildingTile(new Point(position.Value.X, position.Value.Y - 4));
+			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y - 4));
 		}
 
 
@@ -332,39 +412,39 @@ namespace SeedFinding.Volcano
 
 		public Dictionary<int, Point> GetBlobLookup()
 		{
-			if (VolcanoFloor._blobIndexLookup == null)
+			if (_blobIndexLookup == null)
 			{
-				VolcanoFloor._blobIndexLookup = new Dictionary<int, Point>();
-				VolcanoFloor._blobIndexLookup[0] = new Point(0, 0);
-				VolcanoFloor._blobIndexLookup[6] = new Point(1, 0);
-				VolcanoFloor._blobIndexLookup[14] = new Point(2, 0);
-				VolcanoFloor._blobIndexLookup[10] = new Point(3, 0);
-				VolcanoFloor._blobIndexLookup[7] = new Point(1, 1);
-				VolcanoFloor._blobIndexLookup[11] = new Point(3, 1);
-				VolcanoFloor._blobIndexLookup[5] = new Point(1, 2);
-				VolcanoFloor._blobIndexLookup[13] = new Point(2, 2);
-				VolcanoFloor._blobIndexLookup[9] = new Point(3, 2);
-				VolcanoFloor._blobIndexLookup[2] = new Point(0, 1);
-				VolcanoFloor._blobIndexLookup[3] = new Point(0, 2);
-				VolcanoFloor._blobIndexLookup[1] = new Point(0, 3);
-				VolcanoFloor._blobIndexLookup[4] = new Point(1, 3);
-				VolcanoFloor._blobIndexLookup[12] = new Point(2, 3);
-				VolcanoFloor._blobIndexLookup[8] = new Point(3, 3);
-				VolcanoFloor._blobIndexLookup[15] = new Point(2, 1);
+				_blobIndexLookup = new Dictionary<int, Point>();
+				_blobIndexLookup[0] = new Point(0, 0);
+				_blobIndexLookup[6] = new Point(1, 0);
+				_blobIndexLookup[14] = new Point(2, 0);
+				_blobIndexLookup[10] = new Point(3, 0);
+				_blobIndexLookup[7] = new Point(1, 1);
+				_blobIndexLookup[11] = new Point(3, 1);
+				_blobIndexLookup[5] = new Point(1, 2);
+				_blobIndexLookup[13] = new Point(2, 2);
+				_blobIndexLookup[9] = new Point(3, 2);
+				_blobIndexLookup[2] = new Point(0, 1);
+				_blobIndexLookup[3] = new Point(0, 2);
+				_blobIndexLookup[1] = new Point(0, 3);
+				_blobIndexLookup[4] = new Point(1, 3);
+				_blobIndexLookup[12] = new Point(2, 3);
+				_blobIndexLookup[8] = new Point(3, 3);
+				_blobIndexLookup[15] = new Point(2, 1);
 			}
-			return VolcanoFloor._blobIndexLookup;
+			return _blobIndexLookup;
 		}
 		public Dictionary<int, Point> GetLavaBlobLookup()
 		{
-			if (VolcanoFloor._lavaBlobIndexLookup == null)
+			if (_lavaBlobIndexLookup == null)
 			{
-				VolcanoFloor._lavaBlobIndexLookup = new Dictionary<int, Point>(this.GetBlobLookup());
-				VolcanoFloor._lavaBlobIndexLookup[63] = new Point(2, 1);
-				VolcanoFloor._lavaBlobIndexLookup[47] = new Point(4, 3);
-				VolcanoFloor._lavaBlobIndexLookup[31] = new Point(4, 2);
-				VolcanoFloor._lavaBlobIndexLookup[15] = new Point(4, 1);
+				_lavaBlobIndexLookup = new Dictionary<int, Point>(this.GetBlobLookup());
+				_lavaBlobIndexLookup[63] = new Point(2, 1);
+				_lavaBlobIndexLookup[47] = new Point(4, 3);
+				_lavaBlobIndexLookup[31] = new Point(4, 2);
+				_lavaBlobIndexLookup[15] = new Point(4, 1);
 			}
-			return VolcanoFloor._lavaBlobIndexLookup;
+			return _lavaBlobIndexLookup;
 		}
 
 		public virtual void GenerateBlobs(Color match, int tile_x, int tile_y, bool fill_center = true, bool is_lava_pool = false)
@@ -389,6 +469,7 @@ namespace SeedFinding.Volcano
 						{
 							//this.SetTile(this.buildingsLayer, x, y, VolcanoDungeon.GetTileIndex(tile_x + offset.X, tile_y + offset.Y));
 							blockedTiles.Add(new Point(x, y));
+							AddToBuildingTile(new Point(x, y));
 						}
 					}
 				}
@@ -457,9 +538,10 @@ namespace SeedFinding.Volcano
 			return false;
 		}
 
+
 		public virtual void GenerateEntities()
 		{
-			/*List<Point> spawn_points = new List<Point>();
+			List<Point> spawn_points = new List<Point>();
 			this.ApplyToColor(Color.FromArgb(0, 255, 255), delegate (int x, int y)
 			{
 				spawn_points.Add(new Point(x, y));
@@ -504,21 +586,25 @@ namespace SeedFinding.Volcano
 					{
 						p.X += motion.X;
 						p.Y += motion.Y;
-						if (GetPixel(p.X, p.Y, Color.Black) == Color.White)
-						//if (this.isTileClearForMineObjects(new Vector2(p.X, p.Y)))
-						{
-							Vector2 objectPos = new Vector2(p.X, p.Y);
-							if (this.isMushroomLevel())
+						Vector2 objectPos = new Vector2(p.X, p.Y);
+						if (GetPixel(p.X, p.Y, Color.Black).ToArgb() == Color.White.ToArgb())
+							//if (this.isTileClearForMineObjects(new Vector2(p.X, p.Y)))
+							if (!volcanoChests.ContainsKey(objectPos) && !frontTiles.Contains(p))
 							{
-								//base.terrainFeatures.Add(objectPos, new CosmeticPlant(6 + this.generationRandom.Next(3)));
+								if (this.isMushroomLevel())
+								{
+									//base.terrainFeatures.Add(objectPos, new CosmeticPlant(6 + this.generationRandom.Next(3)));
+									blockedTiles.Add(p);
+									this.generationRandom.Next(3);
+								}
+								else
+								{
+									barrelLocations.Add(objectPos);
+									blockedTiles.Add(p);
+									//base.objects.Add(objectPos, BreakableContainer.GetBarrelForVolcanoDungeon(objectPos));
+								}
+								break;
 							}
-							else
-							{
-								barrelLocations.Add(objectPos);
-								//base.objects.Add(objectPos, BreakableContainer.GetBarrelForVolcanoDungeon(objectPos));
-							}
-							break;
-						}
 					}
 				}
 			}
@@ -534,48 +620,63 @@ namespace SeedFinding.Volcano
 						{
 							continue;
 						}
-						if (GetPixel(j,k,Color.Black) != Color.Black && blockedTiles.Contains(point))
+						if (GetPixel(j, k, Color.Black).ToArgb() != Color.Black.ToArgb())
 						{
-							if (generationRandom.NextDouble() < monsterChance)
-						//if (this.CanItemBePlacedHere(objectPos2) && this.generationRandom.NextDouble() < monsterChance)
+							if (!blockedTiles.Contains(point) && generationRandom.NextDouble() < monsterChance)
+							//if (this.CanItemBePlacedHere(objectPos2) && this.generationRandom.NextDouble() < monsterChance)
 							{
 								//if (base.getTileIndexAt((int)objectPos2.X, (int)objectPos2.Y, "Back", "dungeon") == 25)
 								if (dirtTiles.Contains(point))
 								{
 									if (!this.isMushroomLevel())
 									{
-										monsters.Add(objectPos2, "Duggy");
+										if (!monsters.ContainsKey(objectPos2))
+										{
+											monsters.Add(objectPos2, "(O)MagmaDuggy");
+											IncrememntMonsterCount("(O)MagmaDuggy");
+										}
 										//base.characters.Add(new Duggy(objectPos2 * 64f, magmaDuggy: true));
 									}
 								}
 								else if (this.isMushroomLevel())
 								{
 									//base.characters.Add(new RockCrab(objectPos2 * 64f, "False Magma Cap"));
-									monsters.Add(objectPos2, "False Magma Cap");
+									monsters.Add(objectPos2, "(O)False Magma Cap");
+									IncrememntMonsterCount("(O)False Magma Cap");
 								}
 								else
 								{
 									//base.characters.Add(new Bat(objectPos2 * 64f, (this.level.Value > 5 && this.generationRandom.NextBool()) ? (-556) : (-555)));
-									string name = "Magma Sprite";
+									string name = "(O)Magma Sprite";
 									if (level > 5 && this.generationRandom.NextBool())
 									{
-										name = "Magam Sparker";
+										name = "(O)Magma Sparker";
 									}
+									
 									monsters.Add(objectPos2, name);
+									IncrememntMonsterCount(name);
 								}
 							}
 							else
 							{
+								if (volcanoChests.ContainsKey(objectPos2) || dungeonBackTiles.Contains(point) || dirtAdjacentTiles.Contains(point) || blockedTiles.Contains(point) || dirtTiles.Contains(point) || barrelLocations.Contains(objectPos2) || teethLocations.Contains(objectPos2) || frontTiles.Contains(point))
+								{
+									continue;
+								}
 								//if (!this.isTileClearForMineObjects(objectPos2, ignoreRuins: true))
 								//{
 								//	continue;
 								//}
+								if (this.GetPixel((int)point.X, (int)point.Y, Color.Black).ToArgb() == Color.FromArgb(128, 128, 128).ToArgb())
+								{
+									continue;
+								}
 								double chance = stoneChance;
 								if (chance > 0.0)
 								{
 									foreach (Vector2 v in Utility.getAdjacentTileLocations(objectPos2))
 									{
-										if (base.objects.ContainsKey(v))
+										if (teethLocations.Contains(v) || barrelLocations.Contains(v) || stones.ContainsKey(v))
 										{
 											chance += 0.1;
 										}
@@ -585,19 +686,12 @@ namespace SeedFinding.Volcano
 								bool basicStone = stoneIndex >= 845 && stoneIndex <= 847;
 								if (chance > 0.0 && (!basicStone || this.generationRandom.NextDouble() < chance))
 								{
-									Object stone = this.createStone(stoneIndex, objectPos2);
-									if (stone != null)
-									{
-										base.Objects.Add(objectPos2, stone);
-									}
+									this.createStone(stoneIndex, objectPos2);
 								}
 								else if (this.generationRandom.NextDouble() < itemChance)
 								{
-									base.Objects.Add(objectPos2, new Object("851", 1)
-									{
-										IsSpawnedObject = true,
-										CanBeGrabbed = true
-									});
+									magmaCapLocations.Add(objectPos2);
+									blockedTiles.Add(point);
 								}
 							}
 						}
@@ -608,6 +702,8 @@ namespace SeedFinding.Volcano
 					this.tryToAddOreClumps();
 				}
 			}
+			// TODO below code.  This is after sprite/sparkers so don't care right now.
+			/*
 			for (int l = 0; l < 7; l++)
 			{
 				if (spawn_points.Count == 0)
@@ -687,12 +783,190 @@ namespace SeedFinding.Volcano
 			}*/
 		}
 
+		public void tryToAddOreClumps()
+		{
+			if (!(this.generationRandom.NextDouble() < 0.55 + Volcano.dailyLuck))
+			{
+				return;
+			}
+			// getRandomTile uses Game1.random
+			/*
+			Vector2 endPoint = base.getRandomTile();
+			Point point = new Point((int)endPoint.X, (int)endPoint.Y);
+			for (int tries = 0; tries < 1 || this.generationRandom.NextDouble() < 0.25 + Game1.player.DailyLuck; tries++)
+			{
+				if (this.CanItemBePlacedHere(endPoint) && /*this.isTileOnClearAndSolidGround(endPoint) && */ /*!dirtTiles.Contains(point))
+				{
+					Utility.recursiveObjectPlacement(new Object(this.generationRandom.Next(843, 845).ToString(), 1)
+					{
+						MinutesUntilReady = 12
+					}, (int)endPoint.X, (int)endPoint.Y, 0.949999988079071, 0.30000001192092896, this, "Dirt", 0, 0.05000000074505806);
+				}
+				endPoint = base.getRandomTile();
+			}*/
+		}
+
+		private void createStone(int stone, Vector2 tile)
+		{
+			string whichStone = this.chooseStoneTypeIndexOnly(tile).ToString() ?? "";
+			int stoneHealth = 1;
+			switch (whichStone)
+			{
+				case "1095382":
+					whichStone = "VolcanoCoalNode0";
+					stoneHealth = 10;
+					break;
+				case "845":
+				case "846":
+				case "847":
+					stoneHealth = 6;
+					break;
+				case "843":
+				case "844":
+					stoneHealth = 12;
+					break;
+				case "765":
+					stoneHealth = 16;
+					break;
+				case "764":
+					whichStone = "VolcanoGoldNode";
+					stoneHealth = 8;
+					break;
+				case "290":
+					stoneHealth = 8;
+					break;
+				case "751":
+					stoneHealth = 8;
+					break;
+				case "819":
+					stoneHealth = 8;
+					break;
+			}
+
+			stones.Add(tile, "(O)" + whichStone);
+			blockedTiles.Add(new Point((int)tile.X, (int)tile.Y));
+		}
+
+		private int chooseStoneTypeIndexOnly(Vector2 tile)
+		{
+			int whichStone = this.generationRandom.Next(845, 848);
+			float levelMod = 1f + (float)this.level / 7f;
+			float masterMultiplier = 0.8f;
+			float luckMultiplier = 1f + (float)Volcano.luckLevel * 0.035f + (float)Volcano.dailyLuck / 2f;
+			double chance = 0.008 * (double)levelMod * (double)masterMultiplier * (double)luckMultiplier;
+			foreach (Vector2 v in Utility.getAdjacentTileLocations(tile))
+			{
+				if (stones.TryGetValue(v, out var obj) && (obj == "(O)843" || obj == "(O)844"))
+				{
+					chance += 0.15;
+				}
+			}
+			if (this.generationRandom.NextDouble() < chance)
+			{
+				whichStone = this.generationRandom.Next(843, 845);
+			}
+			else
+			{
+				chance = 0.0025 * (double)levelMod * (double)masterMultiplier * (double)luckMultiplier;
+				foreach (Vector2 v2 in Utility.getAdjacentTileLocations(tile))
+				{
+					if (stones.TryGetValue(v2, out var obj2) && obj2 == "(O)765")
+					{
+						chance += 0.1;
+					}
+				}
+				if (this.generationRandom.NextDouble() < chance)
+				{
+					whichStone = 765;
+				}
+				else
+				{
+					chance = 0.01 * (double)levelMod * (double)masterMultiplier;
+					foreach (Vector2 v3 in Utility.getAdjacentTileLocations(tile))
+					{
+						if (stones.TryGetValue(v3, out var obj3) && obj3 == "(O)VolcanoGoldNode")
+						{
+							chance += 0.2;
+						}
+					}
+					if (this.generationRandom.NextDouble() < chance)
+					{
+						whichStone = 764;
+					}
+					else
+					{
+						chance = 0.012 * (double)levelMod * (double)masterMultiplier;
+						foreach (Vector2 v4 in Utility.getAdjacentTileLocations(tile))
+						{
+							if (stones.TryGetValue(v4, out var obj4) && obj4.StartsWith("(O)VolcanoCoalNode"))
+							{
+								chance += 0.2;
+							}
+						}
+						if (this.generationRandom.NextDouble() < chance)
+						{
+							whichStone = 1095382;
+						}
+						else
+						{
+							chance = 0.015 * (double)levelMod * (double)masterMultiplier;
+							foreach (Vector2 v5 in Utility.getAdjacentTileLocations(tile))
+							{
+								if (stones.TryGetValue(v5, out var obj5) && obj5 == "(O)850")
+								{
+									chance += 0.25;
+								}
+							}
+							if (this.generationRandom.NextDouble() < chance)
+							{
+								whichStone = 850;
+							}
+							else
+							{
+								chance = 0.018 * (double)levelMod * (double)masterMultiplier;
+								foreach (Vector2 v6 in Utility.getAdjacentTileLocations(tile))
+								{
+									if (stones.TryGetValue(v6, out var obj6) && obj6 == "(O)849")
+									{
+										chance += 0.25;
+									}
+								}
+								if (this.generationRandom.NextDouble() < chance)
+								{
+									whichStone = 849;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (this.generationRandom.NextDouble() < 0.0005)
+			{
+				whichStone = 819;
+			}
+			if (this.generationRandom.NextDouble() < 0.0007)
+			{
+				whichStone = 44;
+			}
+			if (this.level > 2 && this.generationRandom.NextDouble() < 0.0002)
+			{
+				whichStone = 46;
+			}
+			return whichStone;
+		}
+
 		public virtual void CreateDwarfGate(int gate_index, Point tile_position)
 		{
 			blockedTiles.Add(new Point(tile_position.X - 1, tile_position.Y + 1));
 			blockedTiles.Add(new Point(tile_position.X + 1, tile_position.Y + 1));
 			blockedTiles.Add(new Point(tile_position.X - 1, tile_position.Y));
 			blockedTiles.Add(new Point(tile_position.X + 1, tile_position.Y));
+			AddToBuildingTile(new Point(tile_position.X - 1, tile_position.Y + 1));
+			AddToBuildingTile(new Point(tile_position.X + 1, tile_position.Y + 1));
+			AddToBuildingTile(new Point(tile_position.X - 1, tile_position.Y));
+			AddToBuildingTile(new Point(tile_position.X + 1, tile_position.Y));
+			frontTiles.Add(new Point(tile_position.X - 1, tile_position.Y - 1));
+			frontTiles.Add(new Point(tile_position.X + 1, tile_position.Y - 1));
 			/*this.SetTile(this.backLayer, tile_position.X, tile_position.Y + 1, VolcanoDungeon.GetTileIndex(3, 34));
 			this.SetTile(this.buildingsLayer, tile_position.X - 1, tile_position.Y + 1, VolcanoDungeon.GetTileIndex(2, 34));
 			this.SetTile(this.buildingsLayer, tile_position.X + 1, tile_position.Y + 1, VolcanoDungeon.GetTileIndex(4, 34));
@@ -731,7 +1005,7 @@ namespace SeedFinding.Volcano
 		}
 
 		public virtual void ErodeInvalidDirtTiles()
-		{/*
+		{
 			Point[] neighboring_tiles = new Point[8]
 			{
 				new Point(-1, -1),
@@ -756,7 +1030,7 @@ namespace SeedFinding.Volcano
 						break;
 					}
 				}
-				if (!fail && base.hasTileAt(dirt_tile, "Buildings"))
+				if (!fail && buildingTiles.Contains(dirt_tile))// base.hasTileAt(dirt_tile, "Buildings"))
 				{
 					fail = true;
 				}
@@ -797,7 +1071,76 @@ namespace SeedFinding.Volcano
 			foreach (Point remove in dirt_to_remove)
 			{
 				this.dirtTiles.Remove(remove);
-			}*/
+			}
+		}
+
+		public Point? GetDirtNeighborTile(int tile_x, int tile_y)
+		{
+			if (this.GetPixel(tile_x, tile_y, Color.Black).ToArgb() != Color.White.ToArgb())
+			{
+				return null;
+			}
+			if (buildingTiles.Contains(new Point(tile_x, tile_y)))
+			{
+				return null;
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x, tile_y - 1)) && this.dirtTiles.Contains(new Point(tile_x, tile_y + 1)))
+			{
+				return null;
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x - 1, tile_y)) && this.dirtTiles.Contains(new Point(tile_x + 1, tile_y)))
+			{
+				return null;
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x - 1, tile_y)) && !this.dirtTiles.Contains(new Point(tile_x + 1, tile_y)))
+			{
+				if (this.dirtTiles.Contains(new Point(tile_x, tile_y - 1)))
+				{
+					return new Point(3, 3);
+				}
+				if (this.dirtTiles.Contains(new Point(tile_x, tile_y + 1)))
+				{
+					return new Point(3, 1);
+				}
+				return new Point(2, 1);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x + 1, tile_y)) && !this.dirtTiles.Contains(new Point(tile_x - 1, tile_y)))
+			{
+				if (this.dirtTiles.Contains(new Point(tile_x, tile_y - 1)))
+				{
+					return new Point(3, 2);
+				}
+				if (this.dirtTiles.Contains(new Point(tile_x, tile_y + 1)))
+				{
+					return new Point(3, 0);
+				}
+				return new Point(0, 1);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x, tile_y - 1)) && !this.dirtTiles.Contains(new Point(tile_x, tile_y + 1)))
+			{
+				return new Point(1, 2);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x, tile_y + 1)) && !this.dirtTiles.Contains(new Point(tile_x, tile_y - 1)))
+			{
+				return new Point(1, 0);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x - 1, tile_y - 1)))
+			{
+				return new Point(2, 2);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x + 1, tile_y - 1)))
+			{
+				return new Point(0, 2);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x - 1, tile_y + 1)))
+			{
+				return new Point(0, 2);
+			}
+			if (this.dirtTiles.Contains(new Point(tile_x + 1, tile_y + 1)))
+			{
+				return new Point(2, 2);
+			}
+			return null;
 		}
 
 		public virtual void GenerateDirtTiles()
@@ -866,9 +1209,13 @@ namespace SeedFinding.Volcano
 			};
 			foreach (Point point in this.dirtTiles)
 			{
+				//blockedTiles.Add(point);
+
 				//this.SetTile(this.backLayer, point.X, point.Y, VolcanoDungeon.GetTileIndex(9, 1));
 				if (this.generationRandom.NextDouble() < 0.015)
 				{
+					monsters.Add(new Vector2(point.X, point.Y), "(O)MagmaDuggy");
+					IncrememntMonsterCount("(O)MagmaDuggy");
 					//base.characters.Add(new Duggy(Utility.PointToVector2(point) * 64f, magmaDuggy: true));
 				}
 				Point[] array = neighboring_tiles;
@@ -884,6 +1231,7 @@ namespace SeedFinding.Volcano
 						//{
 						//	this.SetTile(this.backLayer, neighbor.X, neighbor.Y, VolcanoDungeon.GetTileIndex(8 + neighbor_tile_offset.Value.X, neighbor_tile_offset.Value.Y));
 						//}
+						dirtAdjacentTiles.Add(neighbor);
 					}
 				}
 			}
@@ -894,7 +1242,9 @@ namespace SeedFinding.Volcano
 			int index = this.generationRandom.Next(0, 4);
 			//this.SetTile(this.frontLayer, x, y - 1, VolcanoDungeon.GetTileIndex(index, 2));
 			//this.SetTile(this.buildingsLayer, x, y, VolcanoDungeon.GetTileIndex(index, 3));
+			frontTiles.Add(new Point(x, y - 1));
 			blockedTiles.Add(new Point(x, y));
+			AddToBuildingTile(new Point(x, y));
 		}
 
 		public int GetPixelClearance(int x, int y, int wall_height, Color match)
@@ -968,15 +1318,7 @@ namespace SeedFinding.Volcano
 					}
 					for (int current_y = 0; current_y <= VolcanoFloor.mapHeight; current_y++)
 					{
-						Color result = this.GetPixel(x, current_y, match);
-						if (result == match)
-						{
-							if (false)
-							{
-
-							}
-						}
-						if (result.ToArgb() != match.ToArgb() || current_y >= VolcanoFloor.mapHeight)
+						if (this.GetPixel(x, current_y, match).ToArgb() != match.ToArgb() || current_y >= VolcanoFloor.mapHeight)
 						{
 							int current_height = 0;
 							int wall_variant_index = 0;
@@ -1031,12 +1373,14 @@ namespace SeedFinding.Volcano
 												{
 													//this.SetTile(this.buildingsLayer, x, curr_y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants + wall_variant_index, source_y + 1 + random_wall_variants + wall_height - current_height - 1));
 													blockedTiles.Add(new Point(x, curr_y));
+													AddToBuildingTile(new Point(x, curr_y));
 												}
 											}
 											else
 											{
 												//this.SetTile(this.buildingsLayer, x, curr_y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y));
 												blockedTiles.Add(new Point(x, curr_y));
+												AddToBuildingTile(new Point(x, curr_y));
 											}
 											break;
 									}
@@ -1075,29 +1419,36 @@ namespace SeedFinding.Volcano
 								corner_tiles.Add(new Point(j, y));
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y));
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 							else
 							{
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y + 1));
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 						}
 						else
 						{
 							//Layer target_layer = this.buildingsLayer;
+							HashSet<Point> target = buildingTiles;
 							if (right_height >= 0)
 							{
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants, source_y + 1 + random_wall_variants + wall_height - right_height));
 								//target_layer = this.frontLayer;
+								target = frontTiles;
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 							if (height > wall_height)
 							{
 								//this.SetTile(target_layer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3 - 1, source_y + 1 + index));
+								target.Add(new Point(j, y));
 							}
 							else
 							{
 								//this.SetTile(target_layer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 2 + index, source_y + 1 + random_wall_variants * 2 + 1 - height - 1));
+								target.Add(new Point(j, y));
 							}
 							if (wall_height > 0 && y + 1 < VolcanoFloor.mapHeight && right_height == -1 && this.GetHeight(j + 1, y + 1, wall_height) >= 0 && this.GetHeight(j, y + 1, wall_height) >= 0)
 							{
@@ -1106,10 +1457,12 @@ namespace SeedFinding.Volcano
 									corner_tiles.Add(new Point(j, y));
 									//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y));
 									blockedTiles.Add(new Point(j, y));
+									AddToBuildingTile(new Point(j, y));
 								}
 								else
 								{
 									//this.SetTile(this.frontLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y + 2));
+									frontTiles.Add(new Point(j, y));
 								}
 							}
 						}
@@ -1123,29 +1476,36 @@ namespace SeedFinding.Volcano
 								corner_tiles.Add(new Point(j, y));
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y));
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 							else
 							{
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3 + 1, source_y + 1));
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 						}
 						else
 						{
 							//Layer target_layer2 = this.buildingsLayer;
+							HashSet<Point> target = buildingTiles;
 							if (left_height >= 0)
 							{
 								//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants, source_y + 1 + random_wall_variants + wall_height - left_height));
 								//target_layer2 = this.frontLayer;
+								target = frontTiles;
 								blockedTiles.Add(new Point(j, y));
+								AddToBuildingTile(new Point(j, y));
 							}
 							if (height > wall_height)
 							{
 								//this.SetTile(target_layer2, j, y, VolcanoDungeon.GetTileIndex(source_x, source_y + 1 + index));
+								target.Add(new Point(j, y));
 							}
 							else
 							{
 								//this.SetTile(target_layer2, j, y, VolcanoDungeon.GetTileIndex(source_x + index, source_y + 1 + random_wall_variants * 2 + 1 - height - 1));
+								target.Add(new Point(j, y));
 							}
 							if (wall_height > 0 && y + 1 < VolcanoFloor.mapHeight && left_height == -1 && this.GetHeight(j - 1, y + 1, wall_height) >= 0 && this.GetHeight(j, y + 1, wall_height) >= 0)
 							{
@@ -1154,10 +1514,12 @@ namespace SeedFinding.Volcano
 									corner_tiles.Add(new Point(j, y));
 									//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y));
 									blockedTiles.Add(new Point(j, y));
+									AddToBuildingTile(new Point(j, y));
 								}
 								else
 								{
 									//this.SetTile(this.frontLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3 + 1, source_y + 2));
+									frontTiles.Add(new Point(j, y));
 								}
 							}
 						}
@@ -1171,30 +1533,36 @@ namespace SeedFinding.Volcano
 						if (right_height == -1)
 						{
 							//this.SetTile(this.frontLayer, j, y - 1, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 2 + index, source_y));
+							frontTiles.Add(new Point(j, y - 1));
 						}
 						else if (left_height == -1)
 						{
 							//this.SetTile(this.frontLayer, j, y - 1, VolcanoDungeon.GetTileIndex(source_x + index, source_y));
+							frontTiles.Add(new Point(j, y - 1));
 						}
 						else
 						{
 							//this.SetTile(this.frontLayer, j, y - 1, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants + index, source_y));
+							frontTiles.Add(new Point(j, y - 1));
 						}
 					}
 					else if (right_height == -1)
 					{
 						//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 2 + index, source_y));
 						blockedTiles.Add(new Point(j, y));
+						AddToBuildingTile(new Point(j, y));
 					}
 					else if (left_height == -1)
 					{
 						//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + index, source_y));
 						blockedTiles.Add(new Point(j, y));
+						AddToBuildingTile(new Point(j, y));
 					}
 					else
 					{
 						//this.SetTile(this.buildingsLayer, j, y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants + index, source_y));
 						blockedTiles.Add(new Point(j, y));
+						AddToBuildingTile(new Point(j, y));
 					}
 				}
 			}
@@ -1205,18 +1573,22 @@ namespace SeedFinding.Volcano
 					if (this.GetHeight(corner_tile.X - 1, corner_tile.Y, wall_height) == -1)
 					{
 						//this.SetTile(this.frontLayer, corner_tile.X, corner_tile.Y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3 + 1, source_y + 2));
+						frontTiles.Add(new Point(corner_tile.X, corner_tile.Y));
 					}
 					else if (this.GetHeight(corner_tile.X + 1, corner_tile.Y, wall_height) == -1)
 					{
 						//this.SetTile(this.frontLayer, corner_tile.X, corner_tile.Y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y + 2));
+						frontTiles.Add(new Point(corner_tile.X, corner_tile.Y));
 					}
 					if (this.GetHeight(corner_tile.X - 1, corner_tile.Y, wall_height) == wall_height)
 					{
 						//this.SetTile(this.alwaysFrontLayer, corner_tile.X, corner_tile.Y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3 + 1, source_y + 1));
+						frontTiles.Add(new Point(corner_tile.X, corner_tile.Y));
 					}
 					else if (this.GetHeight(corner_tile.X + 1, corner_tile.Y, wall_height) == wall_height)
 					{
 						//this.SetTile(this.alwaysFrontLayer, corner_tile.X, corner_tile.Y, VolcanoDungeon.GetTileIndex(source_x + random_wall_variants * 3, source_y + 1));
+						frontTiles.Add(new Point(corner_tile.X, corner_tile.Y));
 					}
 				}
 			}
@@ -1435,7 +1807,7 @@ namespace SeedFinding.Volcano
 				Item upgradedItem = ChestItem(chest_random, true);
 
 				VolcanoChest chest = new VolcanoChest(isUpgraded, luckRequired, basicItem, upgradedItem, new Vector2(tile_x, tile_y));
-				volcanoChests.Add(chest);
+				volcanoChests.Add(chest.location, chest);
 
 				/*if (chest_random.NextDouble() < (double)((this.level == 9) ? (0.5f + extraRare_luckboost) : (0.1f + extraRare_luckboost)))
 				{
@@ -1487,7 +1859,7 @@ namespace SeedFinding.Volcano
 		}
 		private void ApplySetPieces()
 		{
-			for( int i= 0; i< setPieceAreas.Count; i++)
+			for (int i = 0; i < setPieceAreas.Count; i++)
 			{
 				Rectangle rectangle = setPieceAreas[i];
 				int size = 3;
@@ -1507,7 +1879,6 @@ namespace SeedFinding.Volcano
 				{
 					size = 4;
 				}
-
 				Map override_map = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_{size}.json"));
 				int cols = override_map.Layers[0].Width / size;
 				int rows = override_map.Layers[0].Height / size;
@@ -1515,6 +1886,10 @@ namespace SeedFinding.Volcano
 				int selected_row = this.generationRandom.Next(0, rows);
 				Layer paths_layer = override_map.FindLayer("Paths");
 				Layer building_layer = override_map.FindLayer("Buildings");
+				Layer front_layer = override_map.FindLayer("Front");
+				Layer back_layer = override_map.FindLayer("Back");
+
+				SetPieces.Add(new SetPiece(size, new Vector2(selected_col, selected_row), new Vector2(rectangle.Left, rectangle.Top)));
 
 				if (paths_layer == null)
 				{
@@ -1527,13 +1902,22 @@ namespace SeedFinding.Volcano
 						int source_x = selected_col * size + x;
 						int source_y = selected_row * size + y;
 
-						if (building_layer.GetTileIndex(source_x,source_y) != 0)
-						{
-							blockedTiles.Add(new Point(source_x,source_y));
-						}
-
 						int dest_x = rectangle.Left + x;
 						int dest_y = rectangle.Top + y;
+
+						if (y < size && building_layer.GetTileIndex(source_x, source_y) != 0)
+						{
+							blockedTiles.Add(new Point(dest_x, dest_y));
+							AddToBuildingTile(new Point(dest_x, dest_y));
+						}
+						if (y < size && front_layer.GetTileIndex(source_x, source_y) != 0)
+						{
+							frontTiles.Add(new Point(dest_x, dest_y));
+						}
+						if (y < size && back_layer.GetTileIndex(source_x, source_y) != 0)
+						{
+							dungeonBackTiles.Add(new Point(dest_x, dest_y));
+						}
 						if (!paths_layer.IsValidTileLocation(source_x, source_y))
 						{
 							continue;
@@ -1569,12 +1953,12 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(10, 20))
 						{
-							
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(0, 255, 255));
+
+							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 255, 255));
 						}
 						else if (path_index == GetTileIndex(11, 20))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(0, 0, 255));
+							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 0, 255));
 						}
 						else if (path_index == GetTileIndex(12, 20))
 						{
@@ -1582,14 +1966,14 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(13, 20))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(0, 0, 0));
+							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 0, 0));
 						}
 						else if (path_index == GetTileIndex(14, 20) && this.generationRandom.NextBool())
 						{
 							//if (Game1.IsMasterGame)
 							{
-								barrelLocations.Add( new Vector2(dest_x, dest_y) );
-								blockedTiles.Add( new Point(dest_x, dest_y) );
+								barrelLocations.Add(new Vector2(dest_x, dest_y));
+								blockedTiles.Add(new Point(dest_x, dest_y));
 								//base.objects.Add(new Vector2(dest_x, dest_y), BreakableContainer.GetBarrelForVolcanoDungeon(new Vector2(dest_x, dest_y)));
 							}
 						}
@@ -1599,7 +1983,7 @@ namespace SeedFinding.Volcano
 							{
 
 								Vector2 objTile = new Vector2(dest_x, dest_y);
-								teethLocations.Add( objTile );
+								teethLocations.Add(objTile);
 								blockedTiles.Add(new Point(dest_x, dest_y));
 								//base.objects.Add(objTile, new Object("852", 1)
 								//{
@@ -1610,7 +1994,7 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(10, 21))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(0, 128, 255));
+							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 128, 255));
 						}
 					}
 				}
@@ -3119,6 +3503,17 @@ namespace SeedFinding.Volcano
 			}
 			positions.Add(new Point(x, y));
 		}
+
+		public void IncrememntMonsterCount(string monster)
+		{
+			if (!monsterCounts.ContainsKey(monster))
+			{
+				monsterCounts[monster] = 0;
+			}
+			monsterCounts[monster]++;
+		}
+
+		
 	}
 	public class Volcano
 	{
@@ -3248,6 +3643,57 @@ namespace SeedFinding.Volcano
 
 			items.Add(item);
 			return items;
+		}
+		public static int GetSingleLevelSeed(int seed, int level, int lastLayout, bool specialExists = false, double dailyLuck = 0.0, int luckLevel = 0, bool shortcutUnlocked = false)
+		{
+			if (level == 5)
+			{
+				return 31;
+			}
+			if (level == 9)
+			{
+				return 30;
+			}
+
+			Volcano.dailyLuck = dailyLuck;
+			Volcano.luckLevel = luckLevel;
+			List<int> levels = new();
+			float luckMultiplier = 1f + luckLevel * 0.035f + (float)dailyLuck / 2f;
+			
+
+			List<int> valid_layouts = new();
+			for (int i = 1; i < 30; i++)
+			{
+				valid_layouts.Add(i);
+			}
+
+			Random layout_random = new Random(seed);
+			if (level > 1 && layout_random.NextDouble() < 0.5 * luckMultiplier)
+			{
+				if (!specialExists)
+				{
+					for (int k = 32; k < 38; k++)
+					{
+						valid_layouts.Add(k);
+					}
+				}
+			}
+
+			if (shortcutUnlocked && layout_random.NextDouble() < 0.75)
+			{
+				for (int l = 38; l < 58; l++)
+				{
+					valid_layouts.Add(l);
+				}
+			}
+
+			if (lastLayout != 0)
+			{
+				valid_layouts.Remove(lastLayout);
+			}
+
+			return valid_layouts[layout_random.Next(valid_layouts.Count)];
+
 		}
 		public static List<VolcanoFloor> GetLevels16(uint gameId, int day, double dailyLuck = 0.0, int luckLevel = 0, bool shortcutUnlocked = false, bool crackedGoldenCoconut = false, bool hasMonsterMuskActive = false)
 		{

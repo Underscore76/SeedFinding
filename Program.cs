@@ -1,21 +1,23 @@
+using Newtonsoft.Json;
+using SeedFinding.Bundles;
+using SeedFinding.Cart1_6;
+using SeedFinding.Locations;
+using SeedFinding.Locations1_6;
+using SeedFinding.Trash1_6;
+using SeedFinding.Volcano;
+using StardewValley;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Resources;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Diagnostics;
-using System.IO;
-
-using SeedFinding.Cart1_6;
-using SeedFinding.Bundles;
-using SeedFinding.Locations;
-using SeedFinding.Trash1_6;
-using Newtonsoft.Json;
 using static SeedFinding.ObjectInfo;
-using System.Resources;
-using StardewValley;
-using SeedFinding.Locations1_6;
 
 namespace SeedFinding
 {
@@ -46,6 +48,8 @@ namespace SeedFinding
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
 			{
+				//VolcanoFloorPixelMaps.generatePixelMap();
+				//return;
 				/*Game1.UseLegacyRandom = false;
 				Console.WriteLine(Utility.CreateRandomSeed(5, 2/2));
 				Console.WriteLine(Utility.CreateRandomSeed(5, 3/2));
@@ -67,9 +71,11 @@ namespace SeedFinding
 				//MAXPERFECTION.rainyDialog();
 				//MAXPERFECTION.findPanning();
 				//var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
-				Locations1_6.Location woods = null;
 				//DynamicCCRemixSeeding.ValidSeedDay8(589831, ref woods, false);
-				DynamicCCRemixSeeding.Search(0, Int32.MaxValue, blockSize, out List<int> validSeeds);
+				Volcano.Volcano.monsterMuskActive = true;
+				Volcano.Volcano.luckLevel = 6; ;
+				Volcano.Volcano.dailyLuck = 0.1;
+				VolcanoSearch.Search(1073742666, Int32.MaxValue, blockSize);
 				//DynamicCCRemixSeeding.Curate();
 				//DynamicCCRemixSeeding.testSpot();
 				//Console.WriteLine(StepPredictions.Predict(1695041469, 1, 448, new List<string>() { "One" }).ToString());
