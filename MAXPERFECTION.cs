@@ -232,9 +232,9 @@ namespace SeedFinding
 					//Volcano.VolcanoFloor level = levels.First();
 					foreach (var chest in level.volcanoChests)
 					{
-						if(chest.basicItem.Name == "Cinder Shard" || chest.upgradedItem.Name == "Cinder Shard" || chest.upgradedItem.Name == "Dragontooth Club" || chest.upgradedItem.Name == "Dragontooth Shiv")
+						if(chest.Value.basicItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Dragontooth Club" || chest.Value.upgradedItem.Name == "Dragontooth Shiv")
 						{
-							levelItems += $"{chest.upgradeLuck} {chest.upgradedItem} ";
+							levelItems += $"{chest.Value.upgradeLuck} {chest.Value.upgradedItem} ";
 
 						}
 					}
