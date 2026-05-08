@@ -13,6 +13,37 @@ namespace SeedFinding
 	public class VolcanoSearch
 	{
 
+		public static List<(int, int, int)> floor1Search(int seed)
+		{
+			List<(int, int, int)> Results = new();
+			int level = 2;
+			int layout = Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists: false, luckLevel: 6, shortcutUnlocked: true);
+
+			if (layout != 37)
+			{
+				return Results;
+			}
+			else
+			{
+				Volcano.VolcanoFloor floor = new Volcano.VolcanoFloor(level, layout, seed);
+				int count = 0;
+				if (floor.monsterCounts.ContainsKey("(O)Magma Sprite"))
+				{
+					count += floor.monsterCounts["(O)Magma Sprite"];
+				}
+				if (floor.monsterCounts.ContainsKey("(O)Magma Sparker"))
+				{
+					count += floor.monsterCounts["(O)Magma Sparker"];
+				}
+				if (count >= 25)
+				{
+					var tup = (level, seed, count);
+					Results.Add(tup);
+				}
+				return Results;
+			}
+		}
+
 		public static List<(int, int, int)> floorSearch(int seed)
 		{
 			List<(int, int, int)> Results = new();
@@ -68,11 +99,11 @@ namespace SeedFinding
 					if (seed % 2 == 0) { continue; }
 
 					//Console.WriteLine(seed);
-					List<(int, int, int)> Results = floorSearch(seed);
+					List<(int, int, int)> Results = floor1Search(seed);
 
 					foreach (var tup in Results)
 					{
-						File.AppendAllText("VolcanoSearch.txt", $"{tup},");
+						File.AppendAllText("Volcano1Search.txt", $"{tup},");
 						Console.WriteLine(tup);
 					}
 				}

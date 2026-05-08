@@ -1862,24 +1862,29 @@ namespace SeedFinding.Volcano
 			for (int i = 0; i < setPieceAreas.Count; i++)
 			{
 				Rectangle rectangle = setPieceAreas[i];
+				Map override_map = Volcano.SetLayouts3;
 				int size = 3;
 				if (rectangle.Width >= 32)
 				{
 					size = 32;
+					override_map = Volcano.SetLayouts32;
 				}
 				else if (rectangle.Width >= 16)
 				{
 					size = 16;
+					override_map = Volcano.SetLayouts16;
 				}
 				else if (rectangle.Width >= 8)
 				{
 					size = 8;
+					override_map = Volcano.SetLayouts8;
 				}
 				else if (rectangle.Width >= 4)
 				{
 					size = 4;
+					override_map = Volcano.SetLayouts4;
 				}
-				Map override_map = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_{size}.json"));
+				//Map override_map = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_{size}.json"));
 				int cols = override_map.Layers[0].Width / size;
 				int rows = override_map.Layers[0].Height / size;
 				int selected_col = this.generationRandom.Next(0, cols);
@@ -3525,6 +3530,12 @@ namespace SeedFinding.Volcano
 		public static bool monsterMuskActive = false;
 
 		public static Bitmap LayoutImage = new Bitmap($@"Volcano/Layouts.png");
+
+		public static Map SetLayouts3 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_3.json"));
+		public static Map SetLayouts4 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_4.json"));
+		public static Map SetLayouts8 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_8.json"));
+		public static Map SetLayouts16 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_16.json"));
+		public static Map SetLayouts32= JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_32.json"));
 
 		public static List<Item> BarrelContents(int x, int y)
 		{
