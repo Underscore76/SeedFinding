@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -44,11 +45,10 @@ namespace SeedFinding
 			}
 		}
 
-		public static List<(int, int, int)> floorSearch(int seed)
+		public static List<(int, int, int, int)> floorSearch(int seed)
 		{
-			List<(int, int, int)> Results = new();
+			List<(int, int, int, int)> Results = new();
 			string result = "";
-			int layout;
 			int modResult;
 			// Evaluate floor 9
 			// Suspect we won't need floor 9 - will do this search later.
@@ -60,30 +60,40 @@ namespace SeedFinding
 				{
 					continue;
 				}
-				layout = Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:true);
-				if (layout == 46)
-				{
-					Volcano.VolcanoFloor floor = new Volcano.VolcanoFloor(level, layout, seed);
-					int count = 0;
-					if (floor.monsterCounts.ContainsKey("(O)Magma Sprite"))
+				List<int> layouts = new() {
+					Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:true),
+					Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:false,luckLevel:6,shortcutUnlocked:true),
+					Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:false,luckLevel:6,shortcutUnlocked:false),
+					// Don't care about this scenario - can't get junimo layout or monster layout with it Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:false)
+				};
+				foreach (int layout in layouts) {
+					//layout = Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:true);
+					if (layout == 46 || layout == 37)
 					{
-						count += floor.monsterCounts["(O)Magma Sprite"];
-					}
-					if (floor.monsterCounts.ContainsKey("(O)Magma Sparker"))
-					{
-						count += floor.monsterCounts["(O)Magma Sparker"];
-					}
-					if (count >= 25)
-					{
-						var tup = (level, seed, count);
+						Volcano.VolcanoFloor floor = new Volcano.VolcanoFloor(level, layout, seed);
+						int count = 0;
+						if (floor.monsterCounts.ContainsKey("(O)Magma Sprite"))
+						{
+							count += floor.monsterCounts["(O)Magma Sprite"];
+						}
+						if (floor.monsterCounts.ContainsKey("(O)Magma Sparker"))
+						{
+							count += floor.monsterCounts["(O)Magma Sparker"];
+						}
+						if (layout == 46 && count >= 25 || layout == 37 && count >= 20)
+						{
+							var tup = (level, seed, layout, count);
 
-						Results.Add(tup);
-						//Console.WriteLine(tup);
+							Results.Add(tup);
+							//Console.WriteLine(tup);
+						}
 					}
 				}
 			}
 			return Results;
 		}
+
+
 		public static double Search(int start, int end, int blockSize)
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
@@ -99,11 +109,11 @@ namespace SeedFinding
 					if (seed % 2 == 0) { continue; }
 
 					//Console.WriteLine(seed);
-					List<(int, int, int)> Results = floor1Search(seed);
+					List<(int, int, int, int)> Results = floorSearch(seed);
 
 					foreach (var tup in Results)
 					{
-						File.AppendAllText("Volcano1Search.txt", $"{tup},");
+						File.AppendAllText("VolcanoSearch.txt", $"{tup},");
 						Console.WriteLine(tup);
 					}
 				}

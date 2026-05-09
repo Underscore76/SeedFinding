@@ -76,6 +76,7 @@ namespace SeedFinding.Volcano
 		private const int mapHeight = 64;
 
 		public Dictionary<int, List<Point>> possibleSwitchPositions = new Dictionary<int, List<Point>>();
+		public List<Point> switches = new();
 
 		public Dictionary<int, List<Point>> possibleGatePositions = new Dictionary<int, List<Point>>();
 
@@ -84,11 +85,11 @@ namespace SeedFinding.Volcano
 		public Point? startPosition;
 		public Point? endPosition;
 
-		private HashSet<Point> blockedTiles = new HashSet<Point>();
-		private HashSet<Point> buildingTiles = new HashSet<Point>();
-		private HashSet<Point> frontTiles = new HashSet<Point>();
-		private HashSet<Point> dirtAdjacentTiles = new HashSet<Point>();
-		private HashSet<Point> dungeonBackTiles = new HashSet<Point>();
+		public HashSet<Point> blockedTiles = new HashSet<Point>();
+		public HashSet<Point> buildingTiles = new HashSet<Point>();
+		public HashSet<Point> frontTiles = new HashSet<Point>();
+		public HashSet<Point> dirtAdjacentTiles = new HashSet<Point>();
+		public HashSet<Point> dungeonBackTiles = new HashSet<Point>();
 
 		protected Dictionary<int, Point> _blobIndexLookup = null;
 		protected Dictionary<int, Point> _lavaBlobIndexLookup = null;
@@ -218,6 +219,60 @@ namespace SeedFinding.Volcano
 			// pixelMap. origin is top left.  Rows first.
 
 
+		}
+
+		public static int shortestPath(int seed, int level, int layout)
+		{
+			VolcanoFloor floor = new VolcanoFloor(level, layout, seed);
+
+			// Dictionary of checked tiles, key of tile location, value of distance
+			Dictionary<Point, int> checkedTiles = new();
+
+			List<Size> directions = new() {
+				new Size(-1,0),
+				new Size(1,0),
+				new Size(0,-1),
+				new Size(0,1)
+			};
+
+			// Queue of points to check
+			Queue<Point> tilesToCheck = new();
+
+			tilesToCheck.Enqueue((Point)floor.startPosition);
+			checkedTiles.Add((Point)floor.startPosition, 1);
+			while (tilesToCheck.Count != 0)
+			{
+				Point tile = tilesToCheck.Dequeue();
+				int distance = checkedTiles[tile] + 1;
+				foreach (var direction in directions)
+				{
+					Point neighbour = Point.Add(tile, direction);
+
+					// Found exit
+					if (neighbour == floor.endPosition)
+					{
+						return distance;
+					}
+
+					// Already checked
+					if (checkedTiles.ContainsKey(neighbour))
+					{
+						continue;
+					}
+
+					// Blocked
+					if (floor.blockedTiles.Contains(neighbour))
+					{
+						continue;
+					}
+
+					// Queue neighbour
+					tilesToCheck.Enqueue(neighbour);
+					checkedTiles.Add(neighbour, distance);
+				}
+			}
+
+			return -1;
 		}
 
 		public void AddToBuildingTile(Point point)
@@ -988,6 +1043,28 @@ namespace SeedFinding.Volcano
 				this.SetTile(this.alwaysFrontLayer, tile_position.X + 1, tile_position.Y - 2, VolcanoDungeon.GetTileIndex(10, 25));
 			}*/
 			int seed = this.generationRandom.Next();
+			Random r = Utility.CreateRandom(seed);
+			if (possibleSwitchPositions.TryGetValue(gate_index, out var positions))
+			{
+				int max_points = Math.Min(positions.Count, 3);
+				if (gate_index > 0)
+				{
+					max_points = 1;
+				}
+				List<Point> points = new List<Point>(positions);
+				Utility.Shuffle(r, points);
+				int points_to_choose = r.Next(1, Math.Max(1, max_points));
+				points_to_choose = Math.Min(points_to_choose, max_points);
+				if (isMonsterLevel())
+				{
+					points_to_choose = max_points;
+				}
+				for (int i = 0; i < points_to_choose; i++)
+				{
+					switches.Add(points[i]);
+					//this.switches[points[i]] = false;
+				}
+			}
 			//if (Game1.IsMasterGame)
 			//{
 			//	DwarfGate gate = new DwarfGate(this, gate_index, tile_position.X, tile_position.Y, seed);
