@@ -15,7 +15,7 @@ namespace SeedFinding
 	public class VolcanoSearch
 	{
 
-		public static List<(int, int, int, int, int)> BasicSearch(int level, int seed, int lastLayout = 0)
+		public static List<(int, int, int, int, int)> BasicEval(int level, int seed, int lastLayout = 0)
 		{
 			List<(int, int, int, int, int)> Results = new();
 			int layout = Volcano.Volcano.GetSingleLevelSeed(

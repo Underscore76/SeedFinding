@@ -76,21 +76,13 @@ namespace SeedFinding
                 Volcano.Volcano.luckLevel = 6;
                 Volcano.Volcano.dailyLuck = 0.052;
                 VolcanoFloorPixelMaps.Initialize();
-                var result = VolcanoSearch.CoreSearch(1, 219043265);
-                foreach (var tup in result)
-                {
-                    Console.WriteLine(tup);
-                }
-                result = VolcanoSearch.CoreSearch(2, 219048418, result[0].Item3);
-                foreach (var tup in result)
-                {
-                    Console.WriteLine(tup);
-                }
-                result = VolcanoSearch.CoreSearch(3, 219053571, result[0].Item3);
-                foreach (var tup in result)
-                {
-                    Console.WriteLine(tup);
-                }
+
+                Stopwatch sw = Stopwatch.StartNew();
+                int ns = 1 << 20;
+                int block = 1 << 16;
+                VolcanoSearch.Search(0, ns, block);
+                sw.Stop();
+                Console.WriteLine($"Time: {sw.Elapsed.TotalSeconds} seconds for {ns / sw.Elapsed.TotalSeconds} seeds per second.");
                 // VolcanoSearch.Search(1073742666, Int32.MaxValue, blockSize);
                 // int seed = 1;
                 // while (true)
