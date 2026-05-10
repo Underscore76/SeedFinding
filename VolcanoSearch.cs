@@ -148,10 +148,13 @@ namespace SeedFinding
 					//Console.WriteLine(seed);
 					List<(int, int, int, int)> Results = floorSearch(seed);
 
-					foreach (var tup in Results)
+					if (Results.Count > 0)
 					{
-						File.AppendAllText("VolcanoSearch.txt", $"{tup},");
-						Console.WriteLine(tup);
+						string result = string.Join("\n",
+							Results.Select(tup => $"{{\"level\":{tup.Item1},\"seed\":{tup.Item2},\"layout\":{tup.Item3},\"count\":{tup.Item4}}}")
+						);
+						Console.WriteLine(result);
+						File.AppendAllText("VolcanoSearch.txt", result + "\n");
 					}
 				}
 				localStopwatch.Stop();

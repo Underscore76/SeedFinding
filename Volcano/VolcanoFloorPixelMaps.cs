@@ -43,11 +43,15 @@ namespace SeedFinding.Volcano
 	public class PixelMap
 	{
 		public int Layout;
+		public Point StartPosition;
+		public Point EndPosition;
+		public List<Point> PossibleSwitchPositions;
 		public PixelType[,] Map;
 		public PixelMap(int layout)
 		{
 			Layout = layout;
 			Map = new PixelType[64, 64];
+			PossibleSwitchPositions = new List<Point>();
 		}
 		public void SetPixel(int x, int y, PixelType type, bool flipped = false)
 		{
@@ -79,6 +83,9 @@ namespace SeedFinding.Volcano
 					clone.Map[x, y] = Map[x, y];
 				}
 			}
+			clone.StartPosition = StartPosition;
+			clone.EndPosition = EndPosition;
+			clone.PossibleSwitchPositions = new List<Point>(PossibleSwitchPositions);
 			return clone;
 		}
 	}
@@ -94,6 +101,11 @@ namespace SeedFinding.Volcano
 		public static void Initialize()
 		{
 			PixelMaps = new();
+			SetupLayouts();
+		}
+
+		public static void SetupLayouts()
+		{
 			SKBitmap LayoutImage = SKBitmap.Decode($@"Volcano/Layouts.png");
 			for (int layout = 1; layout <= 57; layout++)
 			{
@@ -112,18 +124,25 @@ namespace SeedFinding.Volcano
 								case var _ when c.Equals(PixelTypeColor.StartPosition):
 									pixelMap.SetPixel(x, y, PixelType.StartPosition);
 									pixelMapFlipped.SetPixel(x, y, PixelType.StartPosition, flipped: true);
+									pixelMap.StartPosition = new Point(x, y);
+									pixelMapFlipped.StartPosition = new Point(63 - x, y);
 									break;
 								case var _ when c.Equals(PixelTypeColor.EndPosition):
 									pixelMap.SetPixel(x, y, PixelType.EndPosition);
 									pixelMapFlipped.SetPixel(x, y, PixelType.EndPosition, flipped: true);
+									pixelMap.EndPosition = new Point(x, y);
+									pixelMapFlipped.EndPosition = new Point(63 - x, y);
 									break;
 								case var _ when c.Equals(PixelTypeColor.Empty):
-									pixelMap.SetPixel(x, y, PixelType.Empty);
-									pixelMapFlipped.SetPixel(x, y, PixelType.Empty, flipped: true);
+									// This gets immediately set to an open tile on generation
+									pixelMap.SetPixel(x, y, PixelType.Open);
+									pixelMapFlipped.SetPixel(x, y, PixelType.Open, flipped: true);
 									break;
 								case var _ when c.Equals(PixelTypeColor.PossibleSwitchPosition):
 									pixelMap.SetPixel(x, y, PixelType.PossibleSwitchPosition);
 									pixelMapFlipped.SetPixel(x, y, PixelType.PossibleSwitchPosition, flipped: true);
+									pixelMap.PossibleSwitchPositions.Add(new Point(x, y));
+									pixelMapFlipped.PossibleSwitchPositions.Add(new Point(63 - x, y));
 									break;
 								case var _ when c.Equals(PixelTypeColor.Wall):
 									pixelMap.SetPixel(x, y, PixelType.Wall);
@@ -159,6 +178,7 @@ namespace SeedFinding.Volcano
 				}
 			}
 		}
+
 		public static PixelMap GetPixelMap(int layout, bool flipped)
 		{
 			if (PixelMaps.TryGetValue(layout, out var maps))

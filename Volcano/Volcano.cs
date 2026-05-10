@@ -114,48 +114,54 @@ namespace SeedFinding.Volcano
 			pixelMap = VolcanoFloorPixelMaps.GetPixelMap(layout, flipped);
 
 			PlaceGroundTiles();
-			this.ApplyToPixelType(PixelType.StartPosition, delegate (int x, int y)
+			this.startPosition = pixelMap.StartPosition;
+			this.endPosition = pixelMap.EndPosition;
+			foreach (var p in pixelMap.PossibleSwitchPositions)
 			{
-				if (!this.startPosition.HasValue)
-				{
-					this.startPosition = new Point(x, y);
-				}
-				if (this.level == 0)
-				{
-					//base.warps.Add(new Warp(x, y + 2, "IslandNorth", 40, 24, flipFarmer: false));
-				}
-				else
-				{
-					//base.warps.Add(new Warp(x, y + 2, VolcanoDungeon.GetLevelName(this.level.Value - 1), x - this.startPosition.Value.X, 0, flipFarmer: false));
-				}
-			});
+				this.AddPossibleSwitchLocation(0, p.X, p.Y);
+			}
+			// this.ApplyToPixelType(PixelType.StartPosition, delegate (int x, int y)
+			// {
+			// 	if (!this.startPosition.HasValue)
+			// 	{
+			// 		this.startPosition = new Point(x, y);
+			// 	}
+			// 	if (this.level == 0)
+			// 	{
+			// 		//base.warps.Add(new Warp(x, y + 2, "IslandNorth", 40, 24, flipFarmer: false));
+			// 	}
+			// 	else
+			// 	{
+			// 		//base.warps.Add(new Warp(x, y + 2, VolcanoDungeon.GetLevelName(this.level.Value - 1), x - this.startPosition.Value.X, 0, flipFarmer: false));
+			// 	}
+			// });
 
-			this.ApplyToPixelType(PixelType.Empty, delegate (int x, int y)
-			{
-				this.SetPixelType(x, y, PixelType.Open);
-			});
+			// this.ApplyToPixelType(PixelType.Empty, delegate (int x, int y)
+			// {
+			// 	this.SetPixelType(x, y, PixelType.Open);
+			// });
 
 
-			this.ApplyToPixelType(PixelType.EndPosition, delegate (int x, int y)
-			{
-				if (!this.endPosition.HasValue)
-				{
-					this.endPosition = new Point(x, y);
-				}
-				if (this.level == 9)
-				{
-					//base.warps.Add(new Warp(x, y - 2, "Caldera", 21, 39, flipFarmer: false));
-				}
-				else
-				{
-					//base.warps.Add(new Warp(x, y - 2, VolcanoDungeon.GetLevelName(this.level.Value + 1), x - this.endPosition.Value.X, 1, flipFarmer: false));
-				}
-			});
+			// this.ApplyToPixelType(PixelType.EndPosition, delegate (int x, int y)
+			// {
+			// 	if (!this.endPosition.HasValue)
+			// 	{
+			// 		this.endPosition = new Point(x, y);
+			// 	}
+			// 	if (this.level == 9)
+			// 	{
+			// 		//base.warps.Add(new Warp(x, y - 2, "Caldera", 21, 39, flipFarmer: false));
+			// 	}
+			// 	else
+			// 	{
+			// 		//base.warps.Add(new Warp(x, y - 2, VolcanoDungeon.GetLevelName(this.level.Value + 1), x - this.endPosition.Value.X, 1, flipFarmer: false));
+			// 	}
+			// });
 
-			this.ApplyToPixelType(PixelType.PossibleSwitchPosition, delegate (int x, int y)
-			{
-				this.AddPossibleSwitchLocation(0, x, y);
-			});
+			// this.ApplyToPixelType(PixelType.PossibleSwitchPosition, delegate (int x, int y)
+			// {
+			// 	this.AddPossibleSwitchLocation(0, x, y);
+			// });
 
 			PopulateSetPieces();
 			ApplySetPieces();
@@ -165,6 +171,8 @@ namespace SeedFinding.Volcano
 				this.SetPixelType(x, y, PixelType.Wall);
 			}, use_corner_hack: true);
 			this.GenerateWalls(PixelType.Wall, 0, 13, 1);
+			return;
+			// return;
 			this.ApplyToPixelType(PixelType.Lava, delegate (int x, int y)
 			{
 				//base.waterTiles[x, y] = true;
@@ -206,7 +214,6 @@ namespace SeedFinding.Volcano
 					this.CreateDwarfGate(index, gate_point);
 				}
 			}
-
 			GenerateEntities();
 			// pixelMap. origin is top left.  Rows first.
 
@@ -1372,6 +1379,7 @@ namespace SeedFinding.Volcano
 			{
 				this.heightMap[i] = -1;
 			}
+			// NOTE: this block is ~25-30s of the total time
 			for (int pass = 0; pass < 2; pass++)
 			{
 				for (int x = 0; x < VolcanoFloor.mapWidth; x++)
@@ -1467,6 +1475,7 @@ namespace SeedFinding.Volcano
 				}
 			}
 			List<Point> corner_tiles = new List<Point>();
+			// NOTE: this block is ~2-2.5s of the total time
 			for (int y = 0; y < VolcanoFloor.mapHeight; y++)
 			{
 				for (int j = 0; j < VolcanoFloor.mapWidth; j++)
@@ -1632,6 +1641,7 @@ namespace SeedFinding.Volcano
 					}
 				}
 			}
+			// NOTE: this block is 1-2 s of total time
 			if (use_corner_hack)
 			{
 				foreach (Point corner_tile in corner_tiles)
