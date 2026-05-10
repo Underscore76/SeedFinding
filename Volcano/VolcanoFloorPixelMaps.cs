@@ -51,7 +51,7 @@ namespace SeedFinding.Volcano
 		{
 			Layout = layout;
 			Map = new PixelType[64, 64];
-			PossibleSwitchPositions = new List<Point>();
+			PossibleSwitchPositions = new List<Point>(10);
 		}
 		public void SetPixel(int x, int y, PixelType type, bool flipped = false)
 		{
@@ -76,16 +76,10 @@ namespace SeedFinding.Volcano
 		public PixelMap Clone()
 		{
 			PixelMap clone = new PixelMap(Layout);
-			for (int x = 0; x < 64; x++)
-			{
-				for (int y = 0; y < 64; y++)
-				{
-					clone.Map[x, y] = Map[x, y];
-				}
-			}
+			Array.Copy(Map, clone.Map, Map.Length);
 			clone.StartPosition = StartPosition;
 			clone.EndPosition = EndPosition;
-			clone.PossibleSwitchPositions = new List<Point>(PossibleSwitchPositions);
+			clone.PossibleSwitchPositions.AddRange(PossibleSwitchPositions);
 			return clone;
 		}
 	}
@@ -147,7 +141,6 @@ namespace SeedFinding.Volcano
 								case var _ when c.Equals(PixelTypeColor.Wall):
 									pixelMap.SetPixel(x, y, PixelType.Wall);
 									pixelMapFlipped.SetPixel(x, y, PixelType.Wall, flipped: true);
-									Console.WriteLine($"Wall at ({x}, {y}) in layout {layout}");
 									break;
 								case var _ when c.Equals(PixelTypeColor.Lava):
 									pixelMap.SetPixel(x, y, PixelType.Lava);

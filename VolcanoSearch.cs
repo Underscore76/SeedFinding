@@ -130,37 +130,28 @@ namespace SeedFinding
 		}
 
 
-		public static double Search(int start, int end, int blockSize)
+		public static double Search(int start, int end)
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 			var bag = new ConcurrentBag<int>();
-			var partioner = Partitioner.Create(start, end, blockSize);
 			//(int, int) range = (start, end);
-			Parallel.ForEach(partioner, (range, loopState) =>
+			var options = new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount };
+			Parallel.For(start, end, options, (seed) =>
 			{
-				Stopwatch localStopwatch = Stopwatch.StartNew();
-				//Location woods = null;
-				//for (int seed = start; seed < end; seed++)
-				for (int seed = (int)range.Item1; seed < range.Item2; seed++)
+				if (seed % 2 == 0) { return; }
+
+				//Console.WriteLine(seed);
+				List<(int, int, int, int)> Results = floorSearch(seed);
+
+				if (Results.Count > 0)
 				{
-					if (seed % 2 == 0) { continue; }
-
-					//Console.WriteLine(seed);
-					List<(int, int, int, int)> Results = floorSearch(seed);
-
-					if (Results.Count > 0)
-					{
-						string result = string.Join("\n",
-							Results.Select(tup => $"{{\"level\":{tup.Item1},\"seed\":{tup.Item2},\"layout\":{tup.Item3},\"count\":{tup.Item4}}}")
-						);
-						Console.WriteLine(result);
-						File.AppendAllText("VolcanoSearch.txt", result + "\n");
-					}
+					string result = string.Join("\n",
+						Results.Select(tup => $"{{\"level\":{tup.Item1},\"seed\":{tup.Item2},\"layout\":{tup.Item3},\"count\":{tup.Item4}}}")
+					);
+					Console.WriteLine(result);
+					File.AppendAllText("VolcanoSearch.txt", result + "\n");
 				}
-				localStopwatch.Stop();
-				Console.WriteLine($"Range {range.Item1}-{range.Item2} took {localStopwatch.Elapsed.TotalSeconds} seconds.");
-			}
-			);
+			});
 			double seconds = stopwatch.Elapsed.TotalSeconds;
 			return seconds;
 		}

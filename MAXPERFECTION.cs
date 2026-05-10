@@ -77,7 +77,7 @@ namespace SeedFinding
 		public static void doveIncubating()
 		{
 			int kid = 52;
-			int nextValidDay = 3754+25;
+			int nextValidDay = 3754 + 25;
 			int incubationDay = -1;
 			bool first = false;
 			bool incubating = false;
@@ -112,7 +112,7 @@ namespace SeedFinding
 				incubationDay = nextValidDay;
 				if (first)
 				{
-					nextValidDay += 55; 
+					nextValidDay += 55;
 				}
 				first = !first;
 				incubating = true;
@@ -223,7 +223,8 @@ namespace SeedFinding
 				string line = "";
 				int count = 0;
 				var levels = Volcano.Volcano.GetLevels16(655571, day, 0.1, 3, true, true);
-				foreach (var level in levels) { 
+				foreach (var level in levels)
+				{
 					if (level.level == 39)
 					{
 						break;
@@ -232,7 +233,7 @@ namespace SeedFinding
 					//Volcano.VolcanoFloor level = levels.First();
 					foreach (var chest in level.volcanoChests)
 					{
-						if(chest.Value.basicItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Dragontooth Club" || chest.Value.upgradedItem.Name == "Dragontooth Shiv")
+						if (chest.Value.basicItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Cinder Shard" || chest.Value.upgradedItem.Name == "Dragontooth Club" || chest.Value.upgradedItem.Name == "Dragontooth Shiv")
 						{
 							levelItems += $"{chest.Value.upgradeLuck} {chest.Value.upgradedItem} ";
 
@@ -241,7 +242,8 @@ namespace SeedFinding
 
 					foreach (var barrelLocation in level.barrelLocations)
 					{
-						var items = Volcano.Volcano.BarrelContents(barrelLocation.X, barrelLocation.Y);
+						//TODO: fix
+						var items = new List<Item>();//Volcano.Volcano.BarrelContents(barrelLocation.X, barrelLocation.Y);
 						foreach (var item in items)
 						{
 							if (item.Name == "Cinder Shard" || item.Name == "Warp Totem: Island")
@@ -259,8 +261,8 @@ namespace SeedFinding
 					{
 						line += $"\t{level.level} " + levelItems;
 					}
-
-					count += level.teethLocations.Count();
+					// TODO: fix
+					// count += level.teethLocations.Count();
 				}
 				output += $"\t{count}" + line;
 				Console.WriteLine(output);
@@ -295,9 +297,9 @@ namespace SeedFinding
 		public static void checkPets()
 		{
 			Guid catid = Guid.Parse("91c39ccc-15f9-4303-a663-54eb4c7e4477");
-			int catpet = 256+7;
+			int catpet = 256 + 7;
 			Guid turtleid = Guid.Parse("0dcb4138-64f9-4019-884c-a4cbde58299f");
-			int turtlepet = 226+1;
+			int turtlepet = 226 + 1;
 
 
 			Guid beansId = Guid.Parse("0dab0296-7c7c-40af-976a-59b5c1531815");
@@ -357,12 +359,13 @@ namespace SeedFinding
 				result += $"	{pet}";
 				//result += $"	Beans: {beansgift}	Baked: {Bakedgift}	Toast: {Toastgift}	Coffee: {Coffeegift}	Qi: {Qigift}	Cocoa: {Cocoagift}	Green: {Greengift}	Mr: {Mrgift}	Toe: {Toegift}";//	Cat: {catgift}	Turtle: {turtlegift}";
 				Console.WriteLine(result);
-		}
+			}
 		}
 
 		public static void rainyDialog()
 		{
-			for (int day = 423; day < 470; day++) {
+			for (int day = 423; day < 470; day++)
+			{
 
 				Random r = Utility.CreateDaySaveRandom(day, 655571, -1161857373803765789);
 
@@ -431,9 +434,9 @@ namespace SeedFinding
 21
 			};
 
-			foreach( var x in tiles)
+			foreach (var x in tiles)
 			{
-				Console.WriteLine($"{x}:	{Item.Get(winterStar(655571,2,x)).Name}");
+				Console.WriteLine($"{x}:	{Item.Get(winterStar(655571, 2, x)).Name}");
 			}
 		}
 
@@ -459,7 +462,7 @@ namespace SeedFinding
 						"(O)60",
 						"(O)70"
 					});
-            return giftRandom.ChooseFrom(gifts);
+			return giftRandom.ChooseFrom(gifts);
 
 
 		}
@@ -486,7 +489,7 @@ namespace SeedFinding
 			int day = 4585;
 			double luck = -0.1;
 			//for (day = 3754; day < 5000; day++)
-			for (luck = -0.1; luck < 0.1;  luck += 0.001)
+			for (luck = -0.1; luck < 0.1; luck += 0.001)
 			{
 				islandNorth.Day = day;
 				islandNorth.ProcessBubbles(true, 1);
@@ -497,7 +500,7 @@ namespace SeedFinding
 					{
 						//continue;
 					}
-					var items = islandNorth.getPanItems1_6(new System.Drawing.Point(panning.X,panning.Y),1,"Reaching",day,0,0,luck);
+					var items = islandNorth.getPanItems1_6(new System.Drawing.Point(panning.X, panning.Y), 1, "Reaching", day, 0, 0, luck);
 					bool tail = false;
 					bool miningXP = false;
 					bool forageXP = false;
@@ -513,7 +516,7 @@ namespace SeedFinding
 							miningXP = true;
 						}
 
-						if (item.Name == "Forage XP - 14" )
+						if (item.Name == "Forage XP - 14")
 						{
 							forageXP = true;
 						}
@@ -618,7 +621,7 @@ namespace SeedFinding
 			}
 
 		}
-		public static List<(string, Vector2)> OvernightFarmUpdate( GameSave save, int steps, int machines)
+		public static List<(string, Vector2)> OvernightFarmUpdate(GameSave save, int steps, int machines)
 		{
 			List<(string, Vector2)> destroyedObjects = new();
 			Season season = Utility.getSeasonFromDay(save.day);
@@ -626,7 +629,7 @@ namespace SeedFinding
 			Location farm = save.farm;
 
 			Random gameRandom;
-			var result = StepPredictions.Predict(save.gameId, save.day-1, steps, save.friends, out gameRandom, machines);
+			var result = StepPredictions.Predict(save.gameId, save.day - 1, steps, save.friends, out gameRandom, machines);
 
 
 			// Special orders board
@@ -653,7 +656,7 @@ namespace SeedFinding
 					}
 				}
 
-				for (int i = 0; i <  questCount; i++)
+				for (int i = 0; i < questCount; i++)
 				{
 					gameRandom.Next();
 				}
@@ -701,7 +704,8 @@ namespace SeedFinding
 						}
 					}
 				}
-			}else if (season == Season.Spring || season == Season.Fall)
+			}
+			else if (season == Season.Spring || season == Season.Fall)
 			{
 				// Upgrading rain to storm
 				if (overmorrow == WeatherType.Rain && save.day > 28)
