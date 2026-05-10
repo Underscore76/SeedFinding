@@ -133,3 +133,6 @@ $RECYCLE.BIN/
 _NCrunch*
 
 .vs/
+
+*.speedscope.json
+*.nettrace
