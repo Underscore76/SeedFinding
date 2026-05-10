@@ -5,16 +5,8 @@ using SeedFinding.StardewClasses;
 using SeedFinding.Utilities;
 using System;
 using System.Collections.Generic;
+using SkiaSharp;
 using System.Drawing;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
-using System.Reflection.Emit;
-using System.Resources;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Layer = SeedFinding.Locations1_6.Layer;
 using Map = SeedFinding.Locations1_6.Map;
 using Tile = SeedFinding.Locations1_6.Tile;
@@ -59,7 +51,7 @@ namespace SeedFinding.Volcano
 		public bool flipped = false;
 		Random generationRandom;
 		List<Rectangle> setPieceAreas = new List<Rectangle>();
-		Color[] pixelMap = new Color[64 * 64];
+		PixelMap pixelMap = null;
 
 		public int[] heightMap;
 		public List<Vector2> barrelLocations = new List<Vector2>();
@@ -119,10 +111,10 @@ namespace SeedFinding.Volcano
 				flipped = false;
 			}
 
-			pixelMap = VolcanoFloorPixelMaps.getPixelMap(layout, flipped);
+			pixelMap = VolcanoFloorPixelMaps.GetPixelMap(layout, flipped);
 
 			PlaceGroundTiles();
-			this.ApplyToColor(Color.FromArgb(0, 255, 0), delegate (int x, int y)
+			this.ApplyToPixelType(PixelType.StartPosition, delegate (int x, int y)
 			{
 				if (!this.startPosition.HasValue)
 				{
@@ -138,13 +130,13 @@ namespace SeedFinding.Volcano
 				}
 			});
 
-			this.ApplyToColor(Color.FromArgb(255, 255, 0), delegate (int x, int y)
+			this.ApplyToPixelType(PixelType.Empty, delegate (int x, int y)
 			{
-				this.SetPixelMap(x, y, Color.FromArgb(255, 255, 255));
+				this.SetPixelType(x, y, PixelType.Open);
 			});
 
 
-			this.ApplyToColor(Color.FromArgb(255, 0, 0), delegate (int x, int y)
+			this.ApplyToPixelType(PixelType.EndPosition, delegate (int x, int y)
 			{
 				if (!this.endPosition.HasValue)
 				{
@@ -160,7 +152,7 @@ namespace SeedFinding.Volcano
 				}
 			});
 
-			this.ApplyToColor(Color.FromArgb(128, 128, 128), delegate (int x, int y)
+			this.ApplyToPixelType(PixelType.PossibleSwitchPosition, delegate (int x, int y)
 			{
 				this.AddPossibleSwitchLocation(0, x, y);
 			});
@@ -168,12 +160,12 @@ namespace SeedFinding.Volcano
 			PopulateSetPieces();
 			ApplySetPieces();
 
-			this.GenerateWalls(Color.Black, 0, 4, 4, 4, start_in_wall: true, delegate (int x, int y)
+			this.GenerateWalls(PixelType.OutOfBounds, 0, 4, 4, 4, start_in_wall: true, delegate (int x, int y)
 			{
-				this.SetPixelMap(x, y, Color.Chartreuse);
+				this.SetPixelType(x, y, PixelType.Wall);
 			}, use_corner_hack: true);
-			this.GenerateWalls(Color.Chartreuse, 0, 13, 1);
-			this.ApplyToColor(Color.Blue, delegate (int x, int y)
+			this.GenerateWalls(PixelType.Wall, 0, 13, 1);
+			this.ApplyToPixelType(PixelType.Lava, delegate (int x, int y)
 			{
 				//base.waterTiles[x, y] = true;
 				//this.SetTile(this.backLayer, x, y, 4);
@@ -185,7 +177,7 @@ namespace SeedFinding.Volcano
 					//base.sharedLights.AddLight(new LightSource($"VolcanoDungeon_{this.level.Value}_Lava_{x}_{y}", 4, new Vector2(x, y) * 64f, 2f, new Color(0, 50, 50), LightSource.LightContext.None, 0L, base.NameOrUniqueName));
 				}
 			});
-			this.GenerateBlobs(Color.Blue, 0, 16, fill_center: true, is_lava_pool: true);
+			this.GenerateBlobs(PixelType.Lava, 0, 16, fill_center: true, is_lava_pool: true);
 			if (this.startPosition.HasValue)
 			{
 				this.CreateEntrance(this.startPosition.Value);
@@ -430,34 +422,32 @@ namespace SeedFinding.Volcano
 			AddToBuildingTile(new Point(position.Value.X + 1, position.Value.Y - 4));
 		}
 
-
-
-		public int GetNeighborValue(int x, int y, Color matched_color, bool is_lava_pool = false)
+		public int GetNeighborValue(int x, int y, PixelType matched_type, bool is_lava_pool = false)
 		{
 			int neighbor_value = 0;
-			if (this.GetPixel(x, y - 1, matched_color).ToArgb() == matched_color.ToArgb())
+			if (this.GetPixelType(x, y - 1) == matched_type)
 			{
 				neighbor_value++;
 			}
-			if (this.GetPixel(x, y + 1, matched_color).ToArgb() == matched_color.ToArgb())
+			if (this.GetPixelType(x, y + 1) == matched_type)
 			{
 				neighbor_value += 2;
 			}
-			if (this.GetPixel(x + 1, y, matched_color).ToArgb() == matched_color.ToArgb())
+			if (this.GetPixelType(x + 1, y) == matched_type)
 			{
 				neighbor_value += 4;
 			}
-			if (this.GetPixel(x - 1, y, matched_color).ToArgb() == matched_color.ToArgb())
+			if (this.GetPixelType(x - 1, y) == matched_type)
 			{
 				neighbor_value += 8;
 			}
 			if (is_lava_pool && neighbor_value == 15)
 			{
-				if (this.GetPixel(x - 1, y - 1, matched_color).ToArgb() == matched_color.ToArgb())
+				if (this.GetPixelType(x - 1, y - 1) == matched_type)
 				{
 					neighbor_value += 16;
 				}
-				if (this.GetPixel(x + 1, y - 1, matched_color).ToArgb() == matched_color.ToArgb())
+				if (this.GetPixelType(x + 1, y - 1) == matched_type)
 				{
 					neighbor_value += 32;
 				}
@@ -502,13 +492,13 @@ namespace SeedFinding.Volcano
 			return _lavaBlobIndexLookup;
 		}
 
-		public virtual void GenerateBlobs(Color match, int tile_x, int tile_y, bool fill_center = true, bool is_lava_pool = false)
+		public virtual void GenerateBlobs(PixelType match, int tile_x, int tile_y, bool fill_center = true, bool is_lava_pool = false)
 		{
 			for (int x = 0; x < VolcanoFloor.mapWidth; x++)
 			{
 				for (int y = 0; y < VolcanoFloor.mapHeight; y++)
 				{
-					if (!(this.GetPixel(x, y, match).ToArgb() == match.ToArgb()))
+					if (this.GetPixelType(x, y) != match)
 					{
 						continue;
 					}
@@ -596,16 +586,16 @@ namespace SeedFinding.Volcano
 
 		public virtual void GenerateEntities()
 		{
-			List<Point> spawn_points = new List<Point>();
-			this.ApplyToColor(Color.FromArgb(0, 255, 255), delegate (int x, int y)
-			{
-				spawn_points.Add(new Point(x, y));
-			});
-			List<Point> spiker_spawn_points = new List<Point>();
-			this.ApplyToColor(Color.FromArgb(0, 128, 255), delegate (int x, int y)
-			{
-				spiker_spawn_points.Add(new Point(x, y));
-			});
+			// List<Point> spawn_points = new List<Point>();
+			// this.ApplyToPixelType(PixelType.SpawnTile, delegate (int x, int y)
+			// {
+			// 	spawn_points.Add(new Point(x, y));
+			// });
+			// List<Point> spiker_spawn_points = new List<Point>();
+			// this.ApplyToPixelType(PixelType.SpikerSpawnTile, delegate (int x, int y)
+			// {
+			// 	spiker_spawn_points.Add(new Point(x, y));
+			// });
 			double stoneChance = (double)this.generationRandom.Next(11, 18) / 150.0;
 			double monsterChance = 0.0008 + (double)this.generationRandom.Next(70) / 10000.0;
 			double itemChance = 0.001;
@@ -642,7 +632,7 @@ namespace SeedFinding.Volcano
 						p.X += motion.X;
 						p.Y += motion.Y;
 						Vector2 objectPos = new Vector2(p.X, p.Y);
-						if (GetPixel(p.X, p.Y, Color.Black).ToArgb() == Color.White.ToArgb())
+						if (GetPixelType(p.X, p.Y) == PixelType.Open)
 							//if (this.isTileClearForMineObjects(new Vector2(p.X, p.Y)))
 							if (!volcanoChests.ContainsKey(objectPos) && !frontTiles.Contains(p))
 							{
@@ -675,7 +665,7 @@ namespace SeedFinding.Volcano
 						{
 							continue;
 						}
-						if (GetPixel(j, k, Color.Black).ToArgb() != Color.Black.ToArgb())
+						if (GetPixelType(j, k) != PixelType.OutOfBounds)
 						{
 							if (!blockedTiles.Contains(point) && generationRandom.NextDouble() < monsterChance)
 							//if (this.CanItemBePlacedHere(objectPos2) && this.generationRandom.NextDouble() < monsterChance)
@@ -707,7 +697,6 @@ namespace SeedFinding.Volcano
 									{
 										name = "(O)Magma Sparker";
 									}
-									
 									monsters.Add(objectPos2, name);
 									IncrememntMonsterCount(name);
 								}
@@ -722,7 +711,7 @@ namespace SeedFinding.Volcano
 								//{
 								//	continue;
 								//}
-								if (this.GetPixel((int)point.X, (int)point.Y, Color.Black).ToArgb() == Color.FromArgb(128, 128, 128).ToArgb())
+								if (this.GetPixelType((int)point.X, (int)point.Y) == PixelType.PossibleSwitchPosition)
 								{
 									continue;
 								}
@@ -1153,7 +1142,7 @@ namespace SeedFinding.Volcano
 
 		public Point? GetDirtNeighborTile(int tile_x, int tile_y)
 		{
-			if (this.GetPixel(tile_x, tile_y, Color.Black).ToArgb() != Color.White.ToArgb())
+			if (this.GetPixelType(tile_x, tile_y) != PixelType.Open)
 			{
 				return null;
 			}
@@ -1241,7 +1230,7 @@ namespace SeedFinding.Volcano
 					{
 						for (int y = center_y - radius; y <= center_y + radius; y++)
 						{
-							if (!(this.GetPixel(x, y, Color.Black).ToArgb() != Color.White.ToArgb()))
+							if (this.GetPixelType(x, y) == PixelType.Open)
 							{
 								this.dirtTiles.Add(new Point(x, y));
 							}
@@ -1324,10 +1313,10 @@ namespace SeedFinding.Volcano
 			AddToBuildingTile(new Point(x, y));
 		}
 
-		public int GetPixelClearance(int x, int y, int wall_height, Color match)
+		public int GetPixelClearance(int x, int y, int wall_height, PixelType match)
 		{
 			int current_height = 0;
-			if (this.GetPixel(x, y, Color.White).ToArgb() == match.ToArgb())
+			if (this.GetPixelType(x, y, PixelType.Open) == match)
 			{
 				current_height++;
 				for (int i = 1; i < wall_height; i++)
@@ -1340,7 +1329,7 @@ namespace SeedFinding.Volcano
 					{
 						return wall_height;
 					}
-					if (!(this.GetPixel(x, y + i, Color.White).ToArgb() == match.ToArgb()))
+					if (this.GetPixelType(x, y + i, PixelType.Open) != match)
 					{
 						break;
 					}
@@ -1356,7 +1345,7 @@ namespace SeedFinding.Volcano
 					{
 						return wall_height;
 					}
-					if (!(this.GetPixel(x, y - j, Color.White).ToArgb() == match.ToArgb()))
+					if (this.GetPixelType(x, y - j, PixelType.Open) != match)
 					{
 						break;
 					}
@@ -1376,7 +1365,7 @@ namespace SeedFinding.Volcano
 		}
 
 
-		public virtual void GenerateWalls(Color match, int source_x, int source_y, int wall_height = 4, int random_wall_variants = 1, bool start_in_wall = false, Action<int, int> on_insufficient_wall_height = null, bool use_corner_hack = false)
+		public virtual void GenerateWalls(PixelType match, int source_x, int source_y, int wall_height = 4, int random_wall_variants = 1, bool start_in_wall = false, Action<int, int> on_insufficient_wall_height = null, bool use_corner_hack = false)
 		{
 			this.heightMap = new int[VolcanoFloor.mapWidth * VolcanoFloor.mapHeight];
 			for (int i = 0; i < this.heightMap.Length; i++)
@@ -1395,7 +1384,7 @@ namespace SeedFinding.Volcano
 					}
 					for (int current_y = 0; current_y <= VolcanoFloor.mapHeight; current_y++)
 					{
-						if (this.GetPixel(x, current_y, match).ToArgb() != match.ToArgb() || current_y >= VolcanoFloor.mapHeight)
+						if (this.GetPixelType(x, current_y, match) != match || current_y >= VolcanoFloor.mapHeight)
 						{
 							int current_height = 0;
 							int wall_variant_index = 0;
@@ -1418,7 +1407,7 @@ namespace SeedFinding.Volcano
 									}
 									else
 									{
-										this.SetPixelMap(x, curr_y, Color.White);
+										this.SetPixelType(x, curr_y, PixelType.Open);
 										this.PlaceSingleWall(x, curr_y);
 									}
 									current_height--;
@@ -1436,7 +1425,7 @@ namespace SeedFinding.Volcano
 												}
 												else
 												{
-													this.SetPixelMap(x, curr_y, Color.White);
+													this.SetPixelType(x, curr_y, PixelType.Open);
 													this.PlaceSingleWall(x, curr_y);
 												}
 												current_height--;
@@ -1672,7 +1661,7 @@ namespace SeedFinding.Volcano
 			this.heightMap = null;
 		}
 
-		public Item ChestItem( Random chest_random, bool upgraded)
+		public Item ChestItem(Random chest_random, bool upgraded)
 		{
 			if (!upgraded)
 			{
@@ -1755,8 +1744,8 @@ namespace SeedFinding.Volcano
 							weapon.attemptAddRandomInnateEnchantment(chest_random);
 							return weapon;
 
-						//items.Add(MeleeWeapon.attemptAddRandomInnateEnchantment(ItemRegistry.Create("(W)" + chest_random.Next(54, 57)), chest_random));
-						break;
+							//items.Add(MeleeWeapon.attemptAddRandomInnateEnchantment(ItemRegistry.Create("(W)" + chest_random.Next(54, 57)), chest_random));
+							break;
 						}
 				}
 			}
@@ -1904,36 +1893,30 @@ namespace SeedFinding.Volcano
 			return x + y * 16;
 		}
 
-		private Color GetPixel(int x, int y, Color out_of_bounds_color)
+		private PixelType GetPixelType(int x, int y, PixelType default_type = PixelType.OutOfBounds)
 		{
-			if (x < 0 || x >= VolcanoFloor.mapWidth || y < 0 || y >= VolcanoFloor.mapHeight)
-			{
-				return out_of_bounds_color;
-			}
-			return this.pixelMap[x + y * VolcanoFloor.mapWidth];
+			return this.pixelMap.GetPixel(x, y, default_type);
 		}
 
-		public void SetPixelMap(int x, int y, Color color)
+		private void SetPixelType(int x, int y, PixelType type)
 		{
-			if (x >= 0 && x < VolcanoFloor.mapWidth && y >= 0 && y < VolcanoFloor.mapHeight)
-			{
-				this.pixelMap[x + y * VolcanoFloor.mapWidth] = color;
-			}
+			this.pixelMap.SetPixel(x, y, type);
 		}
 
-		public virtual void ApplyToColor(Color match, Action<int, int> action)
+		public virtual void ApplyToPixelType(PixelType type, Action<int, int> action)
 		{
 			for (int x = 0; x < VolcanoFloor.mapWidth; x++)
 			{
 				for (int y = 0; y < VolcanoFloor.mapHeight; y++)
 				{
-					if (this.GetPixel(x, y, match).ToArgb() == match.ToArgb())
+					if (this.GetPixelType(x, y, type) == type)
 					{
 						action?.Invoke(x, y);
 					}
 				}
 			}
 		}
+
 		private void ApplySetPieces()
 		{
 			for (int i = 0; i < setPieceAreas.Count; i++)
@@ -2035,12 +2018,11 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(10, 20))
 						{
-
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 255, 255));
+							this.SetPixelType(dest_x, dest_y, PixelType.SpawnTile);
 						}
 						else if (path_index == GetTileIndex(11, 20))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 0, 255));
+							this.SetPixelType(dest_x, dest_y, PixelType.Lava);
 						}
 						else if (path_index == GetTileIndex(12, 20))
 						{
@@ -2048,7 +2030,7 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(13, 20))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 0, 0));
+							this.SetPixelType(dest_x, dest_y, PixelType.OutOfBounds);
 						}
 						else if (path_index == GetTileIndex(14, 20) && this.generationRandom.NextBool())
 						{
@@ -2076,7 +2058,7 @@ namespace SeedFinding.Volcano
 						}
 						else if (path_index == GetTileIndex(10, 21))
 						{
-							this.SetPixelMap(dest_x, dest_y, Color.FromArgb(255, 0, 128, 255));
+							this.SetPixelType(dest_x, dest_y, PixelType.SpikerSpawnTile);
 						}
 					}
 				}
@@ -2115,7 +2097,7 @@ namespace SeedFinding.Volcano
 
 					}
 
-						break;
+					break;
 
 
 				case 2:
@@ -3595,7 +3577,7 @@ namespace SeedFinding.Volcano
 			monsterCounts[monster]++;
 		}
 
-		
+
 	}
 	public class Volcano
 	{
@@ -3606,13 +3588,11 @@ namespace SeedFinding.Volcano
 		public static long gameId = 0;
 		public static bool monsterMuskActive = false;
 
-		public static Bitmap LayoutImage = new Bitmap($@"Volcano/Layouts.png");
-
 		public static Map SetLayouts3 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_3.json"));
 		public static Map SetLayouts4 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_4.json"));
 		public static Map SetLayouts8 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_8.json"));
 		public static Map SetLayouts16 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_16.json"));
-		public static Map SetLayouts32= JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_32.json"));
+		public static Map SetLayouts32 = JsonConvert.DeserializeObject<Map>(System.IO.File.ReadAllText($@"Volcano/Volcano_SetPieces_32.json"));
 
 		public static List<Item> BarrelContents(int x, int y)
 		{
@@ -3747,7 +3727,7 @@ namespace SeedFinding.Volcano
 			Volcano.luckLevel = luckLevel;
 			List<int> levels = new();
 			float luckMultiplier = 1f + luckLevel * 0.035f + (float)dailyLuck / 2f;
-			
+
 
 			List<int> valid_layouts = new();
 			for (int i = 1; i < 30; i++)
@@ -3850,9 +3830,9 @@ namespace SeedFinding.Volcano
 				}
 
 				levels.Add(lastLayout);
-				{ 
+				{
 					VolcanoFloor floor = new VolcanoFloor(level, lastLayout, seed);
-					floors.Add(floor); 
+					floors.Add(floor);
 				}
 			}
 			return floors;
@@ -3860,57 +3840,59 @@ namespace SeedFinding.Volcano
 
 
 		public static List<int> GetLevels(uint gameId, int day, double dailyLuck = 0.0, int luckLevel = 0)
-        {
-            List<int> levels = new();
-            bool foundSpecialLevel = false;
-            float luckMultiplier = 1f + luckLevel * 0.035f + (float)dailyLuck / 2f;
-            int lastLayout = 0;
-            for (int level = 1; level < 10; level++) {
-                if (level == 5)
-                {
-                    lastLayout = 31;
-                    levels.Add(lastLayout);
-                    continue;
-                }
-                if (level == 9)
-                {
-                    lastLayout = 30;
-                    levels.Add(lastLayout);
-                    continue;
-                }
-                List<int> valid_layouts = new();
-                for (int i = 1; i < 30; i++)
-                {
-                    valid_layouts.Add(i);
-                }
+		{
+			List<int> levels = new();
+			bool foundSpecialLevel = false;
+			float luckMultiplier = 1f + luckLevel * 0.035f + (float)dailyLuck / 2f;
+			int lastLayout = 0;
+			for (int level = 1; level < 10; level++)
+			{
+				if (level == 5)
+				{
+					lastLayout = 31;
+					levels.Add(lastLayout);
+					continue;
+				}
+				if (level == 9)
+				{
+					lastLayout = 30;
+					levels.Add(lastLayout);
+					continue;
+				}
+				List<int> valid_layouts = new();
+				for (int i = 1; i < 30; i++)
+				{
+					valid_layouts.Add(i);
+				}
 
 
-                Random layout_random = new Random(day * level + level * 5152 + (int)gameId / 2);
-                if (level > 1 && layout_random.NextDouble() < 0.5 * luckMultiplier) {
-                    if (!foundSpecialLevel)
-                    {
-                        for (int k = 32; k < 38; k++)
-                        {
-                            valid_layouts.Add(k);
-                        }
-                    }
-                }
-                if (lastLayout != 0)
-                {
-                    valid_layouts.Remove(lastLayout);
-                }
+				Random layout_random = new Random(day * level + level * 5152 + (int)gameId / 2);
+				if (level > 1 && layout_random.NextDouble() < 0.5 * luckMultiplier)
+				{
+					if (!foundSpecialLevel)
+					{
+						for (int k = 32; k < 38; k++)
+						{
+							valid_layouts.Add(k);
+						}
+					}
+				}
+				if (lastLayout != 0)
+				{
+					valid_layouts.Remove(lastLayout);
+				}
 
-                lastLayout = valid_layouts[layout_random.Next(valid_layouts.Count)];
+				lastLayout = valid_layouts[layout_random.Next(valid_layouts.Count)];
 
-                if (lastLayout >= 32)
-                {
-                    foundSpecialLevel = true;
-                }
+				if (lastLayout >= 32)
+				{
+					foundSpecialLevel = true;
+				}
 
-                levels.Add(lastLayout);
-            }
-            return levels;
-        }
-    
-    }
+				levels.Add(lastLayout);
+			}
+			return levels;
+		}
+
+	}
 }

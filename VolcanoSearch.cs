@@ -8,11 +8,46 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SeedFinding.Volcano;
 
 namespace SeedFinding
 {
 	public class VolcanoSearch
 	{
+
+		public static List<(int, int, int, int, int)> BasicSearch(int level, int seed, int lastLayout = 0)
+		{
+			List<(int, int, int, int, int)> Results = new();
+			int layout = Volcano.Volcano.GetSingleLevelSeed(
+				seed,
+				level,
+				lastLayout,
+				dailyLuck: Volcano.Volcano.dailyLuck,
+				specialExists: false,
+				luckLevel: Volcano.Volcano.luckLevel,
+				shortcutUnlocked: false
+			);
+			Volcano.VolcanoFloor floor = new Volcano.VolcanoFloor(level, layout, seed);
+
+			int total = 0;
+			int count = 0;
+			foreach (var kvp in floor.monsters)
+			{
+				if (kvp.Value == "(O)Magma Sprite" || kvp.Value == "(O)Magma Sparker")
+				{
+					count++;
+				}
+				Console.WriteLine($"Monster {kvp.Value} at {kvp.Key}");
+				total++;
+			}
+			foreach (var loc in floor.barrelLocations)
+			{
+				Console.WriteLine($"Barrel at {loc}");
+			}
+			var tup = (level, seed, layout, total, count);
+			Results.Add(tup);
+			return Results;
+		}
 
 		public static List<(int, int, int)> floor1Search(int seed)
 		{
@@ -66,7 +101,8 @@ namespace SeedFinding
 					Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:false,luckLevel:6,shortcutUnlocked:false),
 					// Don't care about this scenario - can't get junimo layout or monster layout with it Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:false)
 				};
-				foreach (int layout in layouts) {
+				foreach (int layout in layouts)
+				{
 					//layout = Volcano.Volcano.GetSingleLevelSeed(seed, level, 0, specialExists:true,luckLevel:6,shortcutUnlocked:true);
 					if (layout == 46 || layout == 37)
 					{
@@ -102,6 +138,7 @@ namespace SeedFinding
 			//(int, int) range = (start, end);
 			Parallel.ForEach(partioner, (range, loopState) =>
 			{
+				Stopwatch localStopwatch = Stopwatch.StartNew();
 				//Location woods = null;
 				//for (int seed = start; seed < end; seed++)
 				for (int seed = (int)range.Item1; seed < range.Item2; seed++)
@@ -117,6 +154,8 @@ namespace SeedFinding
 						Console.WriteLine(tup);
 					}
 				}
+				localStopwatch.Stop();
+				Console.WriteLine($"Range {range.Item1}-{range.Item2} took {localStopwatch.Elapsed.TotalSeconds} seconds.");
 			}
 			);
 			double seconds = stopwatch.Elapsed.TotalSeconds;

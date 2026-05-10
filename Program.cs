@@ -47,80 +47,110 @@ namespace SeedFinding
 
             // Quick and dirty call to specific searches.  Adjust this as needed for your searches.
             if (true)
-			{
-				//VolcanoFloorPixelMaps.generatePixelMap();
-				//return;
-				/*Game1.UseLegacyRandom = false;
+            {
+                //VolcanoFloorPixelMaps.generatePixelMap();
+                //return;
+                /*Game1.UseLegacyRandom = false;
 				Console.WriteLine(Utility.CreateRandomSeed(5, 2/2));
 				Console.WriteLine(Utility.CreateRandomSeed(5, 3/2));
 				return;*/
 
 
-				//return;a
-				Game1.UseLegacyRandom = true;
-				//Mines.PrintGeodeContents(1417233291, -7909155559185519700l, 1, 446, new List<Geode> { Geode.FrozenGeode }, ",", false, printBestGeode:true,printBestGeodeMinPrice:90);
-				//Console.WriteLine(Utility.CreateRandom(272092133, 5).NextDouble());
-				//StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
-				//Mines.PrintGeodeContents(1763094885, -7909155559185519700L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
-				//MAXPERFECTION.checkFile();
-				//MAXPERFECTION.checkWinterStar();
-				//MAXPERFECTION.findGoodStepCount(1, 0);
-				//MAXPERFECTION.findVolcanoDays();
-				//MAXPERFECTION.checkPets();
-				//MAXPERFECTION.doveIncubating();
-				//MAXPERFECTION.rainyDialog();
-				//MAXPERFECTION.findPanning();
-				//var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
-				//DynamicCCRemixSeeding.ValidSeedDay8(589831, ref woods, false);
-				Volcano.Volcano.monsterMuskActive = true;
-				Volcano.Volcano.luckLevel = 6; ;
-				Volcano.Volcano.dailyLuck = 0.1;
-				VolcanoSearch.Search(1073742666, Int32.MaxValue, blockSize);
-				//DynamicCCRemixSeeding.Curate();
-				//DynamicCCRemixSeeding.testSpot();
-				//Console.WriteLine(StepPredictions.Predict(1695041469, 1, 448, new List<string>() { "One" }).ToString());
-				//for (int step = 0; step < 600; step++)
-				//{
-				//	var result = StepPredictions.Predict(1695041469, 1, step, new List<string>() { "One" });
-				//if (result.Dish == 213 & result.DailyLuck > 0.08)
-				//	{
-				//		Console.WriteLine($"Step: {step} Dish: {Item.Get(result.Dish.ToString()).Name} Luck: {result.DailyLuck}");
-				//	}
-				//}
+                //return;a
+                Game1.UseLegacyRandom = true;
+                //Mines.PrintGeodeContents(1417233291, -7909155559185519700l, 1, 446, new List<Geode> { Geode.FrozenGeode }, ",", false, printBestGeode:true,printBestGeodeMinPrice:90);
+                //Console.WriteLine(Utility.CreateRandom(272092133, 5).NextDouble());
+                //StreamWriter stream = new StreamWriter(new FileStream($"MaxPerfection_Geodes.txt", FileMode.Append));
+                //Mines.PrintGeodeContents(1763094885, -7909155559185519700L, 1, 1000, new List<Geode> { Geode.Geode, Geode.FrozenGeode, Geode.MagmaGeode, Geode.OmniGeode }, "	", false, 115, false, false,stream:stream);
+                //MAXPERFECTION.checkFile();
+                //MAXPERFECTION.checkWinterStar();
+                //MAXPERFECTION.findGoodStepCount(1, 0);
+                //MAXPERFECTION.findVolcanoDays();
+                //MAXPERFECTION.checkPets();
+                //MAXPERFECTION.doveIncubating();
+                //MAXPERFECTION.rainyDialog();
+                //MAXPERFECTION.findPanning();
+                //var levels = Volcano.Volcano.GetLevels16(655571, 2756, -0.056, 2, true, true);
+                //DynamicCCRemixSeeding.ValidSeedDay8(589831, ref woods, false);
+                Volcano.Volcano.monsterMuskActive = true;
+                Volcano.Volcano.luckLevel = 6;
+                Volcano.Volcano.dailyLuck = 0.052;
+                VolcanoFloorPixelMaps.Initialize();
+                var result = VolcanoSearch.CoreSearch(1, 219043265);
+                foreach (var tup in result)
+                {
+                    Console.WriteLine(tup);
+                }
+                result = VolcanoSearch.CoreSearch(2, 219048418, result[0].Item3);
+                foreach (var tup in result)
+                {
+                    Console.WriteLine(tup);
+                }
+                result = VolcanoSearch.CoreSearch(3, 219053571, result[0].Item3);
+                foreach (var tup in result)
+                {
+                    Console.WriteLine(tup);
+                }
+                // VolcanoSearch.Search(1073742666, Int32.MaxValue, blockSize);
+                // int seed = 1;
+                // while (true)
+                // {
+                //     var results = VolcanoSearch.floorSearch(seed);
+                //     if (results.Count > 0)
+                //     {
+                //         foreach (var tup in results)
+                //         {
+                //             Console.WriteLine(tup);
+                //         }
+                //         break;
+                //     }
+                //     seed += 2;
+                // }
+                //DynamicCCRemixSeeding.Curate();
+                //DynamicCCRemixSeeding.testSpot();
+                //Console.WriteLine(StepPredictions.Predict(1695041469, 1, 448, new List<string>() { "One" }).ToString());
+                //for (int step = 0; step < 600; step++)
+                //{
+                //	var result = StepPredictions.Predict(1695041469, 1, step, new List<string>() { "One" });
+                //if (result.Dish == 213 & result.DailyLuck > 0.08)
+                //	{
+                //		Console.WriteLine($"Step: {step} Dish: {Item.Get(result.Dish.ToString()).Name} Luck: {result.DailyLuck}");
+                //	}
+                //}
 
 
-				//Locations1_6.Location location = new Locations1_6.Location("IslandNorth", 655571, false);
-				//var items = location.getPanItems1_6(new System.Drawing.Point(13, 61), 1, "", 2996, 0, 0,-0.041);
-				//Console.WriteLine(String.Join(",", items));
-				return;
-				Console.WriteLine("Start");
-				for (int day = 1923; day < 5000; day++)
-				{
-					Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
-					string str = "";
-					if (r.NextDouble() < 0.05)
-					{
-						str = "True";
-					}
-					Console.WriteLine($"{str}");
-				}
-				
+                //Locations1_6.Location location = new Locations1_6.Location("IslandNorth", 655571, false);
+                //var items = location.getPanItems1_6(new System.Drawing.Point(13, 61), 1, "", 2996, 0, 0,-0.041);
+                //Console.WriteLine(String.Join(",", items));
+                return;
+                Console.WriteLine("Start");
+                for (int day = 1923; day < 5000; day++)
+                {
+                    Random r = Utility.CreateRandom(day, 655571 / 2, 470124797.0, -1161857373803765789L);
+                    string str = "";
+                    if (r.NextDouble() < 0.05)
+                    {
+                        str = "True";
+                    }
+                    Console.WriteLine($"{str}");
+                }
 
-				return;
 
-				Game1.UseLegacyRandom = true;
-				int startingValue = 655568;
-				for (int i = startingValue; i <= int.MaxValue; i++)
-				{
-					if (MAXPERFECTION.ValidSeed(i))
-					{
-						Console.WriteLine(i);
-						return;
-					}
-				}
-				//Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
-				//Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
-				return;
+                return;
+
+                Game1.UseLegacyRandom = true;
+                int startingValue = 655568;
+                for (int i = startingValue; i <= int.MaxValue; i++)
+                {
+                    if (MAXPERFECTION.ValidSeed(i))
+                    {
+                        Console.WriteLine(i);
+                        return;
+                    }
+                }
+                //Console.WriteLine(Game1.hash.GetDeterministicHashCode("location_weather"));
+                //Console.WriteLine(Utility.CreateRandom(15120335, 18).NextDouble());
+                return;
                 //Console.WriteLine(String.Join(",",new List<string>(TravelingCart.GetStock(359003761, 5).Select(o=>Item.Get(o.Id).Name))));
                 //Console.WriteLine(String.Join(",", Trash1_6.Trash.getAllTrash(48462440, 12, 0.1)));
                 //Console.WriteLine(Trash1_6.Trash.getTrash(48462440, 12, Trash1_6.Trash.Can.George, -0.054).ToString());
@@ -197,21 +227,21 @@ namespace SeedFinding
 
             if (runRemixSearch)
             {
-               /* FileStream fs = new FileStream("Remix.txt", FileMode.Create);
-                // First, save the standard output.
-                TextWriter tmp = Console.Out;
-                StreamWriter sw = new StreamWriter(fs);
-                Console.SetOut(sw);
-                Console.WriteLine("RemixSearch");
-                uint numSeeds = Int32.MaxValue;
-                double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<uint> validSeeds);
-                foreach (var item in validSeeds)
-                {
-                    Console.WriteLine(item);
-                }
-                Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
-                Console.SetOut(tmp);
-                sw.Close();*/
+                /* FileStream fs = new FileStream("Remix.txt", FileMode.Create);
+                 // First, save the standard output.
+                 TextWriter tmp = Console.Out;
+                 StreamWriter sw = new StreamWriter(fs);
+                 Console.SetOut(sw);
+                 Console.WriteLine("RemixSearch");
+                 uint numSeeds = Int32.MaxValue;
+                 double time = DynamicCCRemixSeeding.Search(numSeeds, blockSize, out List<uint> validSeeds);
+                 foreach (var item in validSeeds)
+                 {
+                     Console.WriteLine(item);
+                 }
+                 Console.WriteLine($"Total Time: {time} (sps: {numSeeds / time})");
+                 Console.SetOut(tmp);
+                 sw.Close();*/
             }
 
             if (runVaultSearch)
@@ -229,7 +259,7 @@ namespace SeedFinding
             }
 
 
-               
+
 
         }
     }
